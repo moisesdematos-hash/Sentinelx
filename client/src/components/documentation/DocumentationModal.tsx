@@ -298,10 +298,10 @@ export const DocumentationModal: React.FC<DocumentationModalProps> = ({ isOpen, 
                       <strong>Opção B: Com Agente eBPF (Recomendado para servidores críticos):</strong><br />
                       Copie o comando de 1-linha exibido no painel de Segurança de Servidores e cole no terminal do seu servidor Linux:
                       <div style={{ marginTop: '6px', padding: '10px', background: '#0b0f19', borderRadius: '6px', fontSize: '0.78rem', fontFamily: 'var(--font-mono)', color: 'var(--accent-amber)', position: 'relative' }}>
-                        <button onClick={() => handleCopy('curl -sSL https://api.sentinelx.io/v1/agents/install.sh | sudo bash', 'agent_cmd')} style={{ position: 'absolute', top: '6px', right: '8px', background: 'none', border: 'none', color: 'var(--accent-amber)', cursor: 'pointer' }}>
+                        <button onClick={() => handleCopy('curl -sSL https://api.sentinelx-cyber.com/v1/agents/install.sh | sudo bash', 'agent_cmd')} style={{ position: 'absolute', top: '6px', right: '8px', background: 'none', border: 'none', color: 'var(--accent-amber)', cursor: 'pointer' }}>
                           {copiedSnippet === 'agent_cmd' ? <Check size={14} /> : <Copy size={14} />}
                         </button>
-                        curl -sSL https://api.sentinelx.io/v1/agents/install.sh | sudo bash
+                        curl -sSL https://api.sentinelx-cyber.com/v1/agents/install.sh | sudo bash
                       </div>
                       <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: '4px', display: 'block' }}>
                         O agente eBPF leve (~14MB de RAM) se conectará instantaneamente ao painel do SENTINELX!
@@ -383,7 +383,7 @@ aws iam attach-role-policy \\
                       <li>**Comando de Instalação (Linha Única)**:</li>
                     </ul>
                     <div style={{ marginTop: '10px', padding: '10px', background: '#0b0f19', borderRadius: '6px', fontSize: '0.75rem', fontFamily: 'var(--font-mono)', color: 'var(--accent-purple)' }}>
-                      curl -sSL https://get.sentinelx.io/agent.sh | sudo bash
+                      curl -sSL https://get.sentinelx-cyber.com/agent.sh | sudo bash
                     </div>
                   </div>
                 </div>
@@ -446,7 +446,7 @@ aws iam attach-role-policy \\
 
                 <div style={{ borderRadius: '8px', background: '#0b0f19', border: '1px solid var(--border-color)', padding: '16px', margin: '12px 0', fontFamily: 'var(--font-mono)', fontSize: '0.82rem' }}>
                   <pre style={{ margin: 0, color: 'var(--accent-cyan)' }}>
-{`curl -X POST https://api.sentinelx.io/v1/scans/trigger \\
+{`curl -X POST https://api.sentinelx-cyber.com/v1/scans/trigger \\
   -H "Authorization: Bearer stx_live_98f73b1a2c" \\
   -H "Content-Type: application/json" \\
   -d '{"assetId": "ast_web_prod_01", "scanType": "FULL_AUDIT"}'`}

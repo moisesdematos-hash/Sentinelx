@@ -194,7 +194,7 @@ export const ServerSecurityPage: React.FC = () => {
             </span>
             <div style={{ display: 'flex', gap: '8px', background: '#0b0f19', padding: '8px 12px', borderRadius: '6px', border: '1px solid var(--border-color)', alignItems: 'center' }}>
               <code style={{ fontSize: '0.72rem', color: 'var(--accent-cyan)', fontFamily: 'var(--font-mono)', flex: 1, overflowX: 'auto' }}>
-                curl -sSL https://api.sentinelx.io/v1/agents/install.sh | sudo bash
+                curl -sSL https://api.sentinelx-cyber.com/v1/agents/install.sh | sudo bash
               </code>
               <button onClick={handleCopyInstallCmd} style={{ background: 'none', border: 'none', color: 'var(--accent-cyan)', cursor: 'pointer' }}>
                 {copiedInstallCmd ? <Check size={14} /> : <Copy size={14} />}
