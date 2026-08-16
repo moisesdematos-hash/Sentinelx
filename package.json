@@ -1,0 +1,31 @@
+{
+  "name": "sentinelx",
+  "version": "1.0.0",
+  "private": true,
+  "description": "SENTINELX - Autonomous Continuous Cyber Defense Platform",
+  "workspaces": [
+    "server",
+    "client"
+  ],
+  "scripts": {
+    "dev:server": "npm --prefix server run dev",
+    "dev:client": "npm --prefix client run dev",
+    "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
+    "build:server": "npm --prefix server run build",
+    "build:client": "npm --prefix client run build",
+    "build": "npm run build:server && npm run build:client",
+    "test": "npm --prefix server test"
+  },
+  "keywords": [
+    "cybersecurity",
+    "defense",
+    "siem",
+    "soar",
+    "autopilot",
+    "remediation",
+    "cloud-security",
+    "api-security"
+  ],
+  "author": "SENTINELX Engineering Team",
+  "license": "UNLICENSED"
+}

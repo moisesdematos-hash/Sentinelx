@@ -1,0 +1,936 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Partner {
+  id             String         @id @default(uuid())
+  name           String
+  slug           String         @unique
+  logoUrl        String?
+  primaryContact String?
+  status         String         @default("ACTIVE")
+  organizations  Organization[]
+  branding       Branding?
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+}
+
+model Organization {
+  id              String              @id @default(uuid())
+  partnerId       String?
+  partner         Partner?            @relation(fields: [partnerId], references: [id], onDelete: SetNull)
+  name            String
+  slug            String              @unique
+  domain          String?
+  status          String              @default("ACTIVE")
+  securityScore   Int                 @default(100)
+  users           User[]
+  apiKeys         ApiKey[]
+  assets          Asset[]
+  vulnerabilities Vulnerability[]
+  telemetry       MonitoringTelemetry[]
+  cloudConnectors CloudConnector[]
+  cspmScans       CloudSecurityScan[]
+  securityEvents  SecurityEvent[]
+  detectionRules  DetectionRule[]
+  detectionAlerts DetectionAlert[]
+  graphNodes      SecurityGraphNode[]
+  graphEdges      SecurityGraphEdge[]
+  riskProfiles    RiskProfile[]
+  incidents       Incident[]
+  conversations   AiConversation[]
+  recommendations AiRecommendation[]
+  autopilotPolicies AutopilotPolicy[]
+  autopilotActions  AutopilotAction[]
+  remediationTasks  RemediationTask[]
+  rollbackRecords   RollbackRecord[]
+  threatFeeds       ThreatFeed[]
+  threatIndicators  ThreatIndicator[]
+  complianceReports ComplianceReport[]
+  complianceControls ComplianceControl[]
+  siemIntegrations  SiemIntegration[]
+  soarPlaybooks     SoarPlaybook[]
+  deceptionDecoys   DeceptionDecoy[]
+  networkSegments   NetworkSegment[]
+  identityRisks     IdentityRisk[]
+  jitRequests       JitAccessRequest[]
+  finOpsMetrics     FinOpsMetric[]
+  costSavingRecs    CostSavingRecommendation[]
+  impersonationDomains ImpersonationDomain[]
+  brandLeakedCredentials BrandLeakedCredential[]
+  executiveReports   ExecutiveReport[]
+  subscriptionTiers  SubscriptionTier[]
+  marketplaceEntitlements MarketplaceEntitlement[]
+  mobileScans        MobileSecurityScan[]
+  edgeNodes          EdgeNode[]
+  iotScans           IotDeviceScan[]
+  selfHealingPatches SelfHealingPatch[]
+  globalThreats      GlobalThreatExchange[]
+  aiInvestigations   AiInvestigationReport[]
+  webhooks        Webhook[]
+  auditLogs       AuditLog[]
+  branding        Branding?
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt
+}
+
+model Branding {
+  id             String        @id @default(uuid())
+  partnerId      String?       @unique
+  partner        Partner?      @relation(fields: [partnerId], references: [id], onDelete: Cascade)
+  organizationId String?       @unique
+  organization   Organization? @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  brandName      String
+  logoUrl        String?
+  primaryColor   String        @default("#00f2fe")
+  customDomain   String?
+  reportHeader   String?
+  supportEmail   String?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+}
+
+model User {
+  id             String           @id @default(uuid())
+  organizationId String
+  organization   Organization     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  email          String           @unique
+  passwordHash   String
+  name           String
+  role           String           @default("SECURITY_ANALYST") // SUPER_ADMIN, PARTNER_ADMIN, ORG_ADMIN, SECURITY_ANALYST, AUDITOR
+  isMfaEnabled   Boolean          @default(false)
+  status         String           @default("ACTIVE")
+  lastLoginAt    DateTime?
+  auditLogs      AuditLog[]
+  conversations  AiConversation[]
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+}
+
+model ApiKey {
+  id             String       @id @default(uuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  name           String
+  keyHash        String       @unique
+  prefix         String
+  permissions    String       @default("read,write") // comma-separated scopes: read,write,scans,remediation
+  expiresAt      DateTime?
+  lastUsedAt     DateTime?
+  createdAt      DateTime     @default(now())
+}
+
+model Asset {
+  id              String                  @id @default(uuid())
+  organizationId  String
+  organization    Organization            @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  name            String
+  type            String                  // WEBSITE, API, SERVER, CLOUD, CONTAINER
+  target          String                  // URL, IP, Hostname, ARN, Docker Image
+  environment     String                  @default("PRODUCTION") // PRODUCTION, STAGING, DEVELOPMENT, SANDBOX
+  criticality     String                  @default("MEDIUM")     // CRITICAL, HIGH, MEDIUM, LOW
+  status          String                  @default("MONITORED")  // MONITORED, DEGRADED, UNREACHABLE, PAUSED, PENDING_DISCOVERY
+  owner           String?                 // Responsible engineer or team
+  tags            String                  @default("[]")         // JSON array of string tags
+  metadata        String                  @default("{}")         // JSON string of extra properties
+  securityScore   Int                     @default(100)
+  lastSeenAt      DateTime                @default(now())
+  baselines       AssetBaseline[]
+  websiteScans    WebsiteSecurityScan[]
+  serverScans     ServerSecurityScan[]
+  apiScans        ApiSecurityScan[]
+  containerScans  ContainerSecurityScan[]
+  mobileScans     MobileSecurityScan[]
+  vulnerabilities Vulnerability[]
+  telemetry       MonitoringTelemetry[]
+  securityEvents  SecurityEvent[]
+  detectionAlerts DetectionAlert[]
+  riskProfiles    RiskProfile[]
+  incidents       Incident[]
+  remediationTasks RemediationTask[]
+  rollbackRecords  RollbackRecord[]
+  threatIndicators ThreatIndicator[]
+  createdAt       DateTime                @default(now())
+  updatedAt       DateTime                @updatedAt
+}
+
+model AssetBaseline {
+  id            String   @id @default(uuid())
+  assetId       String
+  asset         Asset    @relation(fields: [assetId], references: [id], onDelete: Cascade)
+  version       Int      @default(1)
+  configuration String   // JSON snapshot of baseline configuration
+  hash          String   // SHA-256 hash of configuration
+  isLocked      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model WebsiteSecurityScan {
+  id            String   @id @default(uuid())
+  assetId       String
+  asset         Asset    @relation(fields: [assetId], references: [id], onDelete: Cascade)
+  url           String
+  tlsStatus     String   // JSON string of TLS analysis
+  headersStatus String   // JSON string of security headers analysis
+  cookieStatus  String   // JSON string of cookies analysis
+  scriptStatus  String   // JSON string of scripts/DOM analysis
+  score         Int      @default(100)
+  issuesCount   Int      @default(0)
+  latencyMs     Int      @default(0)
+  status        String   @default("COMPLETED")
+  timestamp     DateTime @default(now())
+}
+
+model ServerSecurityScan {
+  id              String   @id @default(uuid())
+  assetId         String
+  asset           Asset    @relation(fields: [assetId], references: [id], onDelete: Cascade)
+  target          String
+  fimStatus       String   // JSON string of File Integrity Monitoring
+  processStatus   String   // JSON string of Process Baseline & Anomalies
+  servicesStatus  String   // JSON string of Listening Ports & Services
+  userStatus      String   // JSON string of User Accounts & Sudoers Audit
+  score           Int      @default(100)
+  issuesCount     Int      @default(0)
+  status          String   @default("COMPLETED")
+  timestamp       DateTime @default(now())
+}
+
+model ApiSecurityScan {
+  id               String   @id @default(uuid())
+  assetId          String
+  asset            Asset    @relation(fields: [assetId], references: [id], onDelete: Cascade)
+  target           String
+  endpointsStatus  String   // JSON string of Discovered Endpoints Matrix
+  authDriftStatus  String   // JSON string of Auth & BOLA Drift Audit
+  piiStatus        String   // JSON string of PII / Sensitive Data Exposure
+  rateLimitStatus  String   // JSON string of Rate Limiting & Throttling
+  score            Int      @default(100)
+  issuesCount      Int      @default(0)
+  status           String   @default("COMPLETED")
+  timestamp        DateTime @default(now())
+}
+
+model ContainerSecurityScan {
+  id                  String   @id @default(uuid())
+  assetId             String
+  asset               Asset    @relation(fields: [assetId], references: [id], onDelete: Cascade)
+  target              String
+  imageDigest         String   // SHA-256 Digest
+  vulnerabilityStatus String   // JSON string of Image Layer CVE vulnerabilities
+  runtimeStatus       String   // JSON string of Runtime Security (root user, seccomp, rootfs)
+  k8sStatus           String   // JSON string of Kubernetes Pod Security Standards (PSS)
+  score               Int      @default(100)
+  issuesCount         Int      @default(0)
+  status              String   @default("COMPLETED")
+  timestamp           DateTime @default(now())
+}
+
+model MobileSecurityScan {
+  id               String       @id @default(uuid())
+  assetId          String
+  asset            Asset        @relation(fields: [assetId], references: [id], onDelete: Cascade)
+  organizationId   String
+  organization     Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  platform         String       // ANDROID_APK, IOS_IPA
+  packageName      String       // com.sentinelx.mobile
+  version          String       @default("1.0.0")
+  score            Int          @default(90)
+  masvsStatus      String       // JSON string of MASVS controls
+  hardcodedSecrets String       // JSON string of extracted hardcoded API keys/secrets
+  permissionsAudit String       // JSON string of dangerous permissions audit
+  issuesCount      Int          @default(0)
+  status           String       @default("COMPLETED") // COMPLETED, FAILED
+  timestamp        DateTime     @default(now())
+}
+
+model EdgeNode {
+  id             String          @id @default(uuid())
+  organizationId String
+  organization   Organization    @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  name           String
+  nodeType       String          // CLOUDFLARE_WORKER, AWS_CLOUDFRONT_EDGE, IOT_GATEWAY_BROKER
+  locationRegion String          @default("GLOBAL_EDGE")
+  trafficRps     Int             @default(450)
+  status         String          @default("MONITORED") // MONITORED, DDOS_ATTACK_DETECTED, MITIGATED
+  iotScans       IotDeviceScan[]
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+}
+
+model IotDeviceScan {
+  id                   String        @id @default(uuid())
+  organizationId       String
+  organization         Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  edgeNodeId           String?
+  edgeNode             EdgeNode?     @relation(fields: [edgeNodeId], references: [id], onDelete: SetNull)
+  deviceName           String
+  protocol             String        @default("MQTT") // MQTT, COAP, HTTP
+  hasUnencryptedPort   Boolean       @default(true)
+  defaultCredsDetected Boolean       @default(true)
+  firmwareVersion      String        @default("v2.1.0-legacy")
+  vulnerabilitySummary String        @default("Unencrypted MQTT Broker on port 1883 with default admin creds")
+  timestamp            DateTime      @default(now())
+}
+
+model SelfHealingPatch {
+  id              String       @id @default(uuid())
+  organizationId  String
+  organization    Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  title           String
+  repositoryUrl   String       @default("https://github.com/sentinelx/backend-core")
+  targetFile      String       // src/controllers/user.controller.ts
+  codeDiff        String       // Git diff representation (+ / -)
+  pullRequestUrl  String?      // e.g. https://github.com/sentinelx/backend-core/pull/142
+  safetyScore     Int          @default(98) // 0 - 100
+  status          String       @default("PROPOSED") // PROPOSED, PR_OPENED, APPLIED, REJECTED
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+}
+
+model GlobalThreatExchange {
+  id                String       @id @default(uuid())
+  organizationId    String
+  organization      Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  anonymousNodeHash String       // SHA-256 hash e.g. anon_node_901824a89
+  indicatorType     String       // IP, DOMAIN, PAYLOAD_HASH, USER_AGENT
+  indicatorValue    String       // e.g. 185.220.101.9, malicious-phish.xyz
+  threatCategory    String       @default("EXPLOIT_PAYLOAD") // BRUTE_FORCE, EXPLOIT_PAYLOAD, PHISHING_DOMAIN, BOTNET
+  confidenceScore   Int          @default(95) // 0 - 100
+  status            String       @default("BROADCASTED") // BROADCASTED, SYNCED
+  timestamp         DateTime     @default(now())
+}
+
+model AiInvestigationReport {
+  id               String       @id @default(uuid())
+  organizationId   String
+  organization     Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  incidentId       String?
+  assetId          String?
+  incidentTitle    String
+  rootCauseSummary String
+  attackStoryboard String       // JSON string of multi-stage timeline steps
+  cisoBriefing     String       // Natural language executive briefing
+  confidenceScore  Int          @default(96) // 0 - 100
+  status           String       @default("COMPLETED") // INVESTIGATING, COMPLETED
+  timestamp        DateTime     @default(now())
+}
+
+model CloudConnector {
+  id                    String              @id @default(uuid())
+  organizationId        String
+  organization          Organization        @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  name                  String
+  provider              String              // AWS, AZURE, GCP
+  credentials           String              // JSON string of encrypted credentials / Role ARN
+  region                String              @default("us-east-1")
+  status                String              @default("ACTIVE") // ACTIVE, SYNCING, DISCONNECTED, ERROR
+  lastSyncAt            DateTime?
+  discoveredAssetsCount Int                 @default(0)
+  cspmScans             CloudSecurityScan[]
+  createdAt             DateTime            @default(now())
+  updatedAt             DateTime            @updatedAt
+}
+
+model CloudSecurityScan {
+  id             String         @id @default(uuid())
+  connectorId    String
+  connector      CloudConnector @relation(fields: [connectorId], references: [id], onDelete: Cascade)
+  organizationId String
+  organization   Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  storageStatus  String         // JSON string of storage bucket publicity & encryption
+  iamStatus      String         // JSON string of IAM wildcard admin & MFA audit
+  networkStatus  String         // JSON string of Security Groups 0.0.0.0/0 ingress
+  loggingStatus  String         // JSON string of CloudTrail / audit logging integrity
+  score          Int            @default(100)
+  issuesCount    Int            @default(0)
+  status         String         @default("COMPLETED")
+  timestamp      DateTime       @default(now())
+}
+
+model SecurityEvent {
+  id             String       @id @default(uuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  assetId        String?
+  asset          Asset?       @relation(fields: [assetId], references: [id], onDelete: SetNull)
+  eventType      String       // VulnerabilityDetected, ThreatDetected, BaselineDrift, CertificateExpiring, etc.
+  sourceEngine   String       @default("MONITORING") // WEBSITE, SERVER, API, CONTAINER, CLOUD, VULNERABILITY, MONITORING
+  severity       String       @default("INFO") // CRITICAL, HIGH, MEDIUM, LOW, INFO
+  payload        String       @default("{}") // JSON details payload
+  timestamp      DateTime     @default(now())
+}
+
+model DetectionRule {
+  id             String           @id @default(uuid())
+  organizationId String
+  organization   Organization     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  name           String
+  description    String
+  severity       String           @default("HIGH") // CRITICAL, HIGH, MEDIUM, LOW
+  category       String           @default("EXPLOIT") // BRUTE_FORCE, EXPLOIT, PRIVILEGE_ESCALATION, DATA_LEAK, ANOMALY
+  ruleCondition  String           // JSON string of Sigma/YARA style conditions
+  status         String           @default("ENABLED") // ENABLED, DISABLED
+  alerts         DetectionAlert[]
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+}
+
+model DetectionAlert {
+  id             String         @id @default(uuid())
+  organizationId String
+  organization   Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  ruleId         String?
+  rule           DetectionRule? @relation(fields: [ruleId], references: [id], onDelete: SetNull)
+  assetId        String?
+  asset          Asset?         @relation(fields: [assetId], references: [id], onDelete: SetNull)
+  title          String
+  description    String
+  severity       String         @default("HIGH") // CRITICAL, HIGH, MEDIUM, LOW
+  status         String         @default("OPEN") // OPEN, INVESTIGATING, CLOSED
+  evidence       String         @default("{}") // JSON string of proof snippet
+  timestamp      DateTime       @default(now())
+}
+
+model SecurityGraphNode {
+  id             String              @id @default(uuid())
+  organizationId String
+  organization   Organization        @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  nodeId         String              // e.g. asset-uuid, user-uuid, vuln-cve
+  label          String
+  type           String              // ASSET, CONNECTOR, VULNERABILITY, USER
+  riskScore      Int                 @default(0)
+  metadata       String              @default("{}") // JSON string
+  outgoingEdges  SecurityGraphEdge[] @relation("SourceNode")
+  incomingEdges  SecurityGraphEdge[] @relation("TargetNode")
+  createdAt      DateTime            @default(now())
+}
+
+model SecurityGraphEdge {
+  id               String            @id @default(uuid())
+  organizationId   String
+  organization     Organization      @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  sourceNodeId     String
+  sourceNode       SecurityGraphNode @relation("SourceNode", fields: [sourceNodeId], references: [id], onDelete: Cascade)
+  targetNodeId     String
+  targetNode       SecurityGraphNode @relation("TargetNode", fields: [targetNodeId], references: [id], onDelete: Cascade)
+  relationshipType String            // DEPENDS_ON, EXPOSES, CONNECTS_TO, AFFECTS, OWNS
+  weight           Float             @default(1.0)
+  metadata         String            @default("{}") // JSON string
+  createdAt        DateTime          @default(now())
+}
+
+model RiskProfile {
+  id               String       @id @default(uuid())
+  organizationId   String
+  organization     Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  assetId          String?
+  asset            Asset?       @relation(fields: [assetId], references: [id], onDelete: SetNull)
+  overallRiskScore Int          @default(0) // 0 - 100 Risk Score
+  priorityTier     String       @default("P3_LOW_PRIORITY") // P0_IMMEDIATE_ACTION, P1_HIGH_PRIORITY, P2_MODERATE, P3_LOW_PRIORITY
+  factorsBreakdown String       @default("{}") // JSON string of weighted risk factors
+  timestamp        DateTime     @default(now())
+}
+
+model Incident {
+  id             String             @id @default(uuid())
+  organizationId String
+  organization   Organization       @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  assetId        String?
+  asset          Asset?             @relation(fields: [assetId], references: [id], onDelete: SetNull)
+  title          String
+  description    String
+  severity       String             @default("HIGH") // CRITICAL, HIGH, MEDIUM, LOW
+  status         String             @default("OPEN") // OPEN, TRIAGED, IN_CONTAINMENT, RESOLVED, CLOSED
+  assignee       String             @default("Unassigned")
+  slaExpiresAt   DateTime?
+  resolvedAt     DateTime?
+  timeline       IncidentTimeline[]
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+}
+
+model IncidentTimeline {
+  id         String   @id @default(uuid())
+  incidentId String
+  incident   Incident @relation(fields: [incidentId], references: [id], onDelete: Cascade)
+  author     String   @default("SENTINELX Autopilot")
+  actionType String   @default("STATUS_CHANGE") // STATUS_CHANGE, ANALYST_NOTE, CONTAINMENT_ACTION
+  content    String
+  timestamp  DateTime @default(now())
+}
+
+model AiConversation {
+  id             String       @id @default(uuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  userId         String?
+  user           User?        @relation(fields: [userId], references: [id], onDelete: SetNull)
+  prompt         String
+  response       String
+  context        String       @default("{}") // JSON details
+  timestamp      DateTime     @default(now())
+}
+
+model AiRecommendation {
+  id              String       @id @default(uuid())
+  organizationId  String
+  organization    Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  targetType      String       // INCIDENT, VULNERABILITY, ASSET
+  targetId        String
+  rootCause       String
+  remediationSteps String      // JSON array string
+  codeSnippet     String?      // Executable code/config snippet
+  confidenceScore Int          @default(95) // 0 - 100
+  status          String       @default("PENDING") // PENDING, APPLIED, DISMISSED
+  timestamp       DateTime     @default(now())
+}
+
+model AutopilotPolicy {
+  id               String            @id @default(uuid())
+  organizationId   String
+  organization     Organization      @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  name             String
+  triggerCondition String            // AUTO_CONTAIN_P0, AUTO_REMEDIATE_EXPOSED_S3, AUTO_ISOLATE_CONTAINER, AUTO_REVOKE_WILDCARD_IAM
+  actionType       String            // NETWORK_ISOLATION, S3_PUBLIC_BLOCK, IAM_REVOKE, CONTAINER_QUARANTINE
+  executionMode    String            @default("FULL_AUTO") // FULL_AUTO, SEMI_AUTO, DISABLED
+  maxActionsPerHour Int              @default(5)
+  status           String            @default("ENABLED") // ENABLED, PAUSED
+  actions          AutopilotAction[]
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+}
+
+model AutopilotAction {
+  id             String           @id @default(uuid())
+  organizationId String
+  organization   Organization     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  policyId       String?
+  policy         AutopilotPolicy? @relation(fields: [policyId], references: [id], onDelete: SetNull)
+  actionType     String
+  targetResource String
+  executionMode  String           @default("FULL_AUTO")
+  status         String           @default("EXECUTED") // EXECUTED, PENDING_APPROVAL, ROLLED_BACK, BLOCKED_BY_GUARDRAIL
+  details        String           @default("{}")
+  executedAt     DateTime         @default(now())
+}
+
+model RemediationTask {
+  id                 String       @id @default(uuid())
+  organizationId     String
+  organization       Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  assetId            String?
+  asset              Asset?       @relation(fields: [assetId], references: [id], onDelete: SetNull)
+  title              String
+  patchType          String       // NGINX_SECURITY_HEADERS, SSH_HARDENING, S3_PUBLIC_BLOCK, CONTAINER_NON_ROOT, PACKAGE_UPGRADE
+  target             String
+  codeDiff           String       // Code diff representation (+ / -)
+  status             String       @default("PENDING_APPROVAL") // PENDING_APPROVAL, APPROVED, EXECUTING, COMPLETED, FAILED
+  verificationStatus String       @default("NOT_VERIFIED") // NOT_VERIFIED, VERIFIED_PASS, VERIFIED_FAIL
+  approvedBy         String?
+  executedAt         DateTime?
+  createdAt          DateTime     @default(now())
+  updatedAt          DateTime     @updatedAt
+}
+
+model RollbackRecord {
+  id                String       @id @default(uuid())
+  organizationId    String
+  organization      Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  assetId           String?
+  asset             Asset?       @relation(fields: [assetId], references: [id], onDelete: SetNull)
+  baselineId        String?
+  actionType        String       @default("ROLLBACK_EXECUTED") // ROLLBACK_EXECUTED, ASSET_RESTORED
+  previousState     String       // JSON string
+  restoredState     String       // JSON string
+  integrityHash     String       // SHA-256 hash of restored baseline
+  status            String       @default("COMPLETED") // COMPLETED, FAILED
+  executedBy        String?
+  timestamp         DateTime     @default(now())
+}
+
+model ThreatFeed {
+  id               String            @id @default(uuid())
+  organizationId   String
+  organization     Organization      @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  name             String
+  sourceUrl        String
+  feedType         String            // MISP, OTX, CISA_KEV, ABUSE_IPDB
+  status           String            @default("ACTIVE") // ACTIVE, SYNCING, ERROR
+  lastSyncedAt     DateTime?
+  indicatorsCount  Int               @default(0)
+  indicators       ThreatIndicator[]
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+}
+
+model ThreatIndicator {
+  id              String      @id @default(uuid())
+  organizationId  String
+  organization    Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  feedId          String?
+  feed            ThreatFeed?  @relation(fields: [feedId], references: [id], onDelete: SetNull)
+  type            String       // IP, DOMAIN, HASH, CVE
+  value           String
+  threatActor     String?
+  severity        String       @default("HIGH") // CRITICAL, HIGH, MEDIUM, LOW
+  confidenceScore Int          @default(90) // 0 - 100
+  isMatched       Boolean      @default(false)
+  matchedAssetId  String?
+  matchedAsset    Asset?       @relation(fields: [matchedAssetId], references: [id], onDelete: SetNull)
+  description     String
+  timestamp       DateTime     @default(now())
+}
+
+model ComplianceReport {
+  id                  String   @id @default(uuid())
+  organizationId      String
+  organization        Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  framework           String   // ISO_27001, SOC2_TYPE2, PCI_DSS_V4, HIPAA, GDPR
+  readinessScore      Int      @default(100) // 0 - 100 percentage score
+  passedControlsCount Int      @default(0)
+  failedControlsCount Int      @default(0)
+  status              String   @default("COMPLETED")
+  timestamp           DateTime @default(now())
+}
+
+model ComplianceControl {
+  id             String       @id @default(uuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  framework      String       // ISO_27001, SOC2_TYPE2, PCI_DSS_V4, HIPAA, GDPR
+  controlId      String       // e.g. A.12.6.1, CC6.8, PCI-6.4
+  title          String
+  description    String
+  status         String       @default("PASS") // PASS, FAIL
+  evidence       String       @default("{}") // JSON evidence string
+  timestamp      DateTime     @default(now())
+}
+
+model SiemIntegration {
+  id              String            @id @default(uuid())
+  organizationId  String
+  organization    Organization      @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  name            String
+  provider        String            // SPLUNK, DATADOG, ELASTIC, SENTINEL, SYSLOG
+  endpointUrl     String
+  apiKey          String?           // Token / Key string
+  logFormat       String            @default("CEF") // CEF, LEEF, JSON
+  status          String            @default("ACTIVE") // ACTIVE, PAUSED, ERROR
+  eventsForwarded Int               @default(0)
+  lastForwardedAt DateTime?
+  deliveryLogs    SiemDeliveryLog[]
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+}
+
+model SiemDeliveryLog {
+  id          String          @id @default(uuid())
+  siemId      String
+  siem        SiemIntegration @relation(fields: [siemId], references: [id], onDelete: Cascade)
+  event       String
+  format      String
+  payload     String          // Formatted log string
+  statusCode  Int             @default(200)
+  executionMs Int             @default(15)
+  status      String          @default("DELIVERED") // DELIVERED, FAILED
+  timestamp   DateTime        @default(now())
+}
+
+model SoarPlaybook {
+  id               String            @id @default(uuid())
+  organizationId   String
+  organization     Organization      @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  name             String
+  triggerCondition String            // P0_RANSOMWARE_DETECTED, S3_DATA_EXFILTRATION, IAM_CREDENTIAL_LEAK, K8S_POD_COMPROMISE
+  actionSteps      String            // JSON array string of DAG steps
+  executionMode    String            @default("AUTOMATIC") // AUTOMATIC, MANUAL_APPROVAL, DRY_RUN
+  status           String            @default("ENABLED") // ENABLED, PAUSED
+  executionsCount  Int               @default(0)
+  lastExecutedAt   DateTime?
+  executionLogs    SoarExecutionLog[]
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+}
+
+model SoarExecutionLog {
+  id             String       @id @default(uuid())
+  playbookId     String
+  playbook       SoarPlaybook @relation(fields: [playbookId], references: [id], onDelete: Cascade)
+  triggerEvent   String
+  targetResource String
+  stepResults    String       // JSON array string of step outcomes
+  executionTimeMs Int         @default(45)
+  status         String       @default("SUCCESS") // SUCCESS, FAILED, PENDING_APPROVAL
+  executedBy     String?
+  timestamp      DateTime     @default(now())
+}
+
+model DeceptionDecoy {
+  id                String                 @id @default(uuid())
+  organizationId    String
+  organization      Organization           @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  name              String
+  type              String                 // HONEYPOT_SSH, HONEYPOT_DATABASE, HONEYTOKEN_AWS_KEY, HONEYTOKEN_WEB_COOKIE
+  target            String                 // IP, Hostname, Key String
+  tokenValue        String?                // e.g. AKIA...
+  status            String                 @default("DEPLOYED") // DEPLOYED, TRIGGERED, DISABLED
+  interactionsCount Int                    @default(0)
+  lastInteractedAt  DateTime?
+  interactions      DeceptionInteraction[]
+  createdAt         DateTime               @default(now())
+  updatedAt         DateTime               @updatedAt
+}
+
+model DeceptionInteraction {
+  id                String         @id @default(uuid())
+  decoyId           String
+  decoy             DeceptionDecoy @relation(fields: [decoyId], references: [id], onDelete: Cascade)
+  attackerIp        String
+  userAgent         String?
+  payload           String         // JSON payload string
+  commandsAttempted String         @default("[]") // JSON string of array
+  severity          String         @default("CRITICAL")
+  status            String         @default("ALARM_ACTIVE") // ALARM_ACTIVE, CONTAINED
+  timestamp         DateTime       @default(now())
+}
+
+model NetworkSegment {
+  id                String              @id @default(uuid())
+  organizationId    String
+  organization      Organization        @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  name              String
+  environment       String              @default("PRODUCTION") // PRODUCTION, STAGING, DMZ, PCI_VAULT
+  isolationLevel    String              @default("STRICT_ZERO_TRUST") // STRICT_ZERO_TRUST, MODERATE, PERMISSIVE
+  status            String              @default("ENFORCED") // ENFORCED, LEARNING, DISABLED
+  activeRulesCount  Int                 @default(0)
+  blockedFlowsCount Int                 @default(0)
+  policyRules       SegmentPolicyRule[]
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+}
+
+model SegmentPolicyRule {
+  id          String         @id @default(uuid())
+  segmentId   String
+  segment     NetworkSegment @relation(fields: [segmentId], references: [id], onDelete: Cascade)
+  sourceTag   String
+  targetTag   String
+  protocol    String         @default("TCP") // TCP, UDP, ICMP, ANY
+  portRange   String         @default("443")
+  action      String         @default("DENY") // ALLOW, DENY, QUARANTINE
+  description String
+  createdAt   DateTime       @default(now())
+}
+
+model IdentityRisk {
+  id              String       @id @default(uuid())
+  organizationId  String
+  organization    Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  identityName    String
+  identityType    String       // HUMAN_USER, IAM_ROLE, SERVICE_ACCOUNT, API_KEY
+  riskScore       Int          @default(0) // 0 - 100
+  riskFactors     String       @default("[]") // JSON array string
+  status          String       @default("MONITORED") // MONITORED, SUSPICIOUS, LOCKED_OUT
+  lastEvaluatedAt DateTime     @default(now())
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+}
+
+model JitAccessRequest {
+  id             String       @id @default(uuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  requesterEmail String
+  requestedRole  String       // JIT_SUPER_ADMIN, JIT_PROD_DB_ACCESS, JIT_CONTAINER_ROOT
+  targetResource String
+  durationHours  Int          @default(1)
+  status         String       @default("PENDING") // PENDING, APPROVED, EXPIRED, REVOKED
+  approvedBy     String?
+  expiresAt      DateTime?
+  timestamp      DateTime     @default(now())
+}
+
+model FinOpsMetric {
+  id                   String       @id @default(uuid())
+  organizationId       String
+  organization         Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  monthlySecuritySpend Float        @default(4850.0)
+  monthlyWastageEst    Float        @default(1240.0)
+  projectedSavings     Float        @default(14880.0)
+  roiPercentage        Float        @default(340.0)
+  lastAnalyzedAt       DateTime     @default(now())
+  createdAt            DateTime     @default(now())
+  updatedAt            DateTime     @updatedAt
+}
+
+model CostSavingRecommendation {
+  id                String       @id @default(uuid())
+  organizationId    String
+  organization      Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  title             String
+  provider          String       // AWS, AZURE, GCP
+  resourceId        String       // vol-089a8b12, i-02941aa892, nat-09a288b
+  actionType        String       // DELETE_UNATTACHED_EBS, TERMINATE_IDLE_EC2, RIGHTSIZE_NAT_GATEWAY
+  monthlySavingsEst Float        @default(150.0)
+  status            String       @default("PENDING") // PENDING, APPLIED, DISMISSED
+  appliedAt         DateTime?
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+}
+
+model ImpersonationDomain {
+  id               String       @id @default(uuid())
+  organizationId   String
+  organization     Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  domainName       String       @unique
+  similarityScore  Int          @default(95) // 0 - 100
+  dnsResolvedIp    String?      // e.g. 185.220.101.5
+  hasMxRecord      Boolean      @default(true)
+  phishingDetected Boolean      @default(true)
+  status           String       @default("MONITORED") // MONITORED, TAKEDOWN_SUBMITTED, TAKEDOWN_COMPLETED
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+}
+
+model BrandLeakedCredential {
+  id             String       @id @default(uuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  email          String
+  leakSource     String       // DARKWEB_FORUM, PASTEBIN_DUMP, STEALER_LOG
+  severity       String       @default("CRITICAL") // CRITICAL, HIGH, MEDIUM
+  status         String       @default("OPEN") // OPEN, MITIGATED
+  timestamp      DateTime     @default(now())
+}
+
+model ExecutiveReport {
+  id                   String       @id @default(uuid())
+  organizationId       String
+  organization         Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  title                String
+  period               String       @default("Q3 2026")
+  securityScore        Int          @default(98)
+  mttrHours            Float        @default(0.4)
+  riskMitigatedDollars Float        @default(145000.0)
+  complianceGrade      String       @default("A+")
+  summaryContent       String       @default("{}") // JSON details
+  generatedBy          String       @default("SENTINELX Autonomous Engine")
+  timestamp            DateTime     @default(now())
+}
+
+model SubscriptionTier {
+  id                 String       @id @default(uuid())
+  organizationId     String
+  organization       Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  planTier           String       @default("ENTERPRISE") // COMMUNITY, PROFESSIONAL, ENTERPRISE, MSSP_PARTNER
+  status             String       @default("ACTIVE") // TRIALING, ACTIVE, PAST_DUE, CANCELED
+  monthlyPrice       Float        @default(1999.0)
+  maxAssets          Int          @default(500)
+  maxScansPerMonth   Int          @default(10000)
+  currentAssetsCount Int          @default(42)
+  currentScansCount  Int          @default(1280)
+  renewalDate        DateTime?
+  createdAt          DateTime     @default(now())
+  updatedAt          DateTime     @updatedAt
+}
+
+model MarketplaceEntitlement {
+  id                 String       @id @default(uuid())
+  organizationId     String
+  organization       Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  marketplace        String       @default("AWS_MARKETPLACE") // AWS_MARKETPLACE, AZURE_MARKETPLACE, GCP_MARKETPLACE
+  customerIdentifier String
+  productCode        String       @default("sentinelx-ent-saas")
+  dimension          String       @default("monitored_nodes")
+  quantity           Int          @default(500)
+  status             String       @default("ACTIVE")
+  lastSyncedAt       DateTime     @default(now())
+  createdAt          DateTime     @default(now())
+  updatedAt          DateTime     @updatedAt
+}
+
+model Vulnerability {
+  id             String       @id @default(uuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  assetId        String
+  asset          Asset        @relation(fields: [assetId], references: [id], onDelete: Cascade)
+  cveId          String       // e.g. CVE-2024-3094
+  name           String
+  component      String       // e.g. xz-utils
+  version        String       // e.g. 5.6.0
+  severity       String       // CRITICAL, HIGH, MEDIUM, LOW, INFO
+  cvssScore      Float        @default(0.0) // 0.0 - 10.0
+  evidence       String       // JSON string of technical proof
+  impact         String
+  source         String       @default("SENTINELX Vulnerability Engine")
+  remediation    String       // Recommended fix instructions
+  status         String       @default("OPEN") // OPEN, IN_REMEDIATION, RESOLVED, FALSE_POSITIVE
+  firstSeenAt    DateTime     @default(now())
+  lastSeenAt     DateTime     @default(now())
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+}
+
+model MonitoringTelemetry {
+  id             String       @id @default(uuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  assetId        String
+  asset          Asset        @relation(fields: [assetId], references: [id], onDelete: Cascade)
+  metricType     String       // UPTIME, LATENCY, CERT_EXPIRATION, BASELINE_DRIFT
+  value          Float        // Numerical value (e.g. latency in ms, days remaining, 1.0 for up)
+  details        String       @default("{}") // JSON details
+  status         String       @default("NORMAL") // NORMAL, WARNING, CRITICAL
+  timestamp      DateTime     @default(now())
+}
+
+model Webhook {
+  id             String               @id @default(uuid())
+  organizationId String
+  organization   Organization         @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  name           String
+  url            String
+  secret         String
+  events         String               @default("[]") // JSON array of event names
+  status         String               @default("ACTIVE") // ACTIVE, PAUSED, DISABLED
+  deliveryLogs   WebhookDeliveryLog[]
+  createdAt      DateTime             @default(now())
+  updatedAt      DateTime             @updatedAt
+}
+
+model WebhookDeliveryLog {
+  id             String   @id @default(uuid())
+  webhookId      String
+  webhook        Webhook  @relation(fields: [webhookId], references: [id], onDelete: Cascade)
+  event          String
+  payload        String   // JSON string payload
+  statusCode     Int?
+  responseBody   String?
+  executionMs    Int      @default(0)
+  status         String   @default("DELIVERED") // DELIVERED, FAILED, RETRYING
+  timestamp      DateTime @default(now())
+}
+
+model AuditLog {
+  id             String       @id @default(uuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  userId         String?
+  user           User?        @relation(fields: [userId], references: [id], onDelete: SetNull)
+  ipAddress      String?
+  userAgent      String?
+  action         String
+  resource       String
+  resourceId     String?
+  details        String       @default("{}")
+  status         String       @default("SUCCESS") // SUCCESS, FAILURE, DENIED
+  timestamp      DateTime     @default(now())
+}
