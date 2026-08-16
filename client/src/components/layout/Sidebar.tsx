@@ -136,14 +136,18 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab }) => 
         zIndex: 50,
       }}
     >
-      {/* Brand Header */}
+      {/* Brand Header (Click to return to Home Dashboard) */}
       <div
+        onClick={() => setActiveTab('dashboard')}
+        title="Voltar ao Painel Principal"
         style={{
           padding: '24px 20px',
           borderBottom: '1px solid var(--border-color)',
           display: 'flex',
           alignItems: 'center',
           gap: '12px',
+          cursor: 'pointer',
+          userSelect: 'none',
         }}
       >
         <div

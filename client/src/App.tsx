@@ -110,7 +110,7 @@ const MainApp: React.FC = () => {
     <div style={{ minHeight: '100vh', display: 'flex', background: 'var(--bg-primary)' }}>
       <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-        <Header />
+        <Header onGoLanding={() => setCurrentView('LANDING')} />
         <main style={{ marginLeft: '280px', flex: 1, minHeight: 'calc(100vh - 70px)' }}>
           {activeTab === 'welcome' && (
             <div style={{ padding: '20px' }}>

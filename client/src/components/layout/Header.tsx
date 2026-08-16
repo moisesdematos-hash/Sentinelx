@@ -1,8 +1,12 @@
 import React from 'react';
 import { useAuth } from '../../context/AuthContext';
-import { Building2, LogOut, Bell, ShieldCheck } from 'lucide-react';
+import { Building2, LogOut, Bell, ShieldCheck, Globe, Home } from 'lucide-react';
 
-export const Header: React.FC = () => {
+interface HeaderProps {
+  onGoLanding?: () => void;
+}
+
+export const Header: React.FC<HeaderProps> = ({ onGoLanding }) => {
   const { user, logout } = useAuth();
 
   return (
@@ -33,7 +37,18 @@ export const Header: React.FC = () => {
         </div>
       </div>
 
-      <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+        {onGoLanding && (
+          <button
+            onClick={onGoLanding}
+            title="Voltar para a Landing Page Pública Externa"
+            className="btn-secondary"
+            style={{ fontSize: '0.78rem', padding: '6px 12px', gap: '6px' }}
+          >
+            <Globe size={14} /> Página Inicial
+          </button>
+        )}
+
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }} className="badge badge-purple">
           <Bell size={12} />
           <span>3 ALERTS</span>
