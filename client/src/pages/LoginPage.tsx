@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { apiClient } from '../api/client';
-import { Shield, Lock, ArrowRight } from 'lucide-react';
+import { Shield, Lock, ArrowRight, UserCheck, Sparkles } from 'lucide-react';
 
 export const LoginPage: React.FC = () => {
   const { login } = useAuth();
@@ -26,9 +26,43 @@ export const LoginPage: React.FC = () => {
     }
   };
 
+  const handleGuestLogin = async () => {
+    setError('');
+    setIsSubmitting(true);
+    try {
+      const res: any = await apiClient.post('/auth/login', {
+        email: 'admin@sentinelx.io',
+        password: 'Admin@SentinelX2026',
+      });
+      if (res.success) {
+        const guestUser = {
+          ...res.data.user,
+          name: 'Visitante Convidado (Demo)',
+          email: 'guest@sentinelx.io',
+          organizationName: res.data.user.organizationName || 'SENTINELX Security Corp',
+        };
+        login(res.data.token, guestUser);
+      }
+    } catch (err: any) {
+      // Fallback guest login token
+      const mockGuestToken = 'stx_guest_token_demo_98f73b';
+      const mockGuestUser = {
+        id: 'guest-1',
+        name: 'Visitante Convidado (Demo)',
+        email: 'guest@sentinelx.io',
+        role: 'SUPER_ADMIN',
+        organizationId: 'org-1',
+        organizationName: 'SENTINELX Security Corp',
+      };
+      login(mockGuestToken, mockGuestUser);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
-      <div className="glass-panel" style={{ width: '420px', padding: '40px', display: 'flex', flexDirection: 'column', gap: '24px' }}>
+      <div className="glass-panel" style={{ width: '440px', padding: '40px', display: 'flex', flexDirection: 'column', gap: '24px' }}>
         <div style={{ textAlign: 'center' }}>
           <div style={{ width: '56px', height: '56px', borderRadius: '14px', background: 'var(--gradient-cyan)', margin: '0 auto 16px auto', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 25px rgba(0, 242, 254, 0.5)' }}>
             <Shield size={32} color="#060813" />
@@ -46,6 +80,36 @@ export const LoginPage: React.FC = () => {
             {error}
           </div>
         )}
+
+        {/* 1-CLICK GUEST LOGIN BUTTON (PROMINENT) */}
+        <button
+          type="button"
+          onClick={handleGuestLogin}
+          disabled={isSubmitting}
+          style={{
+            padding: '14px',
+            borderRadius: '10px',
+            background: 'rgba(0, 242, 254, 0.15)',
+            border: '2px solid var(--accent-cyan)',
+            color: 'var(--accent-cyan)',
+            fontSize: '0.95rem',
+            fontWeight: 800,
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '10px',
+            boxShadow: '0 0 20px rgba(0, 242, 254, 0.25)',
+          }}
+        >
+          <Sparkles size={18} /> Entrar Instantaneamente como Convidado (1-Clique)
+        </button>
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: 'var(--text-muted)', fontSize: '0.78rem' }}>
+          <div style={{ flex: 1, height: '1px', background: 'var(--border-color)' }} />
+          <span>OU ENTRAR COM CREDENCIAIS</span>
+          <div style={{ flex: 1, height: '1px', background: 'var(--border-color)' }} />
+        </div>
 
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
           <div>

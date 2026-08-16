@@ -46,9 +46,22 @@ import { VulnerabilitiesPage } from './pages/VulnerabilitiesPage';
 import { LoginPage } from './pages/LoginPage';
 
 const MainApp: React.FC = () => {
-  const { user, isLoading } = useAuth();
+  const { user, login, isLoading } = useAuth();
   const [currentView, setCurrentView] = useState<'LANDING' | 'LOGIN' | 'APP'>('LANDING');
   const [activeTab, setActiveTab] = useState('dashboard');
+
+  const handleGuestAccess = () => {
+    const guestUser = {
+      id: 'guest-demo-1',
+      name: 'Visitante Convidado (Demo)',
+      email: 'guest@sentinelx.io',
+      role: 'SUPER_ADMIN',
+      organizationId: 'org-1',
+      organizationName: 'SENTINELX Security Corp',
+    };
+    login('stx_guest_demo_token_98f73b', guestUser);
+    setCurrentView('APP');
+  };
 
   if (isLoading) {
     return (
@@ -59,7 +72,7 @@ const MainApp: React.FC = () => {
   }
 
   // 1. PUBLIC LANDING PAGE (DEFAULT SEPARATE FRONT DOOR)
-  if (currentView === 'LANDING') {
+  if (currentView === 'LANDING' && !user) {
     return (
       <div style={{ minHeight: '100vh', background: 'var(--bg-primary)' }}>
         <WelcomeLandingPage
@@ -70,6 +83,7 @@ const MainApp: React.FC = () => {
               setCurrentView('LOGIN');
             }
           }}
+          onEnterGuest={handleGuestAccess}
         />
         {/* Floating Chat Assistant available even on Public Landing Page */}
         <FloatingChatWidget />

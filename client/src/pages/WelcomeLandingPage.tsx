@@ -28,14 +28,16 @@ import {
   HelpCircle,
   Video,
   Cpu,
+  UserCheck,
 } from 'lucide-react';
 import { DocumentationModal } from '../components/documentation/DocumentationModal';
 
 interface WelcomeLandingPageProps {
   onEnterApp?: () => void;
+  onEnterGuest?: () => void;
 }
 
-export const WelcomeLandingPage: React.FC<WelcomeLandingPageProps> = ({ onEnterApp }) => {
+export const WelcomeLandingPage: React.FC<WelcomeLandingPageProps> = ({ onEnterApp, onEnterGuest }) => {
   const [showCheckoutModal, setShowCheckoutModal] = useState(false);
   const [showDocModal, setShowDocModal] = useState(false);
   const [showDemoVideoModal, setShowDemoVideoModal] = useState(false);
@@ -121,6 +123,10 @@ export const WelcomeLandingPage: React.FC<WelcomeLandingPageProps> = ({ onEnterA
   ];
 
   const faqs = [
+    {
+      question: 'Posso entrar e testar como Convidado sem cadastro?',
+      answer: 'SIM! Você pode clicar no botão "Entrar como Convidado (Demo Instantânea)" no topo da página e acessar imediatamente todo o Painel de Controle, a Auto-Cura de Código e o Chat Expert com Groq AI sem precisar digitar senha ou informar e-mail.',
+    },
     {
       question: 'Podemos optar por usar Agentes ou o modelo Sem Agente (Agentless)?',
       answer: 'SIM! Você tem total liberdade de escolha. O SENTINELX funciona no modelo Híbrido: 1) Agentless (Sem Agente) via APIs nativas de nuvem (AWS Role, Azure, GCP) sem nenhum impacto de performance nos servidores; 2) Agent-Based (Com Agente eBPF) instalando um Daemon ultra-leve para auditoria profunda no nível do Kernel Linux/Windows; ou 3) Combinar ambos os modelos no seu ambiente!',
@@ -216,8 +222,28 @@ export const WelcomeLandingPage: React.FC<WelcomeLandingPageProps> = ({ onEnterA
         </nav>
 
         <div style={{ display: 'flex', gap: '14px', alignItems: 'center' }}>
+          {/* 1-CLICK GUEST BUTTON IN HEADER */}
+          <button
+            onClick={onEnterGuest}
+            style={{
+              background: 'rgba(168, 85, 247, 0.15)',
+              border: '1px solid var(--accent-purple)',
+              color: 'var(--accent-purple)',
+              padding: '10px 18px',
+              borderRadius: '8px',
+              fontSize: '0.88rem',
+              fontWeight: 700,
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+            }}
+          >
+            <UserCheck size={16} /> Entrar como Convidado
+          </button>
+
           <button className="btn-primary" onClick={onEnterApp}>
-            <Play size={16} /> Entrar na Plataforma
+            <Play size={16} /> Login Corporativo
           </button>
         </div>
       </header>
@@ -228,7 +254,7 @@ export const WelcomeLandingPage: React.FC<WelcomeLandingPageProps> = ({ onEnterA
 
         <div style={{ maxWidth: '900px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '24px', alignItems: 'center' }}>
           <span className="badge badge-cyan" style={{ fontSize: '0.85rem', padding: '8px 18px', display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
-            <Sparkles size={14} /> PLATAFORMA SAAS HÍBRIDA (AGENTLESS + AGENTES EBPF)
+            <Sparkles size={14} /> ACESSO LIVRE DEMO — ENTRE COMO CONVIDADO EM 1-CLIQUE
           </span>
 
           <h1 style={{ fontSize: '3.5rem', fontWeight: 900, lineHeight: 1.15, letterSpacing: '-1px' }}>
@@ -243,17 +269,27 @@ export const WelcomeLandingPage: React.FC<WelcomeLandingPageProps> = ({ onEnterA
           </p>
 
           <div style={{ display: 'flex', gap: '16px', marginTop: '12px' }}>
-            <a href="#planos" className="btn-primary" style={{ padding: '16px 32px', fontSize: '1rem' }}>
-              Ver Planos & Iniciar Teste Grátis <ArrowRight size={18} />
-            </a>
+            <button
+              onClick={onEnterGuest}
+              className="btn-primary"
+              style={{
+                padding: '16px 32px',
+                fontSize: '1.05rem',
+                background: 'var(--gradient-cyan)',
+                boxShadow: '0 0 25px rgba(0, 242, 254, 0.4)',
+              }}
+            >
+              🎮 Entrar como Convidado (Demo Instantânea) <ArrowRight size={18} />
+            </button>
+
             <button className="btn-secondary" style={{ padding: '16px 32px', fontSize: '1rem' }} onClick={() => setShowDemoVideoModal(true)}>
               <Video size={18} /> Ver Vídeo de Demonstração
             </button>
           </div>
 
           <div style={{ display: 'flex', gap: '32px', marginTop: '30px', color: 'var(--text-muted)', fontSize: '0.85rem', fontFamily: 'var(--font-mono)' }}>
+            <span>✓ Acesso Convidado sem Senha</span>
             <span>✓ Opção Agentless ou Agente eBPF</span>
-            <span>✓ Integração com AWS / Azure / GCP</span>
             <span>✓ Certificado ISO 27001 & LGPD</span>
           </div>
         </div>
