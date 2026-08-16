@@ -16,6 +16,7 @@ import {
   Copy,
   Check,
   Cpu,
+  Plug,
 } from 'lucide-react';
 
 interface DocumentationModalProps {
@@ -24,7 +25,7 @@ interface DocumentationModalProps {
 }
 
 export const DocumentationModal: React.FC<DocumentationModalProps> = ({ isOpen, onClose }) => {
-  const [activeSection, setActiveSection] = useState<'QUICKSTART' | 'AGENTS_VS_AGENTLESS' | 'AUTOPILOT' | 'SELF_HEALING' | 'API_WEBHOOKS' | 'COMPLIANCE'>('QUICKSTART');
+  const [activeSection, setActiveSection] = useState<'QUICKSTART' | 'CONNECTIVITY' | 'AGENTS_VS_AGENTLESS' | 'AUTOPILOT' | 'SELF_HEALING' | 'API_WEBHOOKS' | 'COMPLIANCE'>('CONNECTIVITY');
   const [copiedSnippet, setCopiedSnippet] = useState<string | null>(null);
 
   if (!isOpen) return null;
@@ -66,6 +67,26 @@ export const DocumentationModal: React.FC<DocumentationModalProps> = ({ isOpen, 
             <span style={{ fontSize: '0.68rem', fontWeight: 800, color: 'var(--text-muted)', letterSpacing: '1px', padding: '0 8px 8px 8px' }}>
               SUMÁRIO DE DOCUMENTAÇÃO
             </span>
+
+            <button
+              onClick={() => setActiveSection('CONNECTIVITY')}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '10px',
+                padding: '10px 12px',
+                borderRadius: '8px',
+                border: 'none',
+                background: activeSection === 'CONNECTIVITY' ? 'rgba(0, 242, 254, 0.12)' : 'transparent',
+                color: activeSection === 'CONNECTIVITY' ? 'var(--accent-cyan)' : 'var(--text-secondary)',
+                cursor: 'pointer',
+                fontWeight: activeSection === 'CONNECTIVITY' ? 700 : 500,
+                fontSize: '0.85rem',
+                textAlign: 'left',
+              }}
+            >
+              <Plug size={16} /> 🔌 Conexão de Sistemas
+            </button>
 
             <button
               onClick={() => setActiveSection('QUICKSTART')}
@@ -190,6 +211,122 @@ export const DocumentationModal: React.FC<DocumentationModalProps> = ({ isOpen, 
 
           {/* Doc Content Details Panel */}
           <div style={{ flex: 1, padding: '32px', overflowY: 'auto', color: '#fff', fontSize: '0.92rem', lineHeight: 1.7 }}>
+            {activeSection === 'CONNECTIVITY' && (
+              <div>
+                <h2 style={{ fontSize: '1.6rem', fontWeight: 900, marginBottom: '16px', color: 'var(--accent-cyan)' }}>
+                  🔌 COMO FAZER A CONEXÃO DA SUA EMPRESA COM O SENTINELX
+                </h2>
+                <p style={{ color: 'var(--text-secondary)', marginBottom: '24px' }}>
+                  Conectar seus sistemas ao **SENTINELX** é simples, rápido e não exige parar seus serviços. O processo é feito diretamente pela interface da plataforma em 3 passos para cada tipo de ambiente.
+                </p>
+
+                <h3 style={{ fontSize: '1.15rem', fontWeight: 800, color: 'var(--accent-cyan)', marginBottom: '12px' }}>
+                  Abaixo estão os 4 métodos de conexão disponíveis:
+                </h3>
+
+                {/* Method 1 */}
+                <div className="glass-panel" style={{ padding: '20px', marginBottom: '20px', borderLeft: '4px solid var(--accent-cyan)' }}>
+                  <h4 style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--accent-cyan)', marginTop: 0, marginBottom: '8px' }}>
+                    ☁️ 1. Conectar Contas de Nuvem (AWS, Azure ou GCP) — Sem Agente
+                  </h4>
+                  <p style={{ fontSize: '0.88rem', color: 'var(--text-secondary)', marginBottom: '12px' }}>
+                    Esta é a conexão mais rápida. Ela permite ao SENTINELX auditar buckets S3, servidores EC2, regras de firewall e permissões IAM sem instalar nada nos servidores.
+                  </p>
+
+                  <strong style={{ color: '#fff', fontSize: '0.88rem' }}>📋 Passo a Passo:</strong>
+                  <ol style={{ paddingLeft: '20px', marginTop: '6px', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+                    <li>No menu à esquerda do SENTINELX, acesse <strong>Conectores de Nuvem</strong>.</li>
+                    <li>Clique no botão <strong>"Adicionar Conector de Nuvem"</strong>.</li>
+                    <li>Selecione o provedor (<strong>AWS</strong>, <strong>AZURE</strong> ou <strong>GCP</strong>).</li>
+                    <li>Informe o <strong>Role ARN</strong> da sua conta AWS (ex: <code style={{ color: 'var(--accent-cyan)' }}>arn:aws:iam::123456789012:role/SentinelXAuditRole</code>).</li>
+                    <li>Clique em <strong>"Testar Conexão"</strong>. O SENTINELX começará a descobrir e monitorar seus ativos automaticamente em tempo real!</li>
+                  </ol>
+                </div>
+
+                {/* Method 2 */}
+                <div className="glass-panel" style={{ padding: '20px', marginBottom: '20px', borderLeft: '4px solid var(--accent-purple)' }}>
+                  <h4 style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--accent-purple)', marginTop: 0, marginBottom: '8px' }}>
+                    💻 2. Conectar Repositórios GitHub / GitLab — Para Auto-Cura de Código
+                  </h4>
+                  <p style={{ fontSize: '0.88rem', color: 'var(--text-secondary)', marginBottom: '12px' }}>
+                    Permite ao SENTINELX ler o código das suas aplicações e abrir Pull Requests automáticos com as correções de vulnerabilidade.
+                  </p>
+
+                  <strong style={{ color: '#fff', fontSize: '0.88rem' }}>📋 Passo a Passo:</strong>
+                  <ol style={{ paddingLeft: '20px', marginTop: '6px', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+                    <li>No menu à esquerda, acesse <strong>Painel de Administração -&gt; Chaves de API & Integrações</strong>.</li>
+                    <li>Na seção <strong>Conectores Git</strong>, cole o seu <strong>Personal Access Token (PAT)</strong> do GitHub/GitLab com permissão de <code style={{ color: 'var(--accent-purple)' }}>repo</code>.</li>
+                    <li>Selecione os repositórios que deseja proteger (ex: <code style={{ color: 'var(--accent-purple)' }}>empresa/backend-api</code>).</li>
+                    <li>Pronto! O motor de Auto-Cura já está conectado para monitorar e enviar correções de código.</li>
+                  </ol>
+                </div>
+
+                {/* Method 3 */}
+                <div className="glass-panel" style={{ padding: '20px', marginBottom: '20px', borderLeft: '4px solid var(--accent-emerald)' }}>
+                  <h4 style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--accent-emerald)', marginTop: 0, marginBottom: '8px' }}>
+                    🌐 3. Conectar Websites e APIs REST / GraphQL — Para Scanners de Vulnerabilidade
+                  </h4>
+                  <p style={{ fontSize: '0.88rem', color: 'var(--text-secondary)', marginBottom: '12px' }}>
+                    Para monitorar seus sites públicos, portais web e endpoints de API contra ataques de hackers.
+                  </p>
+
+                  <strong style={{ color: '#fff', fontSize: '0.88rem' }}>📋 Passo a Passo:</strong>
+                  <ol style={{ paddingLeft: '20px', marginTop: '6px', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+                    <li>Acesse <strong>Inventário de Ativos (Asset Inventory)</strong> no menu lateral.</li>
+                    <li>Clique em <strong>"Cadastrar Novo Ativo"</strong>.</li>
+                    <li>Selecione o tipo (<strong>WEBSITE</strong> ou <strong>API_ENDPOINT</strong>).</li>
+                    <li>Informe o nome e a URL (ex: <code style={{ color: 'var(--accent-emerald)' }}>https://api.suaempresa.com.br</code>).</li>
+                    <li>Clique em <strong>"Iniciar Varredura Inicial"</strong>.</li>
+                  </ol>
+                </div>
+
+                {/* Method 4 */}
+                <div className="glass-panel" style={{ padding: '20px', marginBottom: '20px', borderLeft: '4px solid var(--accent-amber)' }}>
+                  <h4 style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--accent-amber)', marginTop: 0, marginBottom: '8px' }}>
+                    🛡️ 4. Conectar Servidores Linux / Windows — Opção Com Agente ou Sem Agente
+                  </h4>
+                  <p style={{ fontSize: '0.88rem', color: 'var(--text-secondary)', marginBottom: '12px' }}>
+                    Você escolhe como quer conectar cada servidor:
+                  </p>
+
+                  <ul style={{ paddingLeft: '20px', fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: 1.8 }}>
+                    <li>
+                      <strong>Opção A: Sem Agente (Agentless):</strong><br />
+                      Na tela de <strong>Segurança de Servidores</strong>, selecione a opção <em>Agentless</em>. O SENTINELX faz a auditoria via conexões SSH seguras.
+                    </li>
+                    <li style={{ marginTop: '10px' }}>
+                      <strong>Opção B: Com Agente eBPF (Recomendado para servidores críticos):</strong><br />
+                      Copie o comando de 1-linha exibido no painel de Segurança de Servidores e cole no terminal do seu servidor Linux:
+                      <div style={{ marginTop: '6px', padding: '10px', background: '#0b0f19', borderRadius: '6px', fontSize: '0.78rem', fontFamily: 'var(--font-mono)', color: 'var(--accent-amber)', position: 'relative' }}>
+                        <button onClick={() => handleCopy('curl -sSL https://api.sentinelx.io/v1/agents/install.sh | sudo bash', 'agent_cmd')} style={{ position: 'absolute', top: '6px', right: '8px', background: 'none', border: 'none', color: 'var(--accent-amber)', cursor: 'pointer' }}>
+                          {copiedSnippet === 'agent_cmd' ? <Check size={14} /> : <Copy size={14} />}
+                        </button>
+                        curl -sSL https://api.sentinelx.io/v1/agents/install.sh | sudo bash
+                      </div>
+                      <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: '4px', display: 'block' }}>
+                        O agente eBPF leve (~14MB de RAM) se conectará instantaneamente ao painel do SENTINELX!
+                      </span>
+                    </li>
+                  </ul>
+                </div>
+
+                {/* Timing Summary */}
+                <div style={{ padding: '20px', background: 'rgba(0, 242, 254, 0.08)', borderRadius: '12px', border: '1px solid var(--accent-cyan)' }}>
+                  <h4 style={{ color: 'var(--accent-cyan)', marginTop: 0, marginBottom: '8px', fontSize: '1rem' }}>
+                    ⏱️ Quanto tempo leva no total?
+                  </h4>
+                  <ul style={{ margin: 0, paddingLeft: '20px', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+                    <li>Conectar a Nuvem (AWS): <strong>3 minutos</strong>.</li>
+                    <li>Conectar o GitHub: <strong>2 minutos</strong>.</li>
+                    <li>Conectar um Website/API: <strong>1 minuto</strong>.</li>
+                  </ul>
+                  <p style={{ marginTop: '12px', marginBottom: 0, fontWeight: 700, color: 'var(--accent-cyan)', fontSize: '0.9rem' }}>
+                    Em menos de 10 minutos, toda a sua infraestrutura estará conectada e protegida pelo SENTINELX!
+                  </p>
+                </div>
+              </div>
+            )}
+
             {activeSection === 'QUICKSTART' && (
               <div>
                 <h2 style={{ fontSize: '1.6rem', fontWeight: 900, marginBottom: '16px', color: 'var(--accent-cyan)' }}>
