@@ -72,7 +72,7 @@ const MainApp: React.FC = () => {
   }
 
   // 1. PUBLIC LANDING PAGE (DEFAULT SEPARATE FRONT DOOR)
-  if (currentView === 'LANDING' && !user) {
+  if (currentView === 'LANDING') {
     return (
       <div style={{ minHeight: '100vh', background: 'var(--bg-primary)' }}>
         <WelcomeLandingPage
