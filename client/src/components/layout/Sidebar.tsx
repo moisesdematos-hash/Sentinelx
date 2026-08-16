@@ -46,14 +46,15 @@ interface MenuGroup {
 interface SidebarProps {
   activeTab: string;
   setActiveTab: (tab: string) => void;
+  onGoLanding?: () => void;
 }
 
-export const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab }) => {
+export const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, onGoLanding }) => {
   const menuGroups: MenuGroup[] = [
     {
       title: 'PLATAFORMA',
       items: [
-        { id: 'welcome', label: 'Boas-Vindas & Planos', icon: Home, badge: 'SAAS' },
+        { id: 'welcome', label: 'Landing Page & Planos', icon: Home, badge: 'SAAS' },
         { id: 'dashboard', label: 'Painel Principal', icon: LayoutDashboard },
         { id: 'admin-panel', label: 'Painel de Administração', icon: Settings, badge: 'ADMIN' },
         { id: 'mastery-benchmark', label: 'Mastery & Certificação', icon: Award, badge: '100%' },
@@ -120,6 +121,14 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab }) => 
     },
   ];
 
+  const handleLogoClick = () => {
+    if (onGoLanding) {
+      onGoLanding();
+    } else {
+      setActiveTab('welcome');
+    }
+  };
+
   return (
     <aside
       style={{
@@ -136,10 +145,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab }) => 
         zIndex: 50,
       }}
     >
-      {/* Brand Header (Click to return to Home Dashboard) */}
+      {/* Brand Header (Click to return to Public Landing Page) */}
       <div
-        onClick={() => setActiveTab('dashboard')}
-        title="Voltar ao Painel Principal"
+        onClick={handleLogoClick}
+        title="Voltar para a Página Inicial (Landing Page)"
         style={{
           padding: '24px 20px',
           borderBottom: '1px solid var(--border-color)',
@@ -221,7 +230,13 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab }) => 
                 return (
                   <button
                     key={item.id}
-                    onClick={() => setActiveTab(item.id)}
+                    onClick={() => {
+                      if (item.id === 'welcome' && onGoLanding) {
+                        onGoLanding();
+                      } else {
+                        setActiveTab(item.id);
+                      }
+                    }}
                     style={{
                       display: 'flex',
                       alignItems: 'center',

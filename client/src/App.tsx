@@ -108,7 +108,7 @@ const MainApp: React.FC = () => {
   // 3. AUTHENTICATED CONTROL PLANE (PRODUCTION PLATFORM)
   return (
     <div style={{ minHeight: '100vh', display: 'flex', background: 'var(--bg-primary)' }}>
-      <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
+      <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} onGoLanding={() => setCurrentView('LANDING')} />
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
         <Header onGoLanding={() => setCurrentView('LANDING')} />
         <main style={{ marginLeft: '280px', flex: 1, minHeight: 'calc(100vh - 70px)' }}>
