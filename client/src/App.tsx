@@ -114,7 +114,23 @@ const MainApp: React.FC = () => {
         <main style={{ marginLeft: '280px', flex: 1, minHeight: 'calc(100vh - 70px)' }}>
           {activeTab === 'welcome' && (
             <div style={{ padding: '20px' }}>
-              <button className="btn-secondary" onClick={() => setCurrentView('LANDING')} style={{ marginBottom: '20px' }}>
+              <button
+                className="btn-primary"
+                onClick={() => setCurrentView('LANDING')}
+                style={{
+                  marginBottom: '20px',
+                  padding: '14px 28px',
+                  fontSize: '1.05rem',
+                  fontWeight: 900,
+                  background: 'var(--gradient-cyan)',
+                  color: '#060813',
+                  boxShadow: '0 0 25px rgba(0, 242, 254, 0.4)',
+                  cursor: 'pointer',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '10px',
+                }}
+              >
                 🌐 Ir para a Landing Page Pública Externa
               </button>
               <DashboardPage />

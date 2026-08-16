@@ -27,27 +27,42 @@ export const Header: React.FC<HeaderProps> = ({ onGoLanding }) => {
       }}
     >
       <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-        <div className="badge badge-cyan">
+        <div
+          className="badge badge-cyan"
+          onClick={onGoLanding}
+          title="Clique para ir para a Página Inicial"
+          style={{ cursor: 'pointer', userSelect: 'none' }}
+        >
           <Building2 size={12} />
           <span>{user?.organizationName || 'SENTINELX Security Corp'}</span>
         </div>
-        <div className="badge badge-emerald">
+        <div
+          className="badge badge-emerald"
+          onClick={onGoLanding}
+          title="Clique para ir para a Página Inicial"
+          style={{ cursor: 'pointer', userSelect: 'none' }}
+        >
           <ShieldCheck size={12} />
           <span>SCORES: 96/100 (OPTIMAL)</span>
         </div>
       </div>
 
       <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-        {onGoLanding && (
-          <button
-            onClick={onGoLanding}
-            title="Voltar para a Landing Page Pública Externa"
-            className="btn-secondary"
-            style={{ fontSize: '0.78rem', padding: '6px 12px', gap: '6px' }}
-          >
-            <Globe size={14} /> Página Inicial
-          </button>
-        )}
+        <button
+          onClick={onGoLanding}
+          title="Voltar para a Página Inicial (Landing Page)"
+          className="btn-primary"
+          style={{
+            fontSize: '0.85rem',
+            padding: '8px 16px',
+            gap: '8px',
+            background: 'var(--gradient-cyan)',
+            boxShadow: '0 0 15px rgba(0, 242, 254, 0.3)',
+            cursor: 'pointer',
+          }}
+        >
+          <Globe size={16} /> Página Inicial
+        </button>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }} className="badge badge-purple">
           <Bell size={12} />
@@ -65,7 +80,7 @@ export const Header: React.FC<HeaderProps> = ({ onGoLanding }) => {
           </div>
           <button
             onClick={logout}
-            title="Sign Out"
+            title="Sair / Fazer Logout"
             style={{
               background: 'rgba(255, 8, 68, 0.1)',
               border: '1px solid rgba(255, 8, 68, 0.3)',
