@@ -35,14 +35,17 @@
   box-sizing: border-box;
 }
 
-body {
+html, body {
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
   font-family: var(--font-sans);
   background-color: var(--bg-primary);
   color: var(--text-primary);
   min-height: 100vh;
-  overflow-x: hidden;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* Background Cyber Grid Overlay */
@@ -67,6 +70,9 @@ body::before {
   position: relative;
   z-index: 1;
   min-height: 100vh;
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
   display: flex;
   flex-direction: column;
 }
@@ -95,6 +101,7 @@ body::before {
   border-radius: 12px;
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  max-width: 100%;
 }
 
 .glass-panel:hover {
@@ -206,6 +213,7 @@ code, pre {
   font-family: var(--font-sans);
   font-size: 0.875rem;
   box-shadow: 0 4px 14px rgba(0, 242, 254, 0.3);
+  touch-action: manipulation;
 }
 
 .btn-primary:hover {
@@ -226,6 +234,7 @@ code, pre {
   gap: 8px;
   transition: all 0.2s ease;
   font-size: 0.875rem;
+  touch-action: manipulation;
 }
 
 .btn-secondary:hover {
@@ -251,10 +260,9 @@ code, pre {
 }
 
 /* ========================================================== */
-/* RESPONSIVE DESIGN MEDIA QUERIES (TABLETS & MOBILE PHONES)  */
+/* RESPONSIVE DESIGN & PWA MOBILE TOUCH OPTIMIZATIONS         */
 /* ========================================================== */
 
-/* Desktop-first fallback helper classes */
 .mobile-only {
   display: none !important;
 }
@@ -290,35 +298,57 @@ code, pre {
     margin-left: 0 !important;
     width: 100% !important;
     padding: 16px !important;
+    max-width: 100vw !important;
+    overflow-x: hidden !important;
   }
 
   /* Responsive Grids on Tablets */
   div[style*="gridTemplateColumns: repeat(4, 1fr)"],
   div[style*="gridTemplateColumns: repeat(3, 1fr)"],
-  div[style*="gridTemplateColumns: repeat(6, 1fr)"] {
-    grid-template-columns: repeat(2, 1fr) !important;
+  div[style*="gridTemplateColumns: repeat(6, 1fr)"],
+  div[style*="gridTemplateColumns: 2fr 1fr"] {
+    grid-template-columns: 1fr !important;
   }
 }
 
 @media (max-width: 768px) {
+  /* Prevent iOS Safari auto-zoom on input focus */
+  input, select, textarea {
+    font-size: 16px !important;
+  }
+
   /* Responsive Grids on Mobile Phones */
   div[style*="gridTemplateColumns"] {
     grid-template-columns: 1fr !important;
   }
 
   h1 {
-    font-size: 2rem !important;
+    font-size: 1.75rem !important;
   }
 
   h2 {
-    font-size: 1.5rem !important;
+    font-size: 1.35rem !important;
   }
 
   .glass-panel {
     padding: 16px !important;
   }
 
-  /* Floating Chat Widget spacing on small screens */
+  /* Responsive Table Container for Mobile Smooth Touch Scroll */
+  table {
+    display: block !important;
+    width: 100% !important;
+    overflow-x: auto !important;
+    white-space: nowrap !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  /* Touch Target Optimizations for Mobile */
+  button, .btn-primary, .btn-secondary {
+    min-height: 44px !important;
+  }
+
+  /* Floating Chat Widget on Mobile Phones */
   .floating-chat {
     bottom: 12px !important;
     right: 12px !important;
