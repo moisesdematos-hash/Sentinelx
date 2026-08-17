@@ -249,3 +249,79 @@ code, pre {
   border-color: var(--accent-cyan);
   box-shadow: 0 0 0 2px rgba(0, 242, 254, 0.2);
 }
+
+/* ========================================================== */
+/* RESPONSIVE DESIGN MEDIA QUERIES (TABLETS & MOBILE PHONES)  */
+/* ========================================================== */
+
+/* Desktop-first fallback helper classes */
+.mobile-only {
+  display: none !important;
+}
+
+.desktop-only {
+  display: flex !important;
+}
+
+@media (max-width: 1024px) {
+  .mobile-only {
+    display: flex !important;
+  }
+
+  .desktop-only {
+    display: none !important;
+  }
+
+  aside.app-sidebar {
+    transform: translateX(-100%);
+  }
+  aside.app-sidebar.mobile-open {
+    transform: translateX(0);
+  }
+
+  /* Adjust main & header offsets on mobile/tablets */
+  header.app-header {
+    margin-left: 0 !important;
+    width: 100% !important;
+    padding: 0 16px !important;
+  }
+
+  main.app-main {
+    margin-left: 0 !important;
+    width: 100% !important;
+    padding: 16px !important;
+  }
+
+  /* Responsive Grids on Tablets */
+  div[style*="gridTemplateColumns: repeat(4, 1fr)"],
+  div[style*="gridTemplateColumns: repeat(3, 1fr)"],
+  div[style*="gridTemplateColumns: repeat(6, 1fr)"] {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Responsive Grids on Mobile Phones */
+  div[style*="gridTemplateColumns"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  h1 {
+    font-size: 2rem !important;
+  }
+
+  h2 {
+    font-size: 1.5rem !important;
+  }
+
+  .glass-panel {
+    padding: 16px !important;
+  }
+
+  /* Floating Chat Widget spacing on small screens */
+  .floating-chat {
+    bottom: 12px !important;
+    right: 12px !important;
+    max-width: calc(100vw - 24px) !important;
+  }
+}

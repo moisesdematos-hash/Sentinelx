@@ -29,6 +29,7 @@ import {
   RotateCcw,
   BookOpen,
   Home,
+  X,
 } from 'lucide-react';
 
 interface MenuItem {
@@ -47,9 +48,17 @@ interface SidebarProps {
   activeTab: string;
   setActiveTab: (tab: string) => void;
   onGoLanding?: () => void;
+  isOpenMobile?: boolean;
+  onCloseMobile?: () => void;
 }
 
-export const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, onGoLanding }) => {
+export const Sidebar: React.FC<SidebarProps> = ({
+  activeTab,
+  setActiveTab,
+  onGoLanding,
+  isOpenMobile = false,
+  onCloseMobile,
+}) => {
   const menuGroups: MenuGroup[] = [
     {
       title: 'PLATAFORMA',
@@ -127,184 +136,234 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, onGoL
     } else {
       setActiveTab('welcome');
     }
+    if (onCloseMobile) onCloseMobile();
+  };
+
+  const handleItemClick = (itemId: string) => {
+    if (itemId === 'welcome' && onGoLanding) {
+      onGoLanding();
+    } else {
+      setActiveTab(itemId);
+    }
+    if (onCloseMobile) onCloseMobile();
   };
 
   return (
-    <aside
-      style={{
-        width: '280px',
-        height: '100vh',
-        background: 'rgba(11, 15, 25, 0.95)',
-        backdropFilter: 'blur(16px)',
-        borderRight: '1px solid var(--border-color)',
-        display: 'flex',
-        flexDirection: 'column',
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        zIndex: 50,
-      }}
-    >
-      {/* Brand Header (Click to return to Public Landing Page) */}
-      <div
-        onClick={handleLogoClick}
-        title="Voltar para a Página Inicial (Landing Page)"
-        style={{
-          padding: '24px 20px',
-          borderBottom: '1px solid var(--border-color)',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '12px',
-          cursor: 'pointer',
-          userSelect: 'none',
-        }}
-      >
+    <>
+      {/* Mobile Backdrop Overlay */}
+      {isOpenMobile && (
         <div
+          onClick={onCloseMobile}
           style={{
-            width: '36px',
-            height: '36px',
-            borderRadius: '10px',
-            background: 'var(--gradient-cyan)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            boxShadow: '0 0 15px rgba(0, 242, 254, 0.4)',
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'rgba(6, 8, 19, 0.8)',
+            backdropFilter: 'blur(8px)',
+            zIndex: 99,
           }}
-        >
-          <Shield size={20} color="#060813" />
-        </div>
-        <div>
-          <h1
-            style={{
-              fontSize: '1.25rem',
-              fontWeight: 900,
-              letterSpacing: '0.5px',
-              background: 'var(--gradient-cyan)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-            }}
-          >
-            SENTINELX
-          </h1>
-          <span
-            style={{
-              fontSize: '0.65rem',
-              color: 'var(--text-muted)',
-              fontFamily: 'var(--font-mono)',
-              letterSpacing: '1px',
-            }}
-          >
-            ENTERPRISE PLATFORM
-          </span>
-        </div>
-      </div>
+          className="mobile-only"
+        />
+      )}
 
-      {/* Navigation List (Scrollable) */}
-      <nav
+      <aside
         style={{
-          flex: 1,
-          padding: '16px 12px',
-          overflowY: 'auto',
+          width: '280px',
+          height: '100vh',
+          background: 'rgba(11, 15, 25, 0.98)',
+          backdropFilter: 'blur(16px)',
+          borderRight: '1px solid var(--border-color)',
           display: 'flex',
           flexDirection: 'column',
-          gap: '20px',
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          zIndex: 100,
+          transition: 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
         }}
+        className={`app-sidebar ${isOpenMobile ? 'mobile-open' : ''}`}
       >
-        {menuGroups.map((group, groupIdx) => (
-          <div key={groupIdx}>
-            <div
-              style={{
-                fontSize: '0.68rem',
-                fontWeight: 800,
-                color: 'var(--text-muted)',
-                letterSpacing: '1px',
-                padding: '0 12px 8px 12px',
-              }}
-            >
-              {group.title}
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-              {group.items.map((item) => {
-                const Icon = item.icon;
-                const isActive = activeTab === item.id;
-                return (
-                  <button
-                    key={item.id}
-                    onClick={() => {
-                      if (item.id === 'welcome' && onGoLanding) {
-                        onGoLanding();
-                      } else {
-                        setActiveTab(item.id);
-                      }
-                    }}
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      width: '100%',
-                      padding: '10px 12px',
-                      borderRadius: '8px',
-                      border: 'none',
-                      background: isActive ? 'rgba(0, 242, 254, 0.12)' : 'transparent',
-                      color: isActive ? 'var(--accent-cyan)' : 'var(--text-secondary)',
-                      cursor: 'pointer',
-                      transition: 'all 0.2s ease',
-                      fontWeight: isActive ? 700 : 500,
-                      fontSize: '0.85rem',
-                    }}
-                  >
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                      <Icon size={18} color={isActive ? 'var(--accent-cyan)' : 'var(--text-muted)'} />
-                      <span>{item.label}</span>
-                    </div>
-
-                    {item.badge && (
-                      <span
-                        className={`badge ${
-                          item.badge === 'ADMIN'
-                            ? 'badge-purple'
-                            : item.badge === 'GROQ' || item.badge === 'SAAS'
-                            ? 'badge-cyan'
-                            : 'badge-emerald'
-                        }`}
-                        style={{ fontSize: '0.65rem', padding: '2px 6px' }}
-                      >
-                        {item.badge}
-                      </span>
-                    )}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        ))}
-      </nav>
-
-      {/* System Status Card Footer */}
-      <div
-        style={{
-          padding: '16px',
-          borderTop: '1px solid var(--border-color)',
-          background: 'rgba(6, 8, 19, 0.8)',
-        }}
-      >
+        {/* Brand Header (Click to return to Public Landing Page) */}
         <div
           style={{
+            padding: '24px 20px',
+            borderBottom: '1px solid var(--border-color)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            marginBottom: '8px',
           }}
         >
-          <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Status do Autopiloto</span>
-          <span className="badge badge-emerald" style={{ fontSize: '0.68rem' }}>
-            ONLINE
-          </span>
+          <div
+            onClick={handleLogoClick}
+            title="Voltar para a Página Inicial (Landing Page)"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '12px',
+              cursor: 'pointer',
+              userSelect: 'none',
+            }}
+          >
+            <div
+              style={{
+                width: '36px',
+                height: '36px',
+                borderRadius: '10px',
+                background: 'var(--gradient-cyan)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                boxShadow: '0 0 15px rgba(0, 242, 254, 0.4)',
+              }}
+            >
+              <Shield size={20} color="#060813" />
+            </div>
+            <div>
+              <h1
+                style={{
+                  fontSize: '1.25rem',
+                  fontWeight: 900,
+                  letterSpacing: '0.5px',
+                  background: 'var(--gradient-cyan)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                }}
+              >
+                SENTINELX
+              </h1>
+              <span
+                style={{
+                  fontSize: '0.65rem',
+                  color: 'var(--text-muted)',
+                  fontFamily: 'var(--font-mono)',
+                  letterSpacing: '1px',
+                }}
+              >
+                ENTERPRISE PLATFORM
+              </span>
+            </div>
+          </div>
+
+          {/* Close Mobile Drawer Button */}
+          {onCloseMobile && (
+            <button
+              onClick={onCloseMobile}
+              style={{
+                background: 'none',
+                border: 'none',
+                color: 'var(--text-muted)',
+                cursor: 'pointer',
+              }}
+              className="mobile-only"
+            >
+              <X size={20} />
+            </button>
+          )}
         </div>
-        <div style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--accent-cyan)' }}>
-          FULL_AUTO (100% Autônomo)
+
+        {/* Navigation List (Scrollable) */}
+        <nav
+          style={{
+            flex: 1,
+            padding: '16px 12px',
+            overflowY: 'auto',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '20px',
+          }}
+        >
+          {menuGroups.map((group, groupIdx) => (
+            <div key={groupIdx}>
+              <div
+                style={{
+                  fontSize: '0.68rem',
+                  fontWeight: 800,
+                  color: 'var(--text-muted)',
+                  letterSpacing: '1px',
+                  padding: '0 12px 8px 12px',
+                }}
+              >
+                {group.title}
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                {group.items.map((item) => {
+                  const Icon = item.icon;
+                  const isActive = activeTab === item.id;
+                  return (
+                    <button
+                      key={item.id}
+                      onClick={() => handleItemClick(item.id)}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        width: '100%',
+                        padding: '10px 12px',
+                        borderRadius: '8px',
+                        border: 'none',
+                        background: isActive ? 'rgba(0, 242, 254, 0.12)' : 'transparent',
+                        color: isActive ? 'var(--accent-cyan)' : 'var(--text-secondary)',
+                        cursor: 'pointer',
+                        transition: 'all 0.2s ease',
+                        fontWeight: isActive ? 700 : 500,
+                        fontSize: '0.85rem',
+                      }}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        <Icon size={18} color={isActive ? 'var(--accent-cyan)' : 'var(--text-muted)'} />
+                        <span>{item.label}</span>
+                      </div>
+
+                      {item.badge && (
+                        <span
+                          className={`badge ${
+                            item.badge === 'ADMIN'
+                              ? 'badge-purple'
+                              : item.badge === 'GROQ' || item.badge === 'SAAS'
+                              ? 'badge-cyan'
+                              : 'badge-emerald'
+                          }`}
+                          style={{ fontSize: '0.65rem', padding: '2px 6px' }}
+                        >
+                          {item.badge}
+                        </span>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+        </nav>
+
+        {/* System Status Card Footer */}
+        <div
+          style={{
+            padding: '16px',
+            borderTop: '1px solid var(--border-color)',
+            background: 'rgba(6, 8, 19, 0.8)',
+          }}
+        >
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              marginBottom: '8px',
+            }}
+          >
+            <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Status do Autopiloto</span>
+            <span className="badge badge-emerald" style={{ fontSize: '0.68rem' }}>
+              ONLINE
+            </span>
+          </div>
+          <div style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--accent-cyan)' }}>
+            FULL_AUTO (100% Autônomo)
+          </div>
         </div>
-      </div>
-    </aside>
+      </aside>
+    </>
   );
 };

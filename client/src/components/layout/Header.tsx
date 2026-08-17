@@ -1,16 +1,18 @@
 import React from 'react';
 import { useAuth } from '../../context/AuthContext';
-import { Building2, LogOut, Bell, ShieldCheck, Globe, Home } from 'lucide-react';
+import { Building2, LogOut, Bell, ShieldCheck, Globe, Home, Menu } from 'lucide-react';
 
 interface HeaderProps {
   onGoLanding?: () => void;
+  onToggleMobileSidebar?: () => void;
 }
 
-export const Header: React.FC<HeaderProps> = ({ onGoLanding }) => {
+export const Header: React.FC<HeaderProps> = ({ onGoLanding, onToggleMobileSidebar }) => {
   const { user, logout } = useAuth();
 
   return (
     <header
+      className="app-header"
       style={{
         height: '70px',
         marginLeft: '280px',
@@ -26,7 +28,28 @@ export const Header: React.FC<HeaderProps> = ({ onGoLanding }) => {
         zIndex: 10,
       }}
     >
-      <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+        {/* Mobile Hamburger Menu Toggle Button */}
+        {onToggleMobileSidebar && (
+          <button
+            onClick={onToggleMobileSidebar}
+            style={{
+              background: 'rgba(0, 242, 254, 0.12)',
+              border: '1px solid var(--border-color)',
+              color: 'var(--accent-cyan)',
+              padding: '8px',
+              borderRadius: '8px',
+              cursor: 'pointer',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+            className="mobile-only"
+            title="Abrir Menu Lateral"
+          >
+            <Menu size={22} />
+          </button>
+        )}
+
         <div
           className="badge badge-cyan"
           onClick={onGoLanding}
@@ -36,8 +59,9 @@ export const Header: React.FC<HeaderProps> = ({ onGoLanding }) => {
           <Building2 size={12} />
           <span>{user?.organizationName || 'SENTINELX Security Corp'}</span>
         </div>
+
         <div
-          className="badge badge-emerald"
+          className="badge badge-emerald desktop-only"
           onClick={onGoLanding}
           title="Clique para ir para a Página Inicial"
           style={{ cursor: 'pointer', userSelect: 'none' }}
@@ -61,16 +85,16 @@ export const Header: React.FC<HeaderProps> = ({ onGoLanding }) => {
             cursor: 'pointer',
           }}
         >
-          <Globe size={16} /> Página Inicial
+          <Globe size={16} /> <span className="desktop-only">Página Inicial</span>
         </button>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }} className="badge badge-purple">
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }} className="badge badge-purple desktop-only">
           <Bell size={12} />
           <span>3 ALERTS</span>
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', paddingLeft: '16px', borderLeft: '1px solid var(--border-color)' }}>
-          <div style={{ textAlign: 'right' }}>
+          <div style={{ textAlign: 'right' }} className="desktop-only">
             <div style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-primary)' }}>
               {user?.name || 'Chief Analyst'}
             </div>

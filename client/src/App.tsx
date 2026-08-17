@@ -49,6 +49,7 @@ const MainApp: React.FC = () => {
   const { user, login, isLoading } = useAuth();
   const [currentView, setCurrentView] = useState<'LANDING' | 'LOGIN' | 'APP'>('LANDING');
   const [activeTab, setActiveTab] = useState('dashboard');
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 
   const handleGuestAccess = () => {
     const guestUser = {
@@ -108,10 +109,19 @@ const MainApp: React.FC = () => {
   // 3. AUTHENTICATED CONTROL PLANE (PRODUCTION PLATFORM)
   return (
     <div style={{ minHeight: '100vh', display: 'flex', background: 'var(--bg-primary)' }}>
-      <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} onGoLanding={() => setCurrentView('LANDING')} />
+      <Sidebar
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        onGoLanding={() => setCurrentView('LANDING')}
+        isOpenMobile={isMobileSidebarOpen}
+        onCloseMobile={() => setIsMobileSidebarOpen(false)}
+      />
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-        <Header onGoLanding={() => setCurrentView('LANDING')} />
-        <main style={{ marginLeft: '280px', flex: 1, minHeight: 'calc(100vh - 70px)' }}>
+        <Header
+          onGoLanding={() => setCurrentView('LANDING')}
+          onToggleMobileSidebar={() => setIsMobileSidebarOpen(!isMobileSidebarOpen)}
+        />
+        <main className="app-main" style={{ marginLeft: '280px', flex: 1, minHeight: 'calc(100vh - 70px)' }}>
           {activeTab === 'welcome' && (
             <div style={{ padding: '20px' }}>
               <button
