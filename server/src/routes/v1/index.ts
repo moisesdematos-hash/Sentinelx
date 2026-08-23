@@ -41,6 +41,7 @@ import ebpfHotPatchRoutes from './ebpf_hotpatch.routes.js';
 import deceptionHoneytokenRoutes from './deception_honeytoken.routes.js';
 import quantumRollbackRoutes from './quantum_rollback.routes.js';
 import voiceMessagingCommandRoutes from './voice_messaging_command.routes.js';
+import globalSwarmImmunityRoutes from './global_swarm_immunity.routes.js';
 
 const router = Router();
 
@@ -87,5 +88,6 @@ router.use('/ebpf-hotpatch', ebpfHotPatchRoutes);
 router.use('/honeytokens', deceptionHoneytokenRoutes);
 router.use('/quantum-rollback', quantumRollbackRoutes);
 router.use('/voice-command', voiceMessagingCommandRoutes);
+router.use('/global-swarm', globalSwarmImmunityRoutes);
 
 export default router;
