@@ -1,14 +1,25 @@
 import React from 'react';
 import { useAuth } from '../../context/AuthContext';
-import { Building2, LogOut, Bell, ShieldCheck, Globe, Home, Menu } from 'lucide-react';
+import { Building2, LogOut, Bell, ShieldCheck, Globe, ArrowLeft, Menu } from 'lucide-react';
 
 interface HeaderProps {
   onGoLanding?: () => void;
   onToggleMobileSidebar?: () => void;
+  onBack?: () => void;
+  activeTab?: string;
 }
 
-export const Header: React.FC<HeaderProps> = ({ onGoLanding, onToggleMobileSidebar }) => {
+export const Header: React.FC<HeaderProps> = ({
+  onGoLanding,
+  onToggleMobileSidebar,
+  onBack,
+  activeTab,
+}) => {
   const { user, logout } = useAuth();
+
+  const isHubPage = activeTab?.startsWith('hub-');
+  const isDashboard = activeTab === 'dashboard' || activeTab === 'welcome';
+  const showBackButton = onBack && !isDashboard;
 
   return (
     <header
@@ -40,6 +51,7 @@ export const Header: React.FC<HeaderProps> = ({ onGoLanding, onToggleMobileSideb
               padding: '8px',
               borderRadius: '8px',
               cursor: 'pointer',
+              display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
             }}
@@ -47,6 +59,28 @@ export const Header: React.FC<HeaderProps> = ({ onGoLanding, onToggleMobileSideb
             title="Abrir Menu Lateral"
           >
             <Menu size={22} />
+          </button>
+        )}
+
+        {/* Universal Back Button ("← Voltar") */}
+        {showBackButton && (
+          <button
+            onClick={onBack}
+            title={isHubPage ? 'Voltar para o Painel Principal' : 'Voltar para a Central do Tema'}
+            className="btn-secondary"
+            style={{
+              fontSize: '0.85rem',
+              padding: '8px 16px',
+              gap: '6px',
+              background: 'rgba(0, 242, 254, 0.12)',
+              border: '1px solid rgba(0, 242, 254, 0.3)',
+              color: 'var(--accent-cyan)',
+              fontWeight: 700,
+              cursor: 'pointer',
+            }}
+          >
+            <ArrowLeft size={16} />
+            <span>{isHubPage ? 'Voltar ao Painel' : 'Voltar para Central'}</span>
           </button>
         )}
 

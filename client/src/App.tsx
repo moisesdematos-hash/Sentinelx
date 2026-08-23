@@ -120,6 +120,24 @@ const MainApp: React.FC = () => {
     );
   }
 
+  const handleBackNav = () => {
+    if (['sentinel-ai', 'super-ai-suite', 'red-teaming', 'ebpf-hotpatch', 'honeytokens', 'quantum-rollback', 'voice-command', 'global-swarm', 'finops-sentinel', 'ai-investigations', 'autopilot', 'self-healing'].includes(activeTab)) {
+      setActiveTab('hub-super-ai');
+    } else if (['assets', 'monitoring', 'server-security', 'api-security', 'container-security', 'mobile-security', 'edge-security'].includes(activeTab)) {
+      setActiveTab('hub-epp-edr');
+    } else if (['cloud-connectors', 'cloud-posture'].includes(activeTab)) {
+      setActiveTab('hub-cloud-security');
+    } else if (['event-bus', 'detection-engine', 'security-graph', 'risk-engine', 'incidents', 'soar', 'threat-intel', 'threat-exchange'].includes(activeTab)) {
+      setActiveTab('hub-siem-xdr');
+    } else if (['compliance', 'executive-reporting', 'brand-protection', 'identity', 'microsegmentation'].includes(activeTab)) {
+      setActiveTab('hub-compliance');
+    } else if (['msp', 'finops', 'siem', 'subscriptions', 'api', 'admin-panel', 'mastery-benchmark'].includes(activeTab)) {
+      setActiveTab('hub-operations');
+    } else {
+      setActiveTab('dashboard');
+    }
+  };
+
   // 3. AUTHENTICATED CONTROL PLANE (PRODUCTION PLATFORM)
   return (
     <div style={{ minHeight: '100vh', display: 'flex', background: 'var(--bg-primary)' }}>
@@ -134,6 +152,8 @@ const MainApp: React.FC = () => {
         <Header
           onGoLanding={() => setCurrentView('LANDING')}
           onToggleMobileSidebar={() => setIsMobileSidebarOpen(!isMobileSidebarOpen)}
+          onBack={handleBackNav}
+          activeTab={activeTab}
         />
         <main className="app-main" style={{ marginLeft: '280px', flex: 1, minHeight: 'calc(100vh - 70px)' }}>
           {activeTab === 'welcome' && (

@@ -121,23 +121,29 @@ export const SuperAiHubPage: React.FC<SuperAiHubPageProps> = ({ onNavigate }) =>
   return (
     <div style={{ padding: '32px', display: 'flex', flexDirection: 'column', gap: '28px' }}>
       {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-        <div style={{ width: '52px', height: '52px', borderRadius: '14px', background: 'var(--gradient-cyan)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 25px rgba(0, 242, 254, 0.4)' }}>
-          <Sparkles size={28} color="#060813" />
-        </div>
-        <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <h2 style={{ fontSize: '2rem', fontWeight: 900, letterSpacing: '0.5px' }}>
-              CENTRAL DE AUTONOMIA & SUPER IA
-            </h2>
-            <span className="badge badge-cyan" style={{ fontSize: '0.8rem' }}>
-              12 MOTORES ATIVOS
-            </span>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+          <div style={{ width: '52px', height: '52px', borderRadius: '14px', background: 'var(--gradient-cyan)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 25px rgba(0, 242, 254, 0.4)' }}>
+            <Sparkles size={28} color="#060813" />
           </div>
-          <p style={{ fontSize: '0.92rem', color: 'var(--text-muted)', marginTop: '4px' }}>
-            Selecione qualquer uma das funcionalidades avançadas de inteligência artificial e proteção autônoma abaixo:
-          </p>
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <h2 style={{ fontSize: '2rem', fontWeight: 900, letterSpacing: '0.5px' }}>
+                CENTRAL DE AUTONOMIA & SUPER IA
+              </h2>
+              <span className="badge badge-cyan" style={{ fontSize: '0.8rem' }}>
+                12 MOTORES ATIVOS
+              </span>
+            </div>
+            <p style={{ fontSize: '0.92rem', color: 'var(--text-muted)', marginTop: '4px' }}>
+              Selecione qualquer uma das funcionalidades avançadas de inteligência artificial e proteção autônoma abaixo:
+            </p>
+          </div>
         </div>
+
+        <button className="btn-secondary" onClick={() => onNavigate('dashboard')} style={{ padding: '8px 16px', fontSize: '0.85rem' }}>
+          ← Voltar ao Painel
+        </button>
       </div>
 
       {/* Grid of Sub-Features */}
