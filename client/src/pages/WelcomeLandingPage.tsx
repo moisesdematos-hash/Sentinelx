@@ -222,28 +222,34 @@ export const WelcomeLandingPage: React.FC<WelcomeLandingPageProps> = ({ onEnterA
         </nav>
 
         <div style={{ display: 'flex', gap: '14px', alignItems: 'center' }}>
-          {/* 1-CLICK GUEST BUTTON IN HEADER */}
+          {/* ⚡ 1-CLICK AUTO PROTECTION ENTER APP BUTTON */}
           <button
             onClick={onEnterGuest}
             style={{
-              background: 'rgba(168, 85, 247, 0.15)',
-              border: '1px solid var(--accent-purple)',
-              color: 'var(--accent-purple)',
-              padding: '10px 18px',
+              background: 'var(--gradient-cyan)',
+              border: 'none',
+              color: '#060813',
+              padding: '10px 20px',
               borderRadius: '8px',
               fontSize: '0.88rem',
-              fontWeight: 700,
+              fontWeight: 800,
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
               gap: '8px',
+              boxShadow: '0 0 20px rgba(0, 242, 254, 0.4)',
             }}
+            title="Entrar na Plataforma e ativar a Blindagem Automática"
           >
-            <UserCheck size={16} /> Entrar como Convidado
+            <Zap size={16} /> ⚡ Blindar Serviços em 1-Clique
           </button>
 
-          <button className="btn-primary" onClick={onEnterApp}>
-            <Play size={16} /> Login Corporativo
+          <button
+            onClick={onEnterApp}
+            className="btn-secondary"
+            style={{ fontSize: '0.88rem', padding: '10px 18px' }}
+          >
+            Acessar / Login
           </button>
         </div>
       </header>

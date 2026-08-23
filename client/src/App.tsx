@@ -75,6 +75,7 @@ const MainApp: React.FC = () => {
       organizationName: 'SENTINELX Security Corp',
     };
     login('stx_guest_demo_token_98f73b', guestUser);
+    setActiveTab('assets');
     setCurrentView('APP');
   };
 
