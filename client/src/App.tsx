@@ -61,9 +61,27 @@ import { LoginPage } from './pages/LoginPage';
 
 const MainApp: React.FC = () => {
   const { user, login, isLoading } = useAuth();
-  const [currentView, setCurrentView] = useState<'LANDING' | 'LOGIN' | 'APP'>('LANDING');
-  const [activeTab, setActiveTab] = useState('dashboard');
+  const [currentView, setCurrentView] = useState<'LANDING' | 'LOGIN' | 'APP'>(() => {
+    return (localStorage.getItem('sentinelx_current_view') as any) || 'APP';
+  });
+  const [activeTab, setActiveTabState] = useState<string>(() => {
+    return localStorage.getItem('sentinelx_active_tab') || 'dashboard';
+  });
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
+
+  const setActiveTab = (tab: string) => {
+    setActiveTabState(tab);
+    try {
+      localStorage.setItem('sentinelx_active_tab', tab);
+    } catch (e) {}
+  };
+
+  const handleSetCurrentView = (view: 'LANDING' | 'LOGIN' | 'APP') => {
+    setCurrentView(view);
+    try {
+      localStorage.setItem('sentinelx_current_view', view);
+    } catch (e) {}
+  };
 
   const handleGuestAccess = () => {
     const guestUser = {
@@ -76,7 +94,7 @@ const MainApp: React.FC = () => {
     };
     login('stx_guest_demo_token_98f73b', guestUser);
     setActiveTab('assets');
-    setCurrentView('APP');
+    handleSetCurrentView('APP');
   };
 
   if (isLoading) {
@@ -94,9 +112,9 @@ const MainApp: React.FC = () => {
         <WelcomeLandingPage
           onEnterApp={() => {
             if (user) {
-              setCurrentView('APP');
+              handleSetCurrentView('APP');
             } else {
-              setCurrentView('LOGIN');
+              handleSetCurrentView('LOGIN');
             }
           }}
           onEnterGuest={handleGuestAccess}
@@ -112,7 +130,7 @@ const MainApp: React.FC = () => {
     return (
       <div style={{ minHeight: '100vh', background: 'var(--bg-primary)' }}>
         <div style={{ position: 'absolute', top: '20px', left: '20px', zIndex: 10 }}>
-          <button className="btn-secondary" onClick={() => setCurrentView('LANDING')}>
+          <button className="btn-secondary" onClick={() => handleSetCurrentView('LANDING')}>
             ← Voltar para a Landing Page
           </button>
         </div>
