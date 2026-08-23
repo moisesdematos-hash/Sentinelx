@@ -1,0 +1,145 @@
+import React from 'react';
+import {
+  Server,
+  Activity,
+  Globe,
+  Layers,
+  Smartphone,
+  Zap,
+  ArrowRight,
+  Shield,
+} from 'lucide-react';
+
+interface EppEdrHubPageProps {
+  onNavigate: (tabId: string) => void;
+}
+
+export const EppEdrHubPage: React.FC<EppEdrHubPageProps> = ({ onNavigate }) => {
+  const eppFeatures = [
+    {
+      id: 'assets',
+      title: 'Inventário de Ativos (Asset Discovery)',
+      description: 'Visão unificada e catálogo automático de servidores, endpoints, APIs, contêineres e recursos de nuvem.',
+      icon: Server,
+      badge: 'DISCOVERY',
+      color: 'var(--accent-cyan)',
+    },
+    {
+      id: 'monitoring',
+      title: 'Monitoramento Contínuo (EPP / EDR Telemetry)',
+      description: 'Telemetria em tempo real de uptime, latência, desvio de linha de base e validade de certificados TLS.',
+      icon: Activity,
+      badge: 'LIVE TELEMETRY',
+      color: 'var(--accent-emerald)',
+    },
+    {
+      id: 'server-security',
+      title: 'Segurança de Servidores (EDR Process & FIM)',
+      description: 'Monitoramento de processos, integridade de arquivos (FIM), portas de escuta e auditoria de usuários sudoers.',
+      icon: Server,
+      badge: 'PROCESS & FIM',
+      color: 'var(--accent-purple)',
+    },
+    {
+      id: 'api-security',
+      title: 'Segurança de APIs REST & BOLA Protection',
+      description: 'Descoberta de matriz de endpoints, auditoria de vazamento de PII e proteção contra BOLA/IDOR.',
+      icon: Globe,
+      badge: 'API GUARDIAN',
+      color: 'var(--accent-cyan)',
+    },
+    {
+      id: 'container-security',
+      title: 'Segurança de Contêineres & Kubernetes',
+      description: 'Varredura de camadas de imagem Docker (CVEs), runtime sem privilégios de root e audit PSS em K8s.',
+      icon: Layers,
+      badge: 'KUBERNETES',
+      color: 'var(--accent-amber)',
+    },
+    {
+      id: 'mobile-security',
+      title: 'Segurança Mobile (APK / IPA MASVS Audit)',
+      description: 'Análise estática e dinâmica de aplicativos Android/iOS com extração de segredos e verificação MASVS.',
+      icon: Smartphone,
+      badge: 'MASVS AUDIT',
+      color: 'var(--accent-emerald)',
+    },
+    {
+      id: 'edge-security',
+      title: 'Borda & WAF / DDoS Mitigation',
+      description: 'Proteção de nós de borda (Cloudflare Workers / CloudFront) contra ataques de DDoS e payload malicioso.',
+      icon: Zap,
+      badge: 'EDGE WAF',
+      color: '#ff4b4b',
+    },
+  ];
+
+  return (
+    <div style={{ padding: '32px', display: 'flex', flexDirection: 'column', gap: '28px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+        <div style={{ width: '52px', height: '52px', borderRadius: '14px', background: 'var(--gradient-cyan)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 25px rgba(0, 242, 254, 0.4)' }}>
+          <Shield size={28} color="#060813" />
+        </div>
+        <div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <h2 style={{ fontSize: '2rem', fontWeight: 900, letterSpacing: '0.5px' }}>
+              CENTRAL DE EPP, EDR & PROTEÇÃO DE ATIVOS
+            </h2>
+            <span className="badge badge-cyan" style={{ fontSize: '0.8rem' }}>
+              7 MÓDULOS DE PROTEÇÃO
+            </span>
+          </div>
+          <p style={{ fontSize: '0.92rem', color: 'var(--text-muted)', marginTop: '4px' }}>
+            Selecione qualquer módulo de proteção de endpoints, servidores, APIs, contêineres ou borda para gerenciar:
+          </p>
+        </div>
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', gap: '22px' }}>
+        {eppFeatures.map((item) => {
+          const Icon = item.icon;
+          return (
+            <div
+              key={item.id}
+              onClick={() => onNavigate(item.id)}
+              className="glass-panel"
+              style={{
+                padding: '24px',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+                gap: '16px',
+                cursor: 'pointer',
+                transition: 'all 0.22s ease',
+                borderLeft: `4px solid ${item.color}`,
+              }}
+            >
+              <div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+                  <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: 'rgba(15, 23, 42, 0.8)', border: '1px solid var(--border-color)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <Icon size={22} color={item.color} />
+                  </div>
+                  <span className="badge badge-cyan" style={{ fontSize: '0.68rem', padding: '3px 8px' }}>
+                    {item.badge}
+                  </span>
+                </div>
+
+                <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#fff', marginBottom: '8px' }}>
+                  {item.title}
+                </h3>
+                <p style={{ fontSize: '0.84rem', color: 'var(--text-muted)', lineHeight: 1.5 }}>
+                  {item.description}
+                </p>
+              </div>
+
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.82rem', fontWeight: 700, color: item.color, marginTop: '8px' }}>
+                <span>Abrir Funcionalidade</span>
+                <ArrowRight size={16} />
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+};

@@ -51,6 +51,12 @@ import { VoiceMessagingCommandPage } from './pages/VoiceMessagingCommandPage';
 import { GlobalSwarmImmunityPage } from './pages/GlobalSwarmImmunityPage';
 import { FinOpsSentinelPage } from './pages/FinOpsSentinelPage';
 import { SuperAiSuitePage } from './pages/SuperAiSuitePage';
+import { SuperAiHubPage } from './pages/hubs/SuperAiHubPage';
+import { EppEdrHubPage } from './pages/hubs/EppEdrHubPage';
+import { CloudSecurityHubPage } from './pages/hubs/CloudSecurityHubPage';
+import { SiemXdrHubPage } from './pages/hubs/SiemXdrHubPage';
+import { ComplianceHubPage } from './pages/hubs/ComplianceHubPage';
+import { OperationsHubPage } from './pages/hubs/OperationsHubPage';
 import { LoginPage } from './pages/LoginPage';
 
 const MainApp: React.FC = () => {
@@ -161,6 +167,12 @@ const MainApp: React.FC = () => {
           {activeTab === 'server-security' && <ServerSecurityPage />}
           {activeTab === 'api-security' && <ApiSecurityPage />}
           {activeTab === 'container-security' && <ContainerSecurityPage />}
+          {activeTab === 'hub-super-ai' && <SuperAiHubPage onNavigate={setActiveTab} />}
+          {activeTab === 'hub-epp-edr' && <EppEdrHubPage onNavigate={setActiveTab} />}
+          {activeTab === 'hub-cloud-security' && <CloudSecurityHubPage onNavigate={setActiveTab} />}
+          {activeTab === 'hub-siem-xdr' && <SiemXdrHubPage onNavigate={setActiveTab} />}
+          {activeTab === 'hub-compliance' && <ComplianceHubPage onNavigate={setActiveTab} />}
+          {activeTab === 'hub-operations' && <OperationsHubPage onNavigate={setActiveTab} />}
           {activeTab === 'cloud-connectors' && <CloudConnectorsPage />}
           {activeTab === 'cloud-posture' && <CloudPosturePage />}
           {activeTab === 'event-bus' && <EventBusPage />}
