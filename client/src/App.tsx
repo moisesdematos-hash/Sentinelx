@@ -49,6 +49,7 @@ import { HoneytokenDeceptionPage } from './pages/HoneytokenDeceptionPage';
 import { QuantumRollbackPage } from './pages/QuantumRollbackPage';
 import { VoiceMessagingCommandPage } from './pages/VoiceMessagingCommandPage';
 import { GlobalSwarmImmunityPage } from './pages/GlobalSwarmImmunityPage';
+import { FinOpsSentinelPage } from './pages/FinOpsSentinelPage';
 import { LoginPage } from './pages/LoginPage';
 
 const MainApp: React.FC = () => {
@@ -173,6 +174,7 @@ const MainApp: React.FC = () => {
           {activeTab === 'quantum-rollback' && <QuantumRollbackPage />}
           {activeTab === 'voice-command' && <VoiceMessagingCommandPage />}
           {activeTab === 'global-swarm' && <GlobalSwarmImmunityPage />}
+          {activeTab === 'finops-sentinel' && <FinOpsSentinelPage />}
           {activeTab === 'ai-investigations' && <AiInvestigationPage />}
           {activeTab === 'autopilot' && <AutopilotPage />}
           {activeTab === 'soar' && <SoarEnginePage />}

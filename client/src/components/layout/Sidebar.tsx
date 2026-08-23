@@ -112,6 +112,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         { id: 'quantum-rollback', label: 'Reversão Quântica (Rollback)', icon: RotateCcw, badge: 'SUPER AI' },
         { id: 'voice-command', label: 'Comando por Voz & WhatsApp', icon: Mic, badge: 'SUPER AI' },
         { id: 'global-swarm', label: 'Imunidade Coletiva Swarm', icon: Globe, badge: 'SUPER AI' },
+        { id: 'finops-sentinel', label: 'Escudo Financeiro FinOps', icon: CreditCard, badge: 'SUPER AI' },
         { id: 'ai-investigations', label: 'AI Incident Analyst', icon: Sparkles },
         { id: 'autopilot', label: 'Autopiloto de Contenção', icon: Zap },
         { id: 'soar', label: 'Orquestração SOAR', icon: Terminal },
