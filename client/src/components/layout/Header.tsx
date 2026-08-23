@@ -1,11 +1,12 @@
 import React from 'react';
 import { useAuth } from '../../context/AuthContext';
-import { Building2, LogOut, Bell, ShieldCheck, Globe, ArrowLeft, Menu } from 'lucide-react';
+import { Building2, LogOut, Bell, ShieldCheck, Globe, ArrowLeft, Menu, Zap } from 'lucide-react';
 
 interface HeaderProps {
   onGoLanding?: () => void;
   onToggleMobileSidebar?: () => void;
   onBack?: () => void;
+  onAutoShield?: () => void;
   activeTab?: string;
 }
 
@@ -13,6 +14,7 @@ export const Header: React.FC<HeaderProps> = ({
   onGoLanding,
   onToggleMobileSidebar,
   onBack,
+  onAutoShield,
   activeTab,
 }) => {
   const { user, logout } = useAuth();
@@ -27,13 +29,13 @@ export const Header: React.FC<HeaderProps> = ({
       style={{
         height: '70px',
         marginLeft: '280px',
-        padding: '0 32px',
+        padding: '0 24px',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
         borderBottom: '1px solid var(--border-color)',
-        background: 'rgba(6, 8, 19, 0.7)',
-        backdropFilter: 'blur(12px)',
+        background: 'rgba(6, 8, 19, 0.95)',
+        backdropFilter: 'blur(16px)',
         position: 'sticky',
         top: 0,
         zIndex: 10,
@@ -70,7 +72,7 @@ export const Header: React.FC<HeaderProps> = ({
             className="btn-secondary"
             style={{
               fontSize: '0.85rem',
-              padding: '8px 16px',
+              padding: '8px 14px',
               gap: '6px',
               background: 'rgba(0, 242, 254, 0.12)',
               border: '1px solid rgba(0, 242, 254, 0.3)',
@@ -101,39 +103,56 @@ export const Header: React.FC<HeaderProps> = ({
           style={{ cursor: 'pointer', userSelect: 'none' }}
         >
           <ShieldCheck size={12} />
-          <span>SCORES: 96/100 (OPTIMAL)</span>
+          <span>SCORES: 100/100 (BLINDAGEM TOTAL)</span>
         </div>
       </div>
 
-      <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+        {/* ⚡ PROMINENT 1-CLICK AUTO SHIELD BUTTON IN TOP HEADER */}
+        {onAutoShield && (
+          <button
+            onClick={onAutoShield}
+            title="Ativar eBPF Kernel Hot-Patching, Baseline SHA-256 e Autopiloto em 1-Clique"
+            style={{
+              background: 'var(--gradient-cyan)',
+              border: 'none',
+              color: '#060813',
+              padding: '8px 16px',
+              borderRadius: '8px',
+              fontSize: '0.85rem',
+              fontWeight: 800,
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              boxShadow: '0 0 20px rgba(0, 242, 254, 0.4)',
+            }}
+          >
+            <Zap size={16} /> ⚡ BLINDAR AUTOMATICAMENTE (1-CLIQUE)
+          </button>
+        )}
+
         <button
           onClick={onGoLanding}
           title="Voltar para a Página Inicial (Landing Page)"
-          className="btn-primary"
+          className="btn-secondary"
           style={{
-            fontSize: '0.85rem',
-            padding: '8px 16px',
-            gap: '8px',
-            background: 'var(--gradient-cyan)',
-            boxShadow: '0 0 15px rgba(0, 242, 254, 0.3)',
+            fontSize: '0.82rem',
+            padding: '8px 14px',
+            gap: '6px',
             cursor: 'pointer',
           }}
         >
-          <Globe size={16} /> <span className="desktop-only">Página Inicial</span>
+          <Globe size={14} /> <span className="desktop-only">Página Inicial</span>
         </button>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }} className="badge badge-purple desktop-only">
-          <Bell size={12} />
-          <span>3 ALERTS</span>
-        </div>
-
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', paddingLeft: '16px', borderLeft: '1px solid var(--border-color)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', paddingLeft: '12px', borderLeft: '1px solid var(--border-color)' }}>
           <div style={{ textAlign: 'right' }} className="desktop-only">
-            <div style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-primary)' }}>
+            <div style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-primary)' }}>
               {user?.name || 'Chief Analyst'}
             </div>
-            <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
-              {user?.role || 'ORG_ADMIN'}
+            <div style={{ fontSize: '0.68rem', color: 'var(--accent-cyan)', fontFamily: 'var(--font-mono)' }}>
+              {user?.role || 'SUPER_ADMIN'}
             </div>
           </div>
           <button

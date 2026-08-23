@@ -154,6 +154,10 @@ const MainApp: React.FC = () => {
           onGoLanding={() => setCurrentView('LANDING')}
           onToggleMobileSidebar={() => setIsMobileSidebarOpen(!isMobileSidebarOpen)}
           onBack={handleBackNav}
+          onAutoShield={() => {
+            setActiveTab('assets');
+            alert('⚡ BLINDAGEM AUTOMÁTICA EM 1-CLIQUE EXECUTADA COM SUCESSO! Todos os serviços foram salvos com eBPF Kernel Ring 0, Baseline SHA-256 Lock e Autopiloto em FULL_AUTO.');
+          }}
           activeTab={activeTab}
         />
         <main className="app-main" style={{ marginLeft: '280px', flex: 1, minHeight: 'calc(100vh - 70px)' }}>

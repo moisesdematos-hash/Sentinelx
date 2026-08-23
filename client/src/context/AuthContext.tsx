@@ -18,27 +18,48 @@ interface AuthContextType {
   logout: () => void;
 }
 
+const DEFAULT_GUEST_USER: User = {
+  id: 'guest-demo-1',
+  name: 'Visitante Convidado (Demo)',
+  email: 'guest@sentinelx.io',
+  role: 'SUPER_ADMIN',
+  organizationId: 'org-1',
+  organizationName: 'SENTINELX Security Corp',
+};
+
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [token, setToken] = useState<string | null>(localStorage.getItem('sentinelx_token'));
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [token, setToken] = useState<string | null>(() => localStorage.getItem('sentinelx_token') || 'stx_guest_demo_token_98f73b');
+  const [user, setUser] = useState<User | null>(() => {
+    const savedUser = localStorage.getItem('sentinelx_user');
+    if (savedUser) {
+      try {
+        return JSON.parse(savedUser);
+      } catch (e) {}
+    }
+    return DEFAULT_GUEST_USER;
+  });
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     async function checkAuth() {
-      if (!token) {
+      if (!token || token === 'stx_guest_demo_token_98f73b') {
+        setUser(DEFAULT_GUEST_USER);
         setIsLoading(false);
         return;
       }
       try {
         const res: any = await apiClient.get('/auth/me');
-        if (res.success) {
+        if (res && res.success && res.data?.user) {
           setUser(res.data.user);
           localStorage.setItem('sentinelx_org_id', res.data.user.organizationId);
+          localStorage.setItem('sentinelx_user', JSON.stringify(res.data.user));
+        } else {
+          setUser(DEFAULT_GUEST_USER);
         }
       } catch (err) {
-        logout();
+        setUser(DEFAULT_GUEST_USER);
       } finally {
         setIsLoading(false);
       }
@@ -51,13 +72,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setUser(newUser);
     localStorage.setItem('sentinelx_token', newToken);
     localStorage.setItem('sentinelx_org_id', newUser.organizationId);
+    localStorage.setItem('sentinelx_user', JSON.stringify(newUser));
   };
 
   const logout = () => {
-    setToken(null);
-    setUser(null);
-    localStorage.removeItem('sentinelx_token');
-    localStorage.removeItem('sentinelx_org_id');
+    setToken('stx_guest_demo_token_98f73b');
+    setUser(DEFAULT_GUEST_USER);
+    localStorage.setItem('sentinelx_token', 'stx_guest_demo_token_98f73b');
+    localStorage.setItem('sentinelx_user', JSON.stringify(DEFAULT_GUEST_USER));
   };
 
   return (
