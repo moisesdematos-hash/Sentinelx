@@ -30,6 +30,7 @@ import {
   BookOpen,
   Home,
   X,
+  Flame,
 } from 'lucide-react';
 
 interface MenuItem {
@@ -104,6 +105,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       title: 'AUTONOMIA & IA',
       items: [
         { id: 'sentinel-ai', label: 'Sentinel AI Co-Pilot', icon: Bot, badge: 'GROQ' },
+        { id: 'red-teaming', label: 'Red Teaming Autônomo', icon: Flame, badge: 'SUPER AI' },
         { id: 'ai-investigations', label: 'AI Incident Analyst', icon: Sparkles },
         { id: 'autopilot', label: 'Autopiloto de Contenção', icon: Zap },
         { id: 'soar', label: 'Orquestração SOAR', icon: Terminal },

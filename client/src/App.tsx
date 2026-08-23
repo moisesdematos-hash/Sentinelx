@@ -43,6 +43,7 @@ import { AiInvestigationPage } from './pages/AiInvestigationPage';
 import { MasteryBenchmarkPage } from './pages/MasteryBenchmarkPage';
 import { AdminPanelPage } from './pages/AdminPanelPage';
 import { VulnerabilitiesPage } from './pages/VulnerabilitiesPage';
+import { RedTeamingPage } from './pages/RedTeamingPage';
 import { LoginPage } from './pages/LoginPage';
 
 const MainApp: React.FC = () => {
@@ -161,6 +162,7 @@ const MainApp: React.FC = () => {
           {activeTab === 'risk-engine' && <RiskEnginePage />}
           {activeTab === 'incidents' && <IncidentCenterPage />}
           {activeTab === 'sentinel-ai' && <SentinelAiPage />}
+          {activeTab === 'red-teaming' && <RedTeamingPage />}
           {activeTab === 'ai-investigations' && <AiInvestigationPage />}
           {activeTab === 'autopilot' && <AutopilotPage />}
           {activeTab === 'soar' && <SoarEnginePage />}

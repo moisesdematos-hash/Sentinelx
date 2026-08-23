@@ -36,6 +36,7 @@ import selfHealingRoutes from './self_healing.routes.js';
 import threatExchangeRoutes from './threat_exchange.routes.js';
 import aiInvestigationRoutes from './ai_investigation.routes.js';
 import masteryBenchmarkRoutes from './mastery_benchmark.routes.js';
+import redTeamingRoutes from './red_teaming.routes.js';
 
 const router = Router();
 
@@ -77,5 +78,6 @@ router.use('/self-healing', selfHealingRoutes);
 router.use('/threat-exchange', threatExchangeRoutes);
 router.use('/ai-investigations', aiInvestigationRoutes);
 router.use('/mastery-benchmark', masteryBenchmarkRoutes);
+router.use('/red-teaming', redTeamingRoutes);
 
 export default router;
