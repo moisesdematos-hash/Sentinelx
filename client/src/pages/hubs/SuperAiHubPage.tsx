@@ -1,17 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
-  Sparkles,
   Bot,
-  Flame,
+  Key,
+  ShieldAlert,
   Cpu,
   Lock,
   RotateCcw,
-  Mic,
+  Volume2,
   Globe,
-  CreditCard,
+  DollarSign,
+  Search,
+  Sparkles,
   Zap,
   ArrowRight,
-  ShieldCheck,
+  LayoutGrid,
+  List,
 } from 'lucide-react';
 
 interface SuperAiHubPageProps {
@@ -19,7 +22,9 @@ interface SuperAiHubPageProps {
 }
 
 export const SuperAiHubPage: React.FC<SuperAiHubPageProps> = ({ onNavigate }) => {
-  const aiFeatures = [
+  const [viewMode, setViewMode] = useState<'MOSAIC' | 'LINE'>('MOSAIC');
+
+  const superAiFeatures = [
     {
       id: 'sentinel-ai',
       title: 'Sentinel AI Co-Pilot (Engenheiro Instrutor)',
@@ -31,8 +36,8 @@ export const SuperAiHubPage: React.FC<SuperAiHubPageProps> = ({ onNavigate }) =>
     {
       id: 'super-ai-suite',
       title: 'Super AI Suite & Botão do Pânico Quântico',
-      description: 'Orquestrador Multi-LLM (Groq, DeepSeek R1, Gemini 2.5), RAG Vetorial e isolamento imediato em Air-Gap.',
-      icon: Sparkles,
+      description: 'Orquestrador Multi-LLM (Groq, DeepSeek R1, Gemini 2.5), RAG Vetorial e Isolamento Imediato em Air-Gap.',
+      icon: Key,
       badge: 'GOLDEN KEYS',
       color: 'var(--accent-amber)',
     },
@@ -40,9 +45,9 @@ export const SuperAiHubPage: React.FC<SuperAiHubPageProps> = ({ onNavigate }) =>
       id: 'red-teaming',
       title: 'Red Teaming Autônomo & Simulação de Ataques',
       description: 'Simulações éticas 24/7 de vetores Mitre ATT&CK para descobrir brechas antes de hackers reais.',
-      icon: Flame,
+      icon: ShieldAlert,
       badge: 'SUPER AI 1',
-      color: '#ff4b4b',
+      color: 'var(--accent-rose)',
     },
     {
       id: 'ebpf-hotpatch',
@@ -70,51 +75,35 @@ export const SuperAiHubPage: React.FC<SuperAiHubPageProps> = ({ onNavigate }) =>
     },
     {
       id: 'voice-command',
-      title: 'Comando por Voz & WhatsApp / Telegram',
-      description: 'Execução de ordens de SOC por microfone ao vivo ou mensagens no WhatsApp com voz sintetizada.',
-      icon: Mic,
+      title: 'Comando por Voz Cyber-Assistente',
+      description: 'Controle mãos-livres da plataforma por comandos de voz processados nativamente via Groq AI.',
+      icon: Volume2,
       badge: 'SUPER AI 5',
       color: 'var(--accent-cyan)',
     },
     {
       id: 'global-swarm',
-      title: 'Imunidade Coletiva Swarm (24ms)',
-      description: 'Propagação global de vacinas cibernéticas sintéticas para mais de 14.250 nós no mundo em 24ms.',
+      title: 'Inteligência Enxame Global (Swarm Immunity)',
+      description: 'Imunidade distribuída em rede: se 1 cliente detecta uma nova ameaça, todos os outros 1,000+ ficam imunes.',
       icon: Globe,
       badge: 'SUPER AI 6',
-      color: 'var(--accent-emerald)',
-    },
-    {
-      id: 'finops-sentinel',
-      title: 'Escudo Financeiro FinOps (Anti-Cryptojacking)',
-      description: 'Purga de mineradores de criptomoeda parasitas e redução de até 70% em custos de nuvem.',
-      icon: CreditCard,
-      badge: 'SUPER AI 7',
-      color: 'var(--accent-amber)',
-    },
-    {
-      id: 'ai-investigations',
-      title: 'AI Incident Analyst (RCA Autônomo)',
-      description: 'Investigação profunda de causa-raiz com geração de storyboard de ataque e briefing para CISO.',
-      icon: Sparkles,
-      badge: 'AUTÔNOMO',
       color: 'var(--accent-purple)',
     },
     {
-      id: 'autopilot',
-      title: 'Autopiloto de Contenção (FULL_AUTO)',
-      description: 'Motor de contenção e isolamento automático de ameaças com tempo de resposta em milissegundos.',
-      icon: Zap,
-      badge: 'FULL_AUTO',
+      id: 'finops-sentinel',
+      title: 'Sentinel FinOps Anti-Cryptojacking',
+      description: 'Detecção de mineração maliciosa de criptomoedas no Ring 0 e contenção autônoma de custos de nuvem.',
+      icon: DollarSign,
+      badge: 'SUPER AI 7',
       color: 'var(--accent-emerald)',
     },
     {
-      id: 'self-healing',
-      title: 'Auto-Cura de Código (Self-Healing AST)',
-      description: 'Síntese de patches de código com análise AST e suíte de testes (0% de Risco de Regressão).',
-      icon: Sparkles,
-      badge: 'AUTO-PR',
-      color: 'var(--accent-cyan)',
+      id: 'ai-investigations',
+      title: 'Investigador Forense com IA (Grafos)',
+      description: 'Reconstrução de linha do tempo de incidentes com correlação em grafo e exportação de relatórios.',
+      icon: Search,
+      badge: 'FORENSICS',
+      color: 'var(--accent-amber)',
     },
   ];
 
@@ -132,66 +121,157 @@ export const SuperAiHubPage: React.FC<SuperAiHubPageProps> = ({ onNavigate }) =>
                 CENTRAL DE AUTONOMIA & SUPER IA
               </h2>
               <span className="badge badge-cyan" style={{ fontSize: '0.8rem' }}>
-                12 MOTORES ATIVOS
+                10 MOTORES ATIVOS
               </span>
             </div>
             <p style={{ fontSize: '0.92rem', color: 'var(--text-muted)', marginTop: '4px' }}>
-              Selecione qualquer uma das funcionalidades avançadas de inteligência artificial e proteção autônoma abaixo:
+              Selecione qualquer motor de IA abaixo ou use o seletor para alternar a visualização:
             </p>
           </div>
         </div>
 
-        <button className="btn-secondary" onClick={() => onNavigate('dashboard')} style={{ padding: '8px 16px', fontSize: '0.85rem' }}>
-          ← Voltar ao Painel
-        </button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <button className="btn-secondary" onClick={() => onNavigate('dashboard')} style={{ padding: '8px 16px', fontSize: '0.85rem' }}>
+            ← Voltar ao Painel
+          </button>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: '4px', background: 'rgba(11, 15, 25, 0.9)', padding: '4px', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
+            <button
+              onClick={() => setViewMode('MOSAIC')}
+              style={{
+                padding: '6px 12px',
+                borderRadius: '6px',
+                border: 'none',
+                background: viewMode === 'MOSAIC' ? 'var(--accent-cyan)' : 'transparent',
+                color: viewMode === 'MOSAIC' ? '#060813' : 'var(--text-muted)',
+                fontSize: '0.8rem',
+                fontWeight: 800,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+              }}
+              title="Modo Mosaico (Cards Grid)"
+            >
+              <LayoutGrid size={16} /> Mosaico
+            </button>
+            <button
+              onClick={() => setViewMode('LINE')}
+              style={{
+                padding: '6px 12px',
+                borderRadius: '6px',
+                border: 'none',
+                background: viewMode === 'LINE' ? 'var(--accent-cyan)' : 'transparent',
+                color: viewMode === 'LINE' ? '#060813' : 'var(--text-muted)',
+                fontSize: '0.8rem',
+                fontWeight: 800,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+              }}
+              title="Modo Linha (Tabela)"
+            >
+              <List size={16} /> Linha
+            </button>
+          </div>
+        </div>
       </div>
 
-      {/* Grid of Sub-Features */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', gap: '22px' }}>
-        {aiFeatures.map((item) => {
-          const Icon = item.icon;
-          return (
-            <div
-              key={item.id}
-              onClick={() => onNavigate(item.id)}
-              className="glass-panel"
-              style={{
-                padding: '24px',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'space-between',
-                gap: '16px',
-                cursor: 'pointer',
-                transition: 'all 0.22s ease',
-                borderLeft: `4px solid ${item.color}`,
-              }}
-            >
-              <div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-                  <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: 'rgba(15, 23, 42, 0.8)', border: '1px solid var(--border-color)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <Icon size={22} color={item.color} />
+      {/* Grid of Sub-Features (Mosaico) */}
+      {viewMode === 'MOSAIC' && (
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', gap: '22px' }}>
+          {superAiFeatures.map((item) => {
+            const Icon = item.icon;
+            return (
+              <div
+                key={item.id}
+                onClick={() => onNavigate(item.id)}
+                className="glass-panel"
+                style={{
+                  padding: '24px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  gap: '16px',
+                  cursor: 'pointer',
+                  transition: 'all 0.22s ease',
+                  borderLeft: `4px solid ${item.color}`,
+                }}
+              >
+                <div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+                    <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: 'rgba(15, 23, 42, 0.8)', border: '1px solid var(--border-color)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <Icon size={22} color={item.color} />
+                    </div>
+                    <span className="badge badge-amber" style={{ fontSize: '0.68rem', padding: '3px 8px' }}>
+                      {item.badge}
+                    </span>
                   </div>
-                  <span className="badge badge-emerald" style={{ fontSize: '0.68rem', padding: '3px 8px' }}>
-                    {item.badge}
-                  </span>
+
+                  <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#fff', marginBottom: '8px' }}>
+                    {item.title}
+                  </h3>
+                  <p style={{ fontSize: '0.84rem', color: 'var(--text-muted)', lineHeight: 1.5 }}>
+                    {item.description}
+                  </p>
                 </div>
 
-                <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#fff', marginBottom: '8px' }}>
-                  {item.title}
-                </h3>
-                <p style={{ fontSize: '0.84rem', color: 'var(--text-muted)', lineHeight: 1.5 }}>
-                  {item.description}
-                </p>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.82rem', fontWeight: 700, color: item.color, marginTop: '8px' }}>
+                  <span>Abrir Funcionalidade</span>
+                  <ArrowRight size={16} />
+                </div>
               </div>
+            );
+          })}
+        </div>
+      )}
 
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.82rem', fontWeight: 700, color: item.color, marginTop: '8px' }}>
-                <span>Abrir Funcionalidade</span>
-                <ArrowRight size={16} />
-              </div>
-            </div>
-          );
-        })}
-      </div>
+      {/* Modo Linha (Table List View) */}
+      {viewMode === 'LINE' && (
+        <div className="glass-panel" style={{ overflow: 'hidden' }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+            <thead>
+              <tr style={{ background: 'rgba(11, 15, 25, 0.9)', borderBottom: '1px solid var(--border-color)' }}>
+                <th style={{ padding: '16px 24px', fontSize: '0.75rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>SUPER PODER DE IA</th>
+                <th style={{ padding: '16px 24px', fontSize: '0.75rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>PROVEDOR / MOTOR</th>
+                <th style={{ padding: '16px 24px', fontSize: '0.75rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>DESCRIÇÃO TÉCNICA</th>
+                <th style={{ padding: '16px 24px', fontSize: '0.75rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', textAlign: 'right' }}>AÇÃO</th>
+              </tr>
+            </thead>
+            <tbody>
+              {superAiFeatures.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <tr
+                    key={item.id}
+                    onClick={() => onNavigate(item.id)}
+                    style={{ borderBottom: '1px solid rgba(56, 189, 248, 0.08)', cursor: 'pointer' }}
+                  >
+                    <td style={{ padding: '16px 24px', fontWeight: 700, color: '#fff' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        <Icon size={18} color={item.color} />
+                        <span>{item.title}</span>
+                      </div>
+                    </td>
+                    <td style={{ padding: '16px 24px' }}>
+                      <span className="badge badge-amber">{item.badge}</span>
+                    </td>
+                    <td style={{ padding: '16px 24px', fontSize: '0.84rem', color: 'var(--text-muted)' }}>
+                      {item.description}
+                    </td>
+                    <td style={{ padding: '16px 24px', textAlign: 'right' }}>
+                      <button className="btn-primary" style={{ fontSize: '0.75rem', padding: '6px 12px' }}>
+                        Executar →
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 };
