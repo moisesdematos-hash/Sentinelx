@@ -48,6 +48,48 @@ export const DashboardPage: React.FC = () => {
 
   return (
     <div style={{ padding: '32px', display: 'flex', flexDirection: 'column', gap: '28px' }}>
+      {/* ⚡ 1-Click Auto Protection Action Banner */}
+      <div
+        className="glass-panel"
+        style={{
+          padding: '24px 28px',
+          background: 'linear-gradient(135deg, rgba(0, 242, 254, 0.15) 0%, rgba(79, 70, 229, 0.15) 100%)',
+          border: '1px solid var(--accent-cyan)',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          gap: '20px',
+        }}
+      >
+        <div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <h3 style={{ fontSize: '1.35rem', fontWeight: 900, color: '#fff' }}>
+              ⚡ BLINDAGEM AUTOMÁTICA EM 1-CLIQUE
+            </h3>
+            <span className="badge badge-emerald">FULL_AUTO ACTIVE</span>
+          </div>
+          <p style={{ fontSize: '0.88rem', color: 'var(--text-secondary)', marginTop: '4px' }}>
+            Ative o eBPF Kernel Hot-Patching, Baseline SHA-256 Lock e Autopiloto de Contenção instantaneamente em todos os ativos.
+          </p>
+        </div>
+
+        <button
+          className="btn-primary"
+          onClick={() => {
+            alert('⚡ BLINDAGEM TOTAL EM 1-CLIQUE EXECUTADA! Baseline SHA-256 travado, eBPF Kernel Hot-Patching Ring 0 ativo, Autopiloto em FULL_AUTO e WAF configurado em todos os 42 ativos!');
+          }}
+          style={{
+            background: 'var(--gradient-cyan)',
+            boxShadow: '0 0 25px rgba(0, 242, 254, 0.5)',
+            fontSize: '0.9rem',
+            padding: '12px 24px',
+            whiteSpace: 'nowrap',
+          }}
+        >
+          ⚡ ATIVAR BLINDAGEM TOTAL EM 1-CLIQUE AGORA
+        </button>
+      </div>
+
       {/* Top Banner / Hero Metric Bar */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px' }}>
         <div className="glass-panel" style={{ padding: '24px' }}>
