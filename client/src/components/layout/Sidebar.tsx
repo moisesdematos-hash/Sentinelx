@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useMemo } from 'react';
 import {
   LayoutDashboard,
   Server,
@@ -32,6 +32,9 @@ import {
   X,
   Flame,
   Mic,
+  Search,
+  ChevronDown,
+  ChevronRight,
 } from 'lucide-react';
 
 interface MenuItem {
@@ -61,49 +64,21 @@ export const Sidebar: React.FC<SidebarProps> = ({
   isOpenMobile = false,
   onCloseMobile,
 }) => {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [collapsedGroups, setCollapsedGroups] = useState<Record<string, boolean>>({});
+
   const menuGroups: MenuGroup[] = [
     {
-      title: 'PLATAFORMA',
+      title: '📌 VISÃO GERAL & DASHBOARDS',
       items: [
         { id: 'welcome', label: 'Landing Page & Planos', icon: Home, badge: 'SAAS' },
-        { id: 'dashboard', label: 'Painel Principal', icon: LayoutDashboard },
+        { id: 'dashboard', label: 'Painel Principal (SOC)', icon: LayoutDashboard },
         { id: 'admin-panel', label: 'Painel de Administração', icon: Settings, badge: 'ADMIN' },
         { id: 'mastery-benchmark', label: 'Mastery & Certificação', icon: Award, badge: '100%' },
-        { id: 'assets', label: 'Inventário de Ativos', icon: Server },
-        { id: 'monitoring', label: 'Monitoramento Contínuo', icon: Activity },
       ],
     },
     {
-      title: 'PROTEÇÃO DE ATIVOS',
-      items: [
-        { id: 'server-security', label: 'Segurança de Servidores', icon: Server },
-        { id: 'api-security', label: 'Segurança de APIs REST', icon: Globe },
-        { id: 'container-security', label: 'Segurança de Contêineres', icon: Layers },
-        { id: 'mobile-security', label: 'Segurança Mobile (APK)', icon: Smartphone },
-        { id: 'edge-security', label: 'Borda & WAF / DDoS', icon: Zap },
-      ],
-    },
-    {
-      title: 'NUVEM & INFRAESTRUTURA',
-      items: [
-        { id: 'cloud-connectors', label: 'Conectores de Nuvem', icon: Cloud },
-        { id: 'cloud-posture', label: 'Postura de Nuvem (CSPM)', icon: ShieldCheck },
-      ],
-    },
-    {
-      title: 'DETECÇÃO & ANÁLISE',
-      items: [
-        { id: 'event-bus', label: 'Barramento de Eventos', icon: Cpu },
-        { id: 'detection-engine', label: 'Motor de Detecção', icon: ShieldAlert },
-        { id: 'security-graph', label: 'Grafo de Conhecimento', icon: Share2 },
-        { id: 'risk-engine', label: 'Motor de Risco Contextual', icon: AlertTriangle },
-        { id: 'incidents', label: 'Central de Incidentes', icon: ShieldAlert },
-        { id: 'threat-intel', label: 'Inteligência de Ameaças', icon: Globe },
-        { id: 'threat-exchange', label: 'Troca Global de Ameaças', icon: Share2 },
-      ],
-    },
-    {
-      title: 'AUTONOMIA & IA',
+      title: '🤖 AUTONOMIA & SUPER IA',
       items: [
         { id: 'sentinel-ai', label: 'Sentinel AI Co-Pilot', icon: Bot, badge: 'GROQ' },
         { id: 'super-ai-suite', label: 'Super AI Suite & Kill Switch', icon: Sparkles, badge: 'GOLDEN' },
@@ -115,30 +90,80 @@ export const Sidebar: React.FC<SidebarProps> = ({
         { id: 'global-swarm', label: 'Imunidade Coletiva Swarm', icon: Globe, badge: 'SUPER AI' },
         { id: 'finops-sentinel', label: 'Escudo Financeiro FinOps', icon: CreditCard, badge: 'SUPER AI' },
         { id: 'ai-investigations', label: 'AI Incident Analyst', icon: Sparkles },
-        { id: 'autopilot', label: 'Autopiloto de Contenção', icon: Zap },
-        { id: 'soar', label: 'Orquestração SOAR', icon: Terminal },
+        { id: 'autopilot', label: 'Autopiloto de Contenção', icon: Zap, badge: 'AUTO' },
         { id: 'self-healing', label: 'Auto-Cura (Self-Healing)', icon: Sparkles, badge: 'AUTO-PR' },
-        { id: 'remediation', label: 'Engine de Remediação', icon: RotateCcw },
-        { id: 'recovery', label: 'Recuperação & Rollback', icon: RotateCcw },
       ],
     },
     {
-      title: 'GOVERNAÇA & OPERAÇÕES',
+      title: '🛡️ EPP, EDR & INVENTÁRIO',
       items: [
-        { id: 'compliance', label: 'Auditor de Conformidade', icon: FileCheck },
-        { id: 'siem', label: 'Integrações SIEM / SOAR', icon: Terminal },
-        { id: 'deception', label: 'Deception & Honeytokens', icon: Lock },
-        { id: 'microsegmentation', label: 'Microsegmentação de Rede', icon: Layers },
-        { id: 'identity', label: 'Identidade Zero Trust', icon: Key },
-        { id: 'finops', label: 'Otimização FinOps', icon: CreditCard },
-        { id: 'brand-protection', label: 'Proteção de Marca & Darkweb', icon: Globe },
+        { id: 'assets', label: 'Inventário de Ativos', icon: Server },
+        { id: 'monitoring', label: 'Monitoramento Contínuo', icon: Activity },
+        { id: 'server-security', label: 'Segurança de Servidores', icon: Server },
+        { id: 'api-security', label: 'Segurança de APIs REST', icon: Globe },
+        { id: 'container-security', label: 'Segurança de Contêineres & K8s', icon: Layers },
+        { id: 'mobile-security', label: 'Segurança Mobile (APK)', icon: Smartphone },
+        { id: 'edge-security', label: 'Borda & WAF / DDoS', icon: Zap },
+      ],
+    },
+    {
+      title: '☁️ CLOUD SECURITY (CSPM)',
+      items: [
+        { id: 'cloud-connectors', label: 'Conectores de Nuvem (AWS/Azure/GCP)', icon: Cloud },
+        { id: 'cloud-posture', label: 'Postura de Nuvem (CSPM)', icon: ShieldCheck },
+      ],
+    },
+    {
+      title: '🔍 SIEM, XDR & GRAFO DE RISCO',
+      items: [
+        { id: 'event-bus', label: 'Barramento de Eventos', icon: Cpu },
+        { id: 'detection-engine', label: 'Motor de Detecção', icon: ShieldAlert },
+        { id: 'security-graph', label: 'Grafo de Conhecimento', icon: Share2 },
+        { id: 'risk-engine', label: 'Motor de Risco Contextual', icon: AlertTriangle },
+        { id: 'incidents', label: 'Central de Incidentes', icon: ShieldAlert },
+        { id: 'soar', label: 'Orquestração SOAR', icon: Terminal },
+        { id: 'threat-intel', label: 'Inteligência de Ameaças', icon: Globe },
+        { id: 'threat-exchange', label: 'Troca Global de Ameaças', icon: Share2 },
+      ],
+    },
+    {
+      title: '📜 CONFORMIDADE & AUDITORIA',
+      items: [
+        { id: 'compliance', label: 'Auditor de Conformidade (ISO/SOC2)', icon: FileCheck },
         { id: 'executive-reporting', label: 'Relatórios Executivos', icon: BookOpen },
+        { id: 'brand-protection', label: 'Proteção de Marca & Darkweb', icon: Globe },
+        { id: 'identity', label: 'Identidade Zero Trust & JIT', icon: Key },
+        { id: 'microsegmentation', label: 'Microsegmentação de Rede', icon: Layers },
+      ],
+    },
+    {
+      title: '⚙️ OPERAÇÕES & MSP / MSSP',
+      items: [
         { id: 'msp', label: 'Central MSSP Multi-Tenant', icon: Building },
+        { id: 'finops', label: 'Otimização FinOps', icon: CreditCard },
+        { id: 'siem', label: 'Integrações SIEM / External', icon: Terminal },
         { id: 'subscriptions', label: 'Assinaturas & Cotas', icon: CreditCard },
-        { id: 'api', label: 'API & Webhooks', icon: Key },
+        { id: 'api', label: 'API Keys & Webhooks', icon: Key },
       ],
     },
   ];
+
+  const filteredGroups = useMemo(() => {
+    if (!searchQuery.trim()) return menuGroups;
+    const q = searchQuery.toLowerCase();
+    return menuGroups
+      .map((g) => ({
+        ...g,
+        items: g.items.filter(
+          (item) => item.label.toLowerCase().includes(q) || (item.badge && item.badge.toLowerCase().includes(q))
+        ),
+      }))
+      .filter((g) => g.items.length > 0);
+  }, [menuGroups, searchQuery]);
+
+  const toggleGroupCollapse = (title: string) => {
+    setCollapsedGroups((prev) => ({ ...prev, [title]: !prev[title] }));
+  };
 
   const handleLogoClick = () => {
     if (onGoLanding) {
@@ -195,10 +220,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
         }}
         className={`app-sidebar ${isOpenMobile ? 'mobile-open' : ''}`}
       >
-        {/* Brand Header (Click to return to Public Landing Page) */}
+        {/* Brand Header */}
         <div
           style={{
-            padding: '24px 20px',
+            padding: '20px',
             borderBottom: '1px solid var(--border-color)',
             display: 'flex',
             alignItems: 'center',
@@ -233,7 +258,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             <div>
               <h1
                 style={{
-                  fontSize: '1.25rem',
+                  fontSize: '1.2rem',
                   fontWeight: 900,
                   letterSpacing: '0.5px',
                   background: 'var(--gradient-cyan)',
@@ -245,13 +270,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
               </h1>
               <span
                 style={{
-                  fontSize: '0.65rem',
+                  fontSize: '0.62rem',
                   color: 'var(--text-muted)',
                   fontFamily: 'var(--font-mono)',
                   letterSpacing: '1px',
                 }}
               >
-                ENTERPRISE PLATFORM
+                SECURITY CLOUD
               </span>
             </div>
           </div>
@@ -273,79 +298,133 @@ export const Sidebar: React.FC<SidebarProps> = ({
           )}
         </div>
 
-        {/* Navigation List (Scrollable) */}
+        {/* UX Quick Search Filter Input */}
+        <div style={{ padding: '12px 14px 4px 14px' }}>
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              padding: '8px 12px',
+              borderRadius: '8px',
+              background: 'rgba(15, 23, 42, 0.8)',
+              border: '1px solid var(--border-color)',
+            }}
+          >
+            <Search size={14} color="var(--text-muted)" />
+            <input
+              type="text"
+              placeholder="Buscar no menu (ex: WAF, eBPF, ISO)..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              style={{
+                background: 'transparent',
+                border: 'none',
+                color: '#fff',
+                fontSize: '0.78rem',
+                outline: 'none',
+                width: '100%',
+              }}
+            />
+            {searchQuery && (
+              <X size={12} color="var(--text-muted)" style={{ cursor: 'pointer' }} onClick={() => setSearchQuery('')} />
+            )}
+          </div>
+        </div>
+
+        {/* Navigation List (Scrollable & Collapsible) */}
         <nav
           style={{
             flex: 1,
-            padding: '16px 12px',
+            padding: '12px 12px 20px 12px',
             overflowY: 'auto',
             display: 'flex',
             flexDirection: 'column',
-            gap: '20px',
+            gap: '16px',
           }}
         >
-          {menuGroups.map((group, groupIdx) => (
-            <div key={groupIdx}>
-              <div
-                style={{
-                  fontSize: '0.68rem',
-                  fontWeight: 800,
-                  color: 'var(--text-muted)',
-                  letterSpacing: '1px',
-                  padding: '0 12px 8px 12px',
-                }}
-              >
-                {group.title}
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                {group.items.map((item) => {
-                  const Icon = item.icon;
-                  const isActive = activeTab === item.id;
-                  return (
-                    <button
-                      key={item.id}
-                      onClick={() => handleItemClick(item.id)}
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        width: '100%',
-                        padding: '10px 12px',
-                        borderRadius: '8px',
-                        border: 'none',
-                        background: isActive ? 'rgba(0, 242, 254, 0.12)' : 'transparent',
-                        color: isActive ? 'var(--accent-cyan)' : 'var(--text-secondary)',
-                        cursor: 'pointer',
-                        transition: 'all 0.2s ease',
-                        fontWeight: isActive ? 700 : 500,
-                        fontSize: '0.85rem',
-                      }}
-                    >
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                        <Icon size={18} color={isActive ? 'var(--accent-cyan)' : 'var(--text-muted)'} />
-                        <span>{item.label}</span>
-                      </div>
+          {filteredGroups.map((group, groupIdx) => {
+            const isCollapsed = Boolean(collapsedGroups[group.title]) && !searchQuery;
+            return (
+              <div key={groupIdx}>
+                {/* Group Title Accordion Header */}
+                <div
+                  onClick={() => toggleGroupCollapse(group.title)}
+                  style={{
+                    fontSize: '0.66rem',
+                    fontWeight: 800,
+                    color: 'var(--text-muted)',
+                    letterSpacing: '0.8px',
+                    padding: '6px 8px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    cursor: 'pointer',
+                    borderRadius: '6px',
+                    userSelect: 'none',
+                  }}
+                >
+                  <span>{group.title}</span>
+                  {!searchQuery && (
+                    <span>{isCollapsed ? <ChevronRight size={12} /> : <ChevronDown size={12} />}</span>
+                  )}
+                </div>
 
-                      {item.badge && (
-                        <span
-                          className={`badge ${
-                            item.badge === 'ADMIN'
-                              ? 'badge-purple'
-                              : item.badge === 'GROQ' || item.badge === 'SAAS'
-                              ? 'badge-cyan'
-                              : 'badge-emerald'
-                          }`}
-                          style={{ fontSize: '0.65rem', padding: '2px 6px' }}
+                {/* Items List */}
+                {!isCollapsed && (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '3px', marginTop: '4px' }}>
+                    {group.items.map((item) => {
+                      const Icon = item.icon;
+                      const isActive = activeTab === item.id;
+                      return (
+                        <button
+                          key={item.id}
+                          onClick={() => handleItemClick(item.id)}
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            width: '100%',
+                            padding: '9px 12px',
+                            borderRadius: '8px',
+                            border: 'none',
+                            background: isActive ? 'rgba(0, 242, 254, 0.12)' : 'transparent',
+                            color: isActive ? 'var(--accent-cyan)' : 'var(--text-secondary)',
+                            cursor: 'pointer',
+                            transition: 'all 0.18s ease',
+                            fontWeight: isActive ? 700 : 500,
+                            fontSize: '0.83rem',
+                          }}
                         >
-                          {item.badge}
-                        </span>
-                      )}
-                    </button>
-                  );
-                })}
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                            <Icon size={17} color={isActive ? 'var(--accent-cyan)' : 'var(--text-muted)'} />
+                            <span>{item.label}</span>
+                          </div>
+
+                          {item.badge && (
+                            <span
+                              className={`badge ${
+                                item.badge === 'ADMIN'
+                                  ? 'badge-purple'
+                                  : item.badge === 'GROQ' || item.badge === 'SAAS'
+                                  ? 'badge-cyan'
+                                  : item.badge === 'GOLDEN'
+                                  ? 'badge-amber'
+                                  : 'badge-emerald'
+                              }`}
+                              style={{ fontSize: '0.62rem', padding: '2px 6px' }}
+                            >
+                              {item.badge}
+                            </span>
+                          )}
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
-            </div>
-          ))}
+            );
+          })}
         </nav>
 
         {/* System Status Card Footer */}
@@ -353,7 +432,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           style={{
             padding: '16px',
             borderTop: '1px solid var(--border-color)',
-            background: 'rgba(6, 8, 19, 0.8)',
+            background: 'rgba(6, 8, 19, 0.95)',
           }}
         >
           <div
@@ -361,15 +440,15 @@ export const Sidebar: React.FC<SidebarProps> = ({
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
-              marginBottom: '8px',
+              marginBottom: '6px',
             }}
           >
-            <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Status do Autopiloto</span>
-            <span className="badge badge-emerald" style={{ fontSize: '0.68rem' }}>
+            <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>Status do Autopiloto</span>
+            <span className="badge badge-emerald" style={{ fontSize: '0.65rem' }}>
               ONLINE
             </span>
           </div>
-          <div style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--accent-cyan)' }}>
+          <div style={{ fontSize: '0.78rem', fontWeight: 700, color: 'var(--accent-cyan)' }}>
             FULL_AUTO (100% Autônomo)
           </div>
         </div>
