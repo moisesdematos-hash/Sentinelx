@@ -19,6 +19,9 @@ import {
   Zap,
   Sparkles,
   RefreshCw,
+  LayoutGrid,
+  List,
+  ArrowRight,
 } from 'lucide-react';
 
 export const AssetsPage: React.FC = () => {
@@ -29,6 +32,9 @@ export const AssetsPage: React.FC = () => {
   const [shieldingAssetId, setShieldingAssetId] = useState<string | null>(null);
   const [globalShielding, setGlobalShielding] = useState(false);
   const [shieldingSuccessMsg, setShieldingSuccessMsg] = useState<string | null>(null);
+
+  // View Mode State: 'MOSAIC' (Grid Cards) or 'LINE' (Table List)
+  const [viewMode, setViewMode] = useState<'MOSAIC' | 'LINE'>('MOSAIC');
 
   // Filters State
   const [filterType, setFilterType] = useState('');
@@ -84,10 +90,8 @@ export const AssetsPage: React.FC = () => {
     setShieldingSuccessMsg(null);
 
     try {
-      // 1. Lock baseline
       await apiClient.post(`/assets/${assetId}/baseline`).catch(() => null);
 
-      // 2. Simulate complete protection sequence
       setTimeout(() => {
         setShieldingAssetId(null);
         setShieldingSuccessMsg(`⚡ BLINDAGEM TOTAL ATIVADA EM 1-CLIQUE PARA "${assetName}"! Baseline SHA-256 travado, eBPF Kernel Hot-Patching Ring 0 ativo, Autopiloto em FULL_AUTO e WAF configurado.`);
@@ -105,7 +109,6 @@ export const AssetsPage: React.FC = () => {
     setShieldingSuccessMsg(null);
 
     try {
-      // Lock baselines for all assets
       await Promise.all(assets.map((a) => apiClient.post(`/assets/${a.id}/baseline`).catch(() => null)));
 
       setTimeout(() => {
@@ -157,10 +160,10 @@ export const AssetsPage: React.FC = () => {
 
   const getIcon = (type: string) => {
     switch (type) {
-      case 'WEBSITE': return <Globe size={16} color="var(--accent-cyan)" />;
-      case 'API': return <Terminal size={16} color="var(--accent-purple)" />;
-      case 'CLOUD': return <Cloud size={16} color="var(--accent-amber)" />;
-      default: return <Database size={16} color="var(--accent-blue)" />;
+      case 'WEBSITE': return <Globe size={20} color="var(--accent-cyan)" />;
+      case 'API': return <Terminal size={20} color="var(--accent-purple)" />;
+      case 'CLOUD': return <Cloud size={20} color="var(--accent-amber)" />;
+      default: return <Database size={20} color="var(--accent-blue)" />;
     }
   };
 
@@ -171,7 +174,7 @@ export const AssetsPage: React.FC = () => {
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <h2 style={{ fontSize: '1.75rem', fontWeight: 800 }}>Inventário de Ativos & Proteção</h2>
-            <span className="badge badge-emerald">AUTOMÁTICO EM 1-CLIQUE</span>
+            <span className="badge badge-emerald">MODOS MOSAICO E LINHA ATIVOS</span>
           </div>
           <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', marginTop: '4px' }}>
             Descoberta Contínua de Ativos, Blindagem eBPF, Baseline Lock SHA-256 e Autopiloto em 1-Clique
@@ -208,23 +211,23 @@ export const AssetsPage: React.FC = () => {
         </div>
       )}
 
-      {/* Filter Toolbar */}
-      <div className="glass-panel" style={{ padding: '16px 24px', display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flex: 1, minWidth: '240px' }}>
-          <Search size={16} color="var(--text-muted)" />
-          <input
-            type="text"
-            className="input-field"
-            placeholder="Buscar por nome, URL, IP ou proprietário..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-        </div>
+      {/* Filter Toolbar & View Mode Toggle Bar */}
+      <div className="glass-panel" style={{ padding: '16px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flex: 1, minWidth: '280px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flex: 1 }}>
+            <Search size={16} color="var(--text-muted)" />
+            <input
+              type="text"
+              className="input-field"
+              placeholder="Buscar por nome, URL, IP ou proprietário..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <select
             className="input-field"
-            style={{ width: '160px' }}
+            style={{ width: '150px' }}
             value={filterType}
             onChange={(e) => setFilterType(e.target.value)}
           >
@@ -238,95 +241,225 @@ export const AssetsPage: React.FC = () => {
 
           <select
             className="input-field"
-            style={{ width: '160px' }}
+            style={{ width: '150px' }}
             value={filterEnv}
             onChange={(e) => setFilterEnv(e.target.value)}
           >
-            <option value="">Todos os Ambientes</option>
+            <option value="">Todos Ambientes</option>
             <option value="PRODUCTION">Produção</option>
             <option value="STAGING">Staging</option>
             <option value="DEVELOPMENT">Desenvolvimento</option>
           </select>
         </div>
+
+        {/* View Mode Toggle Buttons: Mosaico vs Linha */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'rgba(11, 15, 25, 0.9)', padding: '4px', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
+          <button
+            onClick={() => setViewMode('MOSAIC')}
+            style={{
+              padding: '6px 14px',
+              borderRadius: '6px',
+              border: 'none',
+              background: viewMode === 'MOSAIC' ? 'var(--accent-cyan)' : 'transparent',
+              color: viewMode === 'MOSAIC' ? '#060813' : 'var(--text-muted)',
+              fontSize: '0.8rem',
+              fontWeight: 700,
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              transition: 'all 0.2s ease',
+            }}
+            title="Visualização em Mosaico (Cards Grid)"
+          >
+            <LayoutGrid size={16} />
+            <span>Mosaico</span>
+          </button>
+
+          <button
+            onClick={() => setViewMode('LINE')}
+            style={{
+              padding: '6px 14px',
+              borderRadius: '6px',
+              border: 'none',
+              background: viewMode === 'LINE' ? 'var(--accent-cyan)' : 'transparent',
+              color: viewMode === 'LINE' ? '#060813' : 'var(--text-muted)',
+              fontSize: '0.8rem',
+              fontWeight: 700,
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              transition: 'all 0.2s ease',
+            }}
+            title="Visualização em Linha (Tabela)"
+          >
+            <List size={16} />
+            <span>Linha</span>
+          </button>
+        </div>
       </div>
 
-      {/* Main Grid: Asset List + Inspector Drawer */}
+      {/* Main Content Area: Mosaico Grid OR Linha Table */}
       <div style={{ display: 'grid', gridTemplateColumns: selectedAsset ? '1fr 420px' : '1fr', gap: '24px' }}>
-        {/* Asset Table */}
-        <div className="glass-panel" style={{ overflow: 'hidden' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
-            <thead>
-              <tr style={{ background: 'rgba(11, 15, 25, 0.9)', borderBottom: '1px solid var(--border-color)' }}>
-                <th style={{ padding: '16px 24px', fontSize: '0.75rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>NOME DO SERVIÇO</th>
-                <th style={{ padding: '16px 24px', fontSize: '0.75rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>TIPO</th>
-                <th style={{ padding: '16px 24px', fontSize: '0.75rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>ALVO / ENDEREÇO</th>
-                <th style={{ padding: '16px 24px', fontSize: '0.75rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>AMBIENTE</th>
-                <th style={{ padding: '16px 24px', fontSize: '0.75rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>CRITICIDADE</th>
-                <th style={{ padding: '16px 24px', fontSize: '0.75rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>SCORE DE SEGURANÇA</th>
-                <th style={{ padding: '16px 24px', fontSize: '0.75rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', textAlign: 'right' }}>PROTEÇÃO 1-CLIQUE</th>
-              </tr>
-            </thead>
-            <tbody>
-              {assets.map((asset) => (
-                <tr
-                  key={asset.id}
-                  style={{
-                    borderBottom: '1px solid rgba(56, 189, 248, 0.08)',
-                    background: selectedAsset?.id === asset.id ? 'rgba(0, 242, 254, 0.06)' : 'transparent',
-                    cursor: 'pointer',
-                  }}
-                  onClick={() => inspectAsset(asset.id)}
-                >
-                  <td style={{ padding: '16px 24px', fontWeight: 600 }}>
+        {/* Mosaico Mode (Grid Cards View) */}
+        {viewMode === 'MOSAIC' && (
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '20px' }}>
+            {assets.map((asset) => (
+              <div
+                key={asset.id}
+                onClick={() => inspectAsset(asset.id)}
+                className="glass-panel"
+                style={{
+                  padding: '24px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  gap: '16px',
+                  cursor: 'pointer',
+                  transition: 'all 0.22s ease',
+                  borderLeft: asset.criticality === 'CRITICAL' ? '4px solid var(--accent-rose)' : '4px solid var(--accent-cyan)',
+                  background: selectedAsset?.id === asset.id ? 'rgba(0, 242, 254, 0.08)' : 'rgba(15, 23, 42, 0.7)',
+                }}
+              >
+                <div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                      {getIcon(asset.type)}
-                      <span>{asset.name}</span>
+                      <div style={{ width: '38px', height: '38px', borderRadius: '10px', background: 'rgba(11, 15, 25, 0.9)', border: '1px solid var(--border-color)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        {getIcon(asset.type)}
+                      </div>
+                      <div>
+                        <h4 style={{ fontSize: '1rem', fontWeight: 800, color: '#fff' }}>{asset.name}</h4>
+                        <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
+                          {asset.target}
+                        </span>
+                      </div>
                     </div>
-                  </td>
-                  <td style={{ padding: '16px 24px' }}>
+
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDelete(asset.id);
+                      }}
+                      style={{ background: 'transparent', border: 'none', color: 'var(--accent-rose)', cursor: 'pointer' }}
+                      title="Remover Ativo"
+                    >
+                      <Trash2 size={16} />
+                    </button>
+                  </div>
+
+                  <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '16px' }}>
                     <span className="badge badge-cyan">{asset.type}</span>
-                  </td>
-                  <td style={{ padding: '16px 24px', fontFamily: 'var(--font-mono)', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-                    {asset.target}
-                  </td>
-                  <td style={{ padding: '16px 24px' }}>
                     <span className="badge badge-purple">{asset.environment}</span>
-                  </td>
-                  <td style={{ padding: '16px 24px' }}>
                     <span className={asset.criticality === 'CRITICAL' ? 'badge badge-rose' : 'badge badge-amber'}>
                       {asset.criticality}
                     </span>
-                  </td>
-                  <td style={{ padding: '16px 24px', fontWeight: 700, color: 'var(--accent-emerald)' }}>
-                    {asset.securityScore}/100
-                  </td>
-                  <td style={{ padding: '16px 24px', textAlign: 'right' }} onClick={(e) => e.stopPropagation()}>
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '8px' }}>
-                      <button
-                        className="btn-primary"
-                        style={{ fontSize: '0.75rem', padding: '6px 12px', gap: '4px' }}
-                        onClick={(e) => handleAutoShieldAsset(asset.id, asset.name, e)}
-                        disabled={shieldingAssetId === asset.id}
-                        title="Ativar eBPF, Baseline Lock SHA-256 e Autopiloto em 1-clique"
-                      >
-                        {shieldingAssetId === asset.id ? <RefreshCw size={12} className="spin" /> : <Zap size={12} />}
-                        ⚡ BLINDAR AUTOMATICAMENTE
-                      </button>
+                  </div>
 
-                      <button
-                        onClick={() => handleDelete(asset.id)}
-                        style={{ background: 'transparent', border: 'none', color: 'var(--accent-rose)', cursor: 'pointer', padding: '4px' }}
-                        title="Remover Ativo"
-                      >
-                        <Trash2 size={16} />
-                      </button>
+                  {/* Security Score Bar */}
+                  <div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', fontWeight: 700, marginBottom: '6px' }}>
+                      <span style={{ color: 'var(--text-muted)' }}>Score de Segurança</span>
+                      <span style={{ color: 'var(--accent-emerald)' }}>{asset.securityScore}/100 (Ótimo)</span>
                     </div>
-                  </td>
+                    <div style={{ height: '6px', background: 'rgba(11, 15, 25, 0.9)', borderRadius: '3px', overflow: 'hidden' }}>
+                      <div style={{ width: `${asset.securityScore}%`, height: '100%', background: 'var(--gradient-cyan)', borderRadius: '3px' }} />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Card Action Footer */}
+                <div style={{ paddingTop: '12px', borderTop: '1px solid var(--border-color)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <button
+                    className="btn-primary"
+                    style={{ fontSize: '0.75rem', padding: '6px 12px', width: '100%', justifyContent: 'center', gap: '6px' }}
+                    onClick={(e) => handleAutoShieldAsset(asset.id, asset.name, e)}
+                    disabled={shieldingAssetId === asset.id}
+                  >
+                    {shieldingAssetId === asset.id ? <RefreshCw size={14} className="spin" /> : <Zap size={14} />}
+                    ⚡ BLINDAR AUTOMATICAMENTE
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Linha Mode (Table List View) */}
+        {viewMode === 'LINE' && (
+          <div className="glass-panel" style={{ overflow: 'hidden' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+              <thead>
+                <tr style={{ background: 'rgba(11, 15, 25, 0.9)', borderBottom: '1px solid var(--border-color)' }}>
+                  <th style={{ padding: '16px 24px', fontSize: '0.75rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>NOME DO SERVIÇO</th>
+                  <th style={{ padding: '16px 24px', fontSize: '0.75rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>TIPO</th>
+                  <th style={{ padding: '16px 24px', fontSize: '0.75rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>ALVO / ENDEREÇO</th>
+                  <th style={{ padding: '16px 24px', fontSize: '0.75rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>AMBIENTE</th>
+                  <th style={{ padding: '16px 24px', fontSize: '0.75rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>CRITICIDADE</th>
+                  <th style={{ padding: '16px 24px', fontSize: '0.75rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>SCORE DE SEGURANÇA</th>
+                  <th style={{ padding: '16px 24px', fontSize: '0.75rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', textAlign: 'right' }}>PROTEÇÃO 1-CLIQUE</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody>
+                {assets.map((asset) => (
+                  <tr
+                    key={asset.id}
+                    style={{
+                      borderBottom: '1px solid rgba(56, 189, 248, 0.08)',
+                      background: selectedAsset?.id === asset.id ? 'rgba(0, 242, 254, 0.06)' : 'transparent',
+                      cursor: 'pointer',
+                    }}
+                    onClick={() => inspectAsset(asset.id)}
+                  >
+                    <td style={{ padding: '16px 24px', fontWeight: 600 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        {getIcon(asset.type)}
+                        <span>{asset.name}</span>
+                      </div>
+                    </td>
+                    <td style={{ padding: '16px 24px' }}>
+                      <span className="badge badge-cyan">{asset.type}</span>
+                    </td>
+                    <td style={{ padding: '16px 24px', fontFamily: 'var(--font-mono)', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+                      {asset.target}
+                    </td>
+                    <td style={{ padding: '16px 24px' }}>
+                      <span className="badge badge-purple">{asset.environment}</span>
+                    </td>
+                    <td style={{ padding: '16px 24px' }}>
+                      <span className={asset.criticality === 'CRITICAL' ? 'badge badge-rose' : 'badge badge-amber'}>
+                        {asset.criticality}
+                      </span>
+                    </td>
+                    <td style={{ padding: '16px 24px', fontWeight: 700, color: 'var(--accent-emerald)' }}>
+                      {asset.securityScore}/100
+                    </td>
+                    <td style={{ padding: '16px 24px', textAlign: 'right' }} onClick={(e) => e.stopPropagation()}>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '8px' }}>
+                        <button
+                          className="btn-primary"
+                          style={{ fontSize: '0.75rem', padding: '6px 12px', gap: '4px' }}
+                          onClick={(e) => handleAutoShieldAsset(asset.id, asset.name, e)}
+                          disabled={shieldingAssetId === asset.id}
+                        >
+                          {shieldingAssetId === asset.id ? <RefreshCw size={12} className="spin" /> : <Zap size={12} />}
+                          ⚡ BLINDAR AUTOMATICAMENTE
+                        </button>
+
+                        <button
+                          onClick={() => handleDelete(asset.id)}
+                          style={{ background: 'transparent', border: 'none', color: 'var(--accent-rose)', cursor: 'pointer', padding: '4px' }}
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
 
         {/* Inspector Panel Drawer */}
         {selectedAsset && (
