@@ -25,6 +25,7 @@ import {
   KeyRound,
   ShieldAlert,
   Trash2,
+  GraduationCap,
 } from 'lucide-react';
 
 interface ChatMessage {
@@ -59,14 +60,18 @@ export const SentinelAiPage: React.FC = () => {
       {
         id: '1',
         sender: 'assistant',
-        content: `Olá! Eu sou o **SENTINELX EXPERT AI** (Alimentado pelo motor Groq Llama 3.3 70B Versatile em tempo real). 🤖⚡
+        content: `Olá! Eu sou o **SENTINELX LEAD PRINCIPAL CYBERSECURITY INSTRUCTOR & CHIEF ARCHITECT** (Alimentado pelo motor Groq Llama 3.3 70B Versatile com Raciocínio Profundo). 🎓🤖⚡
 
-O **Sentinel AI Co-Pilot** está 100% ATIVADO e pronto para analisar incidentes, realizar diagnósticos de nuvem, explicar falhas de segurança e orientar na Auto-Cura de Código!
+Estou configurado no modo **Instrutor de Engenharia Sênior**. Minhas respostas possuem profundidade técnica exaustiva, cobrindo:
+1. 🎓 **Conceito Técnico & Causa-Raiz Profunda (Root Cause Analysis)**
+2. 📋 **Roteiro Didático de Solução Passo a Passo (Hands-On Step-by-Step)**
+3. 💻 **Snippet Prático de Código / Comando CLI para Produção**
+4. 🛡️ **Medidas de Prevenção Futura & Guardrails de Segurança (ISO 27001 / SOC 2 / LGPD)**
 
-### 🎯 Como posso te ajudar agora?
-Escolha uma categoria abaixo ou clique em uma das soluções recomendadas:`,
+### 🎯 Como posso te guiar agora?
+Escolha um tópico ou faça sua pergunta técnica com o nível de detalhe que desejar:`,
         timestamp: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
-        categoryTag: 'GROQ_LLAMA_3.3_70B',
+        categoryTag: 'PRINCIPAL_INSTRUCTOR_AI',
         suggestedActions: [
           '🚨 Como resolver um Alerta de Invasão / Exfiltração de Dados P0?',
           '🛠️ Como corrigir SQL Injection e XSS com a Auto-Cura de Código?',
@@ -105,11 +110,11 @@ Escolha uma categoria abaixo ou clique em uma das soluções recomendadas:`,
       {
         id: String(Date.now()),
         sender: 'assistant',
-        content: `Memória do Sentinel AI reiniciada com sucesso! 🤖✨
+        content: `Memória do Sentinel AI Engenheiro Instrutor reiniciada com sucesso! 🎓✨
 
-Como posso ajudar no seu próximo diagnóstico de cibersegurança?`,
+Qual é a próxima consulta técnica ou arquitetural que deseja analisar em profundidade?`,
         timestamp: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
-        categoryTag: 'GROQ_LLAMA_3.3_70B',
+        categoryTag: 'PRINCIPAL_INSTRUCTOR_AI',
         suggestedActions: [
           '🚨 Solução de Incidente P0',
           '🛠️ Auto-Cura de Código (SQLi)',
@@ -121,7 +126,7 @@ Como posso ajudar no seu próximo diagnóstico de cibersegurança?`,
     localStorage.removeItem(LOCAL_STORAGE_KEY);
   };
 
-  // Comprehensive Knowledge Base Engine fallback for Groq AI Co-Pilot
+  // Deep Masterclass Instructor Knowledge Base Engine
   const generateExpertAnswer = (query: string): ChatMessage => {
     const q = query.toLowerCase();
     const timeStr = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
@@ -131,20 +136,39 @@ Como posso ajudar no seu próximo diagnóstico de cibersegurança?`,
         id: String(Date.now()),
         sender: 'assistant',
         timestamp: timeStr,
-        categoryTag: 'GROQ_LLAMA_3.3_70B',
-        content: `### 🚨 [GROQ AI CO-PILOT] Guia de Resolução: Incidente P0 & Exfiltração
-        
-Ao detectar um incidente crítico de segurança, o **SENTINELX** recomenda o plano de ação de 4 passos:
+        categoryTag: 'DEEP_MASTERCLASS',
+        content: `### 🎓 1. Conceito Técnico & Causa-Raiz Profunda (Root Cause)
+Um incidente crítico **P0 (P0_CRITICAL_INCIDENT)** representa o nível máximo de severidade em cibersegurança, onde o vetor de ataque comprometeu o perímetro de execução (ex: vazamento de credenciais STS temporárias, sequestro de token JWT de administrador ou exploração de Zero-Day RCE). 
+A causa-raiz mais comum advém da combinação de **Falta de Isolamento Zero Trust na Borda** com **Permissões Excessivas de IAM (Wildcard Actions \`s3:*\`)**.
 
+---
+
+### 📋 2. Roteiro Didático de Solução Passo a Passo (Hands-On Step-by-Step)
 1. **Contenção Autônoma pelo Autopiloto**:
-   - Acesse **Autopilot Engine** no menu lateral e ative o modo **FULL_AUTO**.
-   - O sistema isolará automaticamente o nó comprometido e revogará chaves STS temporárias.
-2. **Bloqueio de IP no WAF em Milissegundos**:
-   - No painel **Global Threat Exchange**, clique em **"Sincronizar Lista de Bloqueio"**.
-3. **Análise de Causa-Raiz (RCA)**:
-   - O **AI Incident Analyst** gerará a reconstrução do storyboard de ataque com a origem do comprometimento.
-4. **Restauração Segura (Rollback)**:
-   - Vá em **Recovery & Rollback** para reverter o código vulnerável para a última versão com hash SHA-256 verificado.`,
+   - Acesse **Autopilot Engine** no menu lateral e alterne para o modo **FULL_AUTO**. Isso aciona a revogação de sessões ativas e isolamento de rede via eBPF.
+2. **Inoculação do IP Atacante no WAF**:
+   - Vá em **Troca Global de Ameaças (Threat Exchange)** e clique em **"Propagar Bloqueio Swarm"**. O IP atacante será banido em todas as regras Edge WAF em $<24\text{ms}$.
+3. **Análise Forense de Storyboard de Ataque**:
+   - Utilize o **AI Incident Analyst** para reconstruir o grafo da invasão (do IP de origem até os recursos tocados).
+4. **Reversão Criptográfica SHA-256**:
+   - Vá para **Reversão Quântica (Rollback)** e execute a restauração do snapshot pré-infecção em 18ms.
+
+---
+
+### 💻 3. Snippet Prático de Código / Comando CLI para Produção
+\`\`\`bash
+# Executar contenção emergencial e revogação de chaves comprometidas via CLI
+sentinelx containment isolate --node node-prod-kernel-01 --mode full-auto
+
+# Bloquear IP do atacante no WAF em produção
+sentinelx waf block-ip --ip 185.220.101.9 --reason "Exfiltração de dados detectada"
+\`\`\`
+
+---
+
+### 🛡️ 4. Medidas de Prevenção Futura & Guardrails (ISO 27001 / LGPD)
+- **Regra de Guardrail ISO 27001 A.12.6.1**: Implemente varreduras diárias de vulnerabilidades no Inventário de Ativos.
+- **Proteção LGPD Art. 46**: Mantenha logs de auditoria imutáveis criptografados em repositório seguro com retenção de 365 dias.`,
         suggestedActions: [
           '⚡ Alternar Autopiloto para FULL_AUTO',
           '📜 Exportar Relatório Executivo em PDF',
@@ -157,46 +181,48 @@ Ao detectar um incidente crítico de segurança, o **SENTINELX** recomenda o pla
         id: String(Date.now()),
         sender: 'assistant',
         timestamp: timeStr,
-        categoryTag: 'GROQ_LLAMA_3.3_70B',
-        content: `### 🛠️ [GROQ AI CO-PILOT] Auto-Cura de Código (Self-Healing Engine)
+        categoryTag: 'DEEP_MASTERCLASS',
+        content: `### 🎓 1. Conceito Técnico & Causa-Raiz Profunda (Root Cause)
+A vulnerabilidade de **SQL Injection (SQLi)** decorre da interpolação direta de entradas do usuário em comandos SQL interpretados pelo banco de dados. Isso viola a separação fundamental entre instruções e parâmetros. O **Cross-Site Scripting (XSS)** ocorre pela falta de sanitização de contexto nas respostas HTTP, permitindo a execução inadvertida de código JavaScript no navegador da vítima.
 
-Para aplicar correções automáticas de código no repositório GitHub/GitLab sem intervenção manual:
+---
 
-1. Acesse **Auto-Cura (Self-Healing)** no menu lateral.
-2. Conecte o repositório em **Painel de Administração -> Chaves de API & Integrações**.
-3. O motor analisará a falha de SQL Injection / XSS e sintetizará o patch com Prepared Statements.
-4. Se o **Guardrail Score** for $\\ge 95\\%$, o Pull Request será aberto automaticamente!`,
-        codeSnippet: `// Exemplo de Patch Sintetizado pelo Sentinel Self-Healing
-// ANTES (Vulnerável):
-const query = "SELECT * FROM users WHERE email = '" + req.body.email + "'";
+### 📋 2. Roteiro Didático de Solução Passo a Passo (Hands-On Step-by-Step)
+1. **Substituir Concatenações por Prepared Statements**: Parâmetros vinculados ($1, $2) informam ao SGBD que o dado deve ser tratado unicamente como valor literal.
+2. **Utilizar o Sintetizador AST do SENTINELX**: O motor analisa a Árvore Sintática Abstrata do código e gera o patch seguro automaticamente.
+3. **Execução de Suíte de Testes Automáticos**: O patch é submetido aos testes unitários em contêiner sandbox para garantir **0% de risco de regressão**.
+4. **Abertura do Pull Request**: Se aprovado nos guardrails (>95%), o PR é submetido ao repositório GitHub/GitLab.
 
-// DEPOIS (Protegido por Prepared Statements):
-const query = "SELECT * FROM users WHERE email = $1";
-const result = await db.query(query, [req.body.email]);`,
+---
+
+### 💻 3. Snippet Prático de Código para Produção
+\`\`\`typescript
+// ❌ ANTES (Vulnerável a SQL Injection):
+// const query = "SELECT * FROM users WHERE email = '" + req.body.email + "'";
+
+// ✅ DEPOIS (Protegido por Prepared Statements & Validação Zod):
+import { z } from 'zod';
+import { Pool } from 'pg';
+
+const emailSchema = z.string().email();
+const pool = new Pool();
+
+export async function findUserSecure(rawEmail: string) {
+  const validEmail = emailSchema.parse(rawEmail);
+  const query = 'SELECT id, email, role, created_at FROM users WHERE email = $1 AND active = true';
+  const { rows } = await pool.query(query, [validEmail]);
+  return rows[0];
+}
+\`\`\`
+
+---
+
+### 🛡️ 4. Medidas de Prevenção Futura & Guardrails
+- **Guardrail de Regressão Zero**: O SENTINELX certifica que 100% dos testes unitários foram mantidos intactos.
+- **OWASP Top 10 A03:2021**: Elimina 100% das injeções na camada de persistência.`,
         suggestedActions: [
           '🛠️ Testar Sintetizador de Auto-Cura',
           '📜 Verificar Regras de Guardrail (>95%)',
-        ],
-      };
-    }
-
-    if (q.includes('aws') || q.includes('nuvem') || q.includes('gcp') || q.includes('azure') || q.includes('arn')) {
-      return {
-        id: String(Date.now()),
-        sender: 'assistant',
-        timestamp: timeStr,
-        categoryTag: 'GROQ_LLAMA_3.3_70B',
-        content: `### ☁️ [GROQ AI CO-PILOT] Conexão e Segurança Multi-Nuvem (CSPM)
-
-Para auditarmos sua conta de nuvem no modo **Agentless (Sem Agente)**:
-
-1. Vá em **Conectores de Nuvem** no menu lateral.
-2. Clique em **"Adicionar Conector de Nuvem"** e selecione o provedor (AWS, Azure ou GCP).
-3. Cole o **Role ARN** de auditoria criado com a política \`SecurityAudit\`.
-4. O SENTINELX fará a varredura contínua de buckets S3 públicos, portas desprotegidas e permissões IAM excessivas!`,
-        suggestedActions: [
-          '☁️ Cadastrar Novo Conector AWS',
-          '🛡️ Executar Varredura CSPM Agora',
         ],
       };
     }
@@ -205,17 +231,33 @@ Para auditarmos sua conta de nuvem no modo **Agentless (Sem Agente)**:
       id: String(Date.now()),
       sender: 'assistant',
       timestamp: timeStr,
-      categoryTag: 'GROQ_LLAMA_3.3_70B',
-      content: `### 🤖 [GROQ AI CO-PILOT] Resposta de Diagnóstico
+      categoryTag: 'DEEP_MASTERCLASS',
+      content: `### 🎓 1. Conceito Técnico & Causa-Raiz Profunda (Root Cause)
+Como Engenheiro Instrutor Principal do SENTINELX, analisei sua consulta sobre **"${query}"**.
+Em arquiteturas distribuídas modernas (Cloud Native, Microserviços & K8s), o segredo da resiliência reside na imposição da arquitetura **Zero Trust (Nunca Confie, Sempre Verifique)** e no controle contínuo de drift de infraestrutura.
 
-Análise concluída sobre **"${query}"**! ⚡
+---
 
-O **Sentinel AI Co-Pilot (Groq Llama 3.3 70B)** analisou os 42 ativos monitorados e 0 falhas críticas ativas.
+### 📋 2. Roteiro Didático de Solução Passo a Passo (Hands-On Step-by-Step)
+1. **Mapear a Superfície de Ataque**: Verifique o Grafo de Conhecimento de Segurança para visualizar as relações entre APIs, bancos de dados e conectores de nuvem.
+2. **Injetar Campo de Força eBPF**: Ative o Hot-Patching no Kernel para bloquear exploits de Zero-Day diretamente na camada Ring 0 sem reiniciar servidores.
+3. **Implantar Armadilhas Honeytokens**: Posicione credenciais sintéticas falsas em repositórios para capturar scanners não autorizados.
 
-### 💡 Recomendações do Sentinel AI:
-1. Mantenha a política do Autopiloto em **FULL_AUTO** para mitigar ameaças em milissegundos.
-2. Ative o scanner diário de vulnerabilidades no **Inventário de Ativos**.
-3. Exporte os relatórios quinzenais de auditoria no **Auditor de Conformidade (ISO 27001 / LGPD)**.`,
+---
+
+### 💻 3. Snippet Prático de Comando CLI para Produção
+\`\`\`bash
+# Executar varredura profunda de postura de segurança e auditoria RAG
+sentinelx audit --target-org auto --depth full --output report.json
+
+# Verificar status da rede de imunidade coletiva Swarm
+sentinelx swarm status --check-propagation
+\`\`\`
+
+---
+
+### 🛡️ 4. Medidas de Prevenção Futura & Guardrails
+- **Conformidade ISO 27001 / SOC 2**: Ative os relatórios executivos para o conselho e mantenha o passaporte de conformidade contínua ativado 24/7.`,
       suggestedActions: [
         '🚨 Solução de Incidente P0',
         '🛠️ Auto-Cura de Código (SQLi)',
@@ -251,7 +293,7 @@ O **Sentinel AI Co-Pilot (Groq Llama 3.3 70B)** analisou os 42 ativos monitorado
           sender: 'assistant',
           content: res.data.response,
           timestamp: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
-          categoryTag: 'GROQ_LLAMA_3.3_70B',
+          categoryTag: 'PRINCIPAL_INSTRUCTOR_AI',
           suggestedActions: [
             '🚨 Solução de Incidente P0',
             '🛠️ Auto-Cura de Código',
@@ -263,10 +305,10 @@ O **Sentinel AI Co-Pilot (Groq Llama 3.3 70B)** analisou os 42 ativos monitorado
         return;
       }
     } catch (err) {
-      console.warn('Groq AI API backend call warning, using intelligent local engine', err);
+      console.warn('Groq AI API backend call warning, using deep instructor engine', err);
     }
 
-    // Direct Intelligent Groq Response fallback
+    // Direct Deep Instructor Response fallback
     setTimeout(() => {
       const expertAnswer = generateExpertAnswer(text);
       setMessages((prev) => [...prev, expertAnswer]);
@@ -281,14 +323,14 @@ O **Sentinel AI Co-Pilot (Groq Llama 3.3 70B)** analisou os 42 ativos monitorado
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
             <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: 'var(--gradient-cyan)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 20px rgba(0, 242, 254, 0.4)' }}>
-              <Bot size={24} color="#060813" />
+              <GraduationCap size={24} color="#060813" />
             </div>
             <div>
               <h2 style={{ fontSize: '1.85rem', fontWeight: 900, letterSpacing: '0.5px' }}>
-                SENTINELX EXPERT AI & CO-PILOT CHAT
+                SENTINELX LEAD CYBER INSTRUCTOR AI
               </h2>
               <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', marginTop: '2px' }}>
-                Assistente Especialista com Memória Persistente (Powered by Groq AI - Llama 3.3 70B Versatile)
+                Engenheiro Instrutor Chefe de Cibersegurança (Groq Llama 3.3 70B com Profundidade Técnica Exaustiva)
               </p>
             </div>
           </div>
@@ -296,7 +338,7 @@ O **Sentinel AI Co-Pilot (Groq Llama 3.3 70B)** analisou os 42 ativos monitorado
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <span className="badge badge-emerald" style={{ fontSize: '0.78rem', padding: '6px 14px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-            ⚡ SENTINEL AI CO-PILOT (GROQ LLAMA 3.3 70B) ATIVO
+            🎓 ENGENHEIRO INSTRUTOR PRINCIPAL ATIVO
           </span>
           <button className="btn-secondary" onClick={handleClearMemory}>
             <Trash2 size={16} /> Limpar Memória do Chat
@@ -395,13 +437,13 @@ O **Sentinel AI Co-Pilot (Groq Llama 3.3 70B)** analisou os 42 ativos monitorado
                   flexShrink: 0,
                 }}
               >
-                {msg.sender === 'user' ? 'VOCÊ' : <Bot size={20} color="#060813" />}
+                {msg.sender === 'user' ? 'VOCÊ' : <GraduationCap size={20} color="#060813" />}
               </div>
 
               {/* Message Content Bubble */}
               <div
                 style={{
-                  maxWidth: '82%',
+                  maxWidth: '85%',
                   background: msg.sender === 'user' ? 'rgba(79, 70, 229, 0.25)' : 'rgba(15, 23, 42, 0.85)',
                   border: msg.sender === 'user' ? '1px solid var(--accent-purple)' : '1px solid var(--border-color)',
                   borderRadius: '14px',
@@ -413,7 +455,7 @@ O **Sentinel AI Co-Pilot (Groq Llama 3.3 70B)** analisou os 42 ativos monitorado
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                     <span style={{ fontSize: '0.78rem', fontWeight: 700, color: msg.sender === 'user' ? 'var(--accent-purple)' : 'var(--accent-cyan)' }}>
-                      {msg.sender === 'user' ? 'VOCÊ' : 'SENTINELX EXPERT AI (Groq Llama 3.3 70B)'}
+                      {msg.sender === 'user' ? 'VOCÊ' : 'SENTINELX LEAD CYBER INSTRUCTOR'}
                     </span>
                     {msg.categoryTag && <span className="badge badge-emerald" style={{ fontSize: '0.65rem' }}>{msg.categoryTag}</span>}
                   </div>
@@ -465,10 +507,10 @@ O **Sentinel AI Co-Pilot (Groq Llama 3.3 70B)** analisou os 42 ativos monitorado
           {isTyping && (
             <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
               <div style={{ width: '38px', height: '38px', borderRadius: '10px', background: 'var(--gradient-cyan)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <Bot size={20} color="#060813" />
+                <GraduationCap size={20} color="#060813" />
               </div>
               <div style={{ background: 'rgba(15, 23, 42, 0.85)', border: '1px solid var(--border-color)', borderRadius: '14px', padding: '14px 20px', color: 'var(--accent-cyan)', fontFamily: 'var(--font-mono)', fontSize: '0.85rem' }}>
-                🤖 Consultando Groq Llama 3.3 70B AI em tempo real...
+                🎓 Formulando aula técnica e resposta de engenharia profunda via Groq AI...
               </div>
             </div>
           )}
@@ -480,7 +522,7 @@ O **Sentinel AI Co-Pilot (Groq Llama 3.3 70B)** analisou os 42 ativos monitorado
         <div style={{ padding: '20px 24px', borderTop: '1px solid var(--border-color)', background: 'rgba(11, 15, 25, 0.95)', display: 'flex', gap: '12px' }}>
           <input
             type="text"
-            placeholder="Pergunte ao Groq Llama 3.3 AI (as conversas são salvas na memória)..."
+            placeholder="Pergunte ao Engenheiro Instrutor Principal (Respostas profundas com causa-raiz e código)..."
             value={inputPrompt}
             onChange={(e) => setInputPrompt(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
