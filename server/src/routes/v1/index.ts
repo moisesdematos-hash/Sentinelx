@@ -39,6 +39,7 @@ import masteryBenchmarkRoutes from './mastery_benchmark.routes.js';
 import redTeamingRoutes from './red_teaming.routes.js';
 import ebpfHotPatchRoutes from './ebpf_hotpatch.routes.js';
 import deceptionHoneytokenRoutes from './deception_honeytoken.routes.js';
+import quantumRollbackRoutes from './quantum_rollback.routes.js';
 
 const router = Router();
 
@@ -83,5 +84,6 @@ router.use('/mastery-benchmark', masteryBenchmarkRoutes);
 router.use('/red-teaming', redTeamingRoutes);
 router.use('/ebpf-hotpatch', ebpfHotPatchRoutes);
 router.use('/honeytokens', deceptionHoneytokenRoutes);
+router.use('/quantum-rollback', quantumRollbackRoutes);
 
 export default router;
