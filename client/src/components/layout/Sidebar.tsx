@@ -31,6 +31,7 @@ import {
   Home,
   X,
   Flame,
+  Mic,
 } from 'lucide-react';
 
 interface MenuItem {
@@ -109,6 +110,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         { id: 'ebpf-hotpatch', label: 'Campo de Força eBPF', icon: Cpu, badge: 'SUPER AI' },
         { id: 'honeytokens', label: 'Armadilhas Honeytokens', icon: Lock, badge: 'SUPER AI' },
         { id: 'quantum-rollback', label: 'Reversão Quântica (Rollback)', icon: RotateCcw, badge: 'SUPER AI' },
+        { id: 'voice-command', label: 'Comando por Voz & WhatsApp', icon: Mic, badge: 'SUPER AI' },
         { id: 'ai-investigations', label: 'AI Incident Analyst', icon: Sparkles },
         { id: 'autopilot', label: 'Autopiloto de Contenção', icon: Zap },
         { id: 'soar', label: 'Orquestração SOAR', icon: Terminal },

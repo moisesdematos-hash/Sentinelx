@@ -47,6 +47,7 @@ import { RedTeamingPage } from './pages/RedTeamingPage';
 import { EbpfHotPatchPage } from './pages/EbpfHotPatchPage';
 import { HoneytokenDeceptionPage } from './pages/HoneytokenDeceptionPage';
 import { QuantumRollbackPage } from './pages/QuantumRollbackPage';
+import { VoiceMessagingCommandPage } from './pages/VoiceMessagingCommandPage';
 import { LoginPage } from './pages/LoginPage';
 
 const MainApp: React.FC = () => {
@@ -169,6 +170,7 @@ const MainApp: React.FC = () => {
           {activeTab === 'ebpf-hotpatch' && <EbpfHotPatchPage />}
           {activeTab === 'honeytokens' && <HoneytokenDeceptionPage />}
           {activeTab === 'quantum-rollback' && <QuantumRollbackPage />}
+          {activeTab === 'voice-command' && <VoiceMessagingCommandPage />}
           {activeTab === 'ai-investigations' && <AiInvestigationPage />}
           {activeTab === 'autopilot' && <AutopilotPage />}
           {activeTab === 'soar' && <SoarEnginePage />}
