@@ -50,6 +50,7 @@ import { QuantumRollbackPage } from './pages/QuantumRollbackPage';
 import { VoiceMessagingCommandPage } from './pages/VoiceMessagingCommandPage';
 import { GlobalSwarmImmunityPage } from './pages/GlobalSwarmImmunityPage';
 import { FinOpsSentinelPage } from './pages/FinOpsSentinelPage';
+import { SuperAiSuitePage } from './pages/SuperAiSuitePage';
 import { LoginPage } from './pages/LoginPage';
 
 const MainApp: React.FC = () => {
@@ -168,6 +169,7 @@ const MainApp: React.FC = () => {
           {activeTab === 'risk-engine' && <RiskEnginePage />}
           {activeTab === 'incidents' && <IncidentCenterPage />}
           {activeTab === 'sentinel-ai' && <SentinelAiPage />}
+          {activeTab === 'super-ai-suite' && <SuperAiSuitePage />}
           {activeTab === 'red-teaming' && <RedTeamingPage />}
           {activeTab === 'ebpf-hotpatch' && <EbpfHotPatchPage />}
           {activeTab === 'honeytokens' && <HoneytokenDeceptionPage />}

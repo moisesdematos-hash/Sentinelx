@@ -106,6 +106,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       title: 'AUTONOMIA & IA',
       items: [
         { id: 'sentinel-ai', label: 'Sentinel AI Co-Pilot', icon: Bot, badge: 'GROQ' },
+        { id: 'super-ai-suite', label: 'Super AI Suite & Kill Switch', icon: Sparkles, badge: 'GOLDEN' },
         { id: 'red-teaming', label: 'Red Teaming Autônomo', icon: Flame, badge: 'SUPER AI' },
         { id: 'ebpf-hotpatch', label: 'Campo de Força eBPF', icon: Cpu, badge: 'SUPER AI' },
         { id: 'honeytokens', label: 'Armadilhas Honeytokens', icon: Lock, badge: 'SUPER AI' },

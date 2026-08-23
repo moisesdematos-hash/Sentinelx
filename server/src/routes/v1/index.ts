@@ -43,6 +43,7 @@ import quantumRollbackRoutes from './quantum_rollback.routes.js';
 import voiceMessagingCommandRoutes from './voice_messaging_command.routes.js';
 import globalSwarmImmunityRoutes from './global_swarm_immunity.routes.js';
 import finopsSentinelRoutes from './finops_sentinel.routes.js';
+import superAiGoldenKeysRoutes from './super_ai_golden_keys.routes.js';
 
 const router = Router();
 
@@ -91,5 +92,6 @@ router.use('/quantum-rollback', quantumRollbackRoutes);
 router.use('/voice-command', voiceMessagingCommandRoutes);
 router.use('/global-swarm', globalSwarmImmunityRoutes);
 router.use('/finops-sentinel', finopsSentinelRoutes);
+router.use('/super-ai-suite', superAiGoldenKeysRoutes);
 
 export default router;
