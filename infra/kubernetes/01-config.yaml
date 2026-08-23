@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: sentinelx-security-cloud
+  labels:
+    name: sentinelx-security-cloud
+    pod-security.kubernetes.io/enforce: restricted
+    pod-security.kubernetes.io/audit: restricted
+    pod-security.kubernetes.io/warn: restricted
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sentinelx-config
+  namespace: sentinelx-security-cloud
+data:
+  NODE_ENV: "production"
+  PORT: "3000"
+  LOG_LEVEL: "info"
+  DATABASE_URL: "file:/app/prisma/dev.db"
+  AUTOPILOT_DEFAULT_MODE: "FULL_AUTO"
+  SECURITY_GUARDRAIL_MIN_SCORE: "95"
+  SWARM_PROPAGATION_MAX_LATENCY_MS: "50"
