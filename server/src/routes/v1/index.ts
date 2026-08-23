@@ -38,6 +38,7 @@ import aiInvestigationRoutes from './ai_investigation.routes.js';
 import masteryBenchmarkRoutes from './mastery_benchmark.routes.js';
 import redTeamingRoutes from './red_teaming.routes.js';
 import ebpfHotPatchRoutes from './ebpf_hotpatch.routes.js';
+import deceptionHoneytokenRoutes from './deception_honeytoken.routes.js';
 
 const router = Router();
 
@@ -81,5 +82,6 @@ router.use('/ai-investigations', aiInvestigationRoutes);
 router.use('/mastery-benchmark', masteryBenchmarkRoutes);
 router.use('/red-teaming', redTeamingRoutes);
 router.use('/ebpf-hotpatch', ebpfHotPatchRoutes);
+router.use('/honeytokens', deceptionHoneytokenRoutes);
 
 export default router;

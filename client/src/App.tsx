@@ -45,6 +45,7 @@ import { AdminPanelPage } from './pages/AdminPanelPage';
 import { VulnerabilitiesPage } from './pages/VulnerabilitiesPage';
 import { RedTeamingPage } from './pages/RedTeamingPage';
 import { EbpfHotPatchPage } from './pages/EbpfHotPatchPage';
+import { HoneytokenDeceptionPage } from './pages/HoneytokenDeceptionPage';
 import { LoginPage } from './pages/LoginPage';
 
 const MainApp: React.FC = () => {
@@ -165,6 +166,7 @@ const MainApp: React.FC = () => {
           {activeTab === 'sentinel-ai' && <SentinelAiPage />}
           {activeTab === 'red-teaming' && <RedTeamingPage />}
           {activeTab === 'ebpf-hotpatch' && <EbpfHotPatchPage />}
+          {activeTab === 'honeytokens' && <HoneytokenDeceptionPage />}
           {activeTab === 'ai-investigations' && <AiInvestigationPage />}
           {activeTab === 'autopilot' && <AutopilotPage />}
           {activeTab === 'soar' && <SoarEnginePage />}
