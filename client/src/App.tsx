@@ -1,3 +1,4 @@
+// SENTINELX Security Cloud Platform - Release 1.0.0
 import React, { useState } from 'react';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { Sidebar } from './components/layout/Sidebar';
