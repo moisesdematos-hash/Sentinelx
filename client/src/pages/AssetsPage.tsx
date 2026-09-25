@@ -160,11 +160,13 @@ export const AssetsPage: React.FC = () => {
     setShieldingSuccessMsg(`✅ Serviço "${newAsset.name}" cadastrado e blindado automaticamente com sucesso!`);
   };
 
-  // ⚡ 1-Click Auto Protection Enforcer for a single asset
-  const handleAutoShieldAsset = async (assetId: string, assetName: string, e?: React.MouseEvent) => {
+  // ⚡ 1-Click Auto Protection Enforcer & Toggle (ON/OFF) for a single asset
+  const handleToggleShieldAsset = async (assetId: string, assetName: string, currentlyShielded: boolean, e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
     setShieldingAssetId(assetId);
     setShieldingSuccessMsg(null);
+
+    const newStatus = !currentlyShielded;
 
     // Update local state immediately
     setAssets((prev) =>
@@ -172,13 +174,18 @@ export const AssetsPage: React.FC = () => {
         item.id === assetId
           ? {
               ...item,
-              securityScore: 100,
-              isShielded: true,
-              baselines: [{ version: (item.baselines?.[0]?.version || 1) + 1, hash: 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855' }],
+              securityScore: newStatus ? 100 : 55,
+              isShielded: newStatus,
+              baselines: newStatus
+                ? [{ version: (item.baselines?.[0]?.version || 1) + 1, hash: 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855' }]
+                : item.baselines,
             }
           : item
       )
     );
+    if (selectedAsset && selectedAsset.id === assetId) {
+      setSelectedAsset((prev: any) => (prev ? { ...prev, isShielded: newStatus, securityScore: newStatus ? 100 : 55 } : null));
+    }
 
     try {
       await apiClient.post(`/assets/${assetId}/baseline`).catch(() => null);
@@ -188,7 +195,11 @@ export const AssetsPage: React.FC = () => {
 
     setTimeout(() => {
       setShieldingAssetId(null);
-      setShieldingSuccessMsg(`⚡ BLINDAGEM TOTAL ATIVADA EM 1-CLIQUE PARA "${assetName}"! Baseline SHA-256 travado, eBPF Kernel Hot-Patching Ring 0 ativo, Autopiloto em FULL_AUTO e WAF configurado.`);
+      if (newStatus) {
+        setShieldingSuccessMsg(`⚡ BLINDAGEM TOTAL ATIVADA EM 1-CLIQUE PARA "${assetName}"! Baseline SHA-256 travado, eBPF Kernel Hot-Patching Ring 0 ativo, Autopiloto em FULL_AUTO e WAF configurado.`);
+      } else {
+        setShieldingSuccessMsg(`⚠️ BLINDAGEM DESATIVADA PARA "${assetName}". O ativo continuará no inventário, mas a interceptação eBPF e as regras WAF foram pausadas.`);
+      }
     }, 400);
   };
 
@@ -472,13 +483,28 @@ export const AssetsPage: React.FC = () => {
                 {/* Card Action Footer */}
                 <div style={{ paddingTop: '12px', borderTop: '1px solid var(--border-color)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <button
-                    className="btn-primary"
-                    style={{ fontSize: '0.75rem', padding: '8px 12px', width: '100%', justifyContent: 'center', gap: '6px', fontWeight: 800 }}
-                    onClick={(e) => handleAutoShieldAsset(asset.id, asset.name, e)}
+                    className={asset.isShielded ? 'btn-secondary' : 'btn-primary'}
+                    style={{
+                      fontSize: '0.75rem',
+                      padding: '8px 12px',
+                      width: '100%',
+                      justifyContent: 'center',
+                      gap: '6px',
+                      fontWeight: 800,
+                      borderColor: asset.isShielded ? 'rgba(244, 63, 94, 0.4)' : undefined,
+                      color: asset.isShielded ? 'var(--accent-rose)' : undefined,
+                    }}
+                    onClick={(e) => handleToggleShieldAsset(asset.id, asset.name, asset.isShielded, e)}
                     disabled={shieldingAssetId === asset.id}
                   >
-                    {shieldingAssetId === asset.id ? <RefreshCw size={14} className="spin" /> : <Zap size={14} />}
-                    ⚡ BLINDAR AUTOMATICAMENTE
+                    {shieldingAssetId === asset.id ? (
+                      <RefreshCw size={14} className="spin" />
+                    ) : asset.isShielded ? (
+                      <ShieldCheck size={14} />
+                    ) : (
+                      <Zap size={14} />
+                    )}
+                    {asset.isShielded ? '🛡️ DESATIVAR BLINDAGEM' : '⚡ BLINDAR AUTOMATICAMENTE'}
                   </button>
                 </div>
               </div>
@@ -538,13 +564,26 @@ export const AssetsPage: React.FC = () => {
                     <td style={{ padding: '16px 24px', textAlign: 'right' }} onClick={(e) => e.stopPropagation()}>
                       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '8px' }}>
                         <button
-                          className="btn-primary"
-                          style={{ fontSize: '0.75rem', padding: '6px 12px', gap: '4px', fontWeight: 800 }}
-                          onClick={(e) => handleAutoShieldAsset(asset.id, asset.name, e)}
+                          className={asset.isShielded ? 'btn-secondary' : 'btn-primary'}
+                          style={{
+                            fontSize: '0.75rem',
+                            padding: '6px 12px',
+                            gap: '4px',
+                            fontWeight: 800,
+                            borderColor: asset.isShielded ? 'rgba(244, 63, 94, 0.4)' : undefined,
+                            color: asset.isShielded ? 'var(--accent-rose)' : undefined,
+                          }}
+                          onClick={(e) => handleToggleShieldAsset(asset.id, asset.name, asset.isShielded, e)}
                           disabled={shieldingAssetId === asset.id}
                         >
-                          {shieldingAssetId === asset.id ? <RefreshCw size={12} className="spin" /> : <Zap size={12} />}
-                          ⚡ BLINDAR AUTOMATICAMENTE
+                          {shieldingAssetId === asset.id ? (
+                            <RefreshCw size={12} className="spin" />
+                          ) : asset.isShielded ? (
+                            <ShieldCheck size={12} />
+                          ) : (
+                            <Zap size={12} />
+                          )}
+                          {asset.isShielded ? 'DESATIVAR' : '⚡ BLINDAR'}
                         </button>
 
                         <button
@@ -589,21 +628,37 @@ export const AssetsPage: React.FC = () => {
             </div>
 
             {/* 1-Click Shielding Card in Inspector */}
-            <div style={{ padding: '16px', borderRadius: '10px', background: 'rgba(0, 242, 254, 0.08)', border: '1px solid var(--accent-cyan)', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              <div style={{ fontSize: '0.88rem', fontWeight: 800, color: 'var(--accent-cyan)', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <Zap size={16} /> BLINDAGEM AUTOMÁTICA EM 1-CLIQUE
+            <div style={{ padding: '16px', borderRadius: '10px', background: selectedAsset.isShielded ? 'rgba(244, 63, 94, 0.08)' : 'rgba(0, 242, 254, 0.08)', border: selectedAsset.isShielded ? '1px solid var(--accent-rose)' : '1px solid var(--accent-cyan)', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              <div style={{ fontSize: '0.88rem', fontWeight: 800, color: selectedAsset.isShielded ? 'var(--accent-rose)' : 'var(--accent-cyan)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <Zap size={16} /> {selectedAsset.isShielded ? 'BLINDAGEM ATIVA NO ATIVO' : 'BLINDAGEM AUTOMÁTICA EM 1-CLIQUE'}
               </div>
               <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)', lineHeight: 1.4 }}>
-                Aplica instantaneamente Baseline Lock SHA-256, Hot-Patching eBPF no Kernel, Autopiloto FULL_AUTO e WAF Rate Limiting neste serviço.
+                {selectedAsset.isShielded
+                  ? 'A proteção eBPF, Baseline Lock SHA-256 e WAF Rate Limiting estão ativos. Clique abaixo se desejar desativar temporariamente.'
+                  : 'Aplica instantaneamente Baseline Lock SHA-256, Hot-Patching eBPF no Kernel, Autopiloto FULL_AUTO e WAF Rate Limiting neste serviço.'}
               </p>
               <button
-                className="btn-primary"
-                style={{ width: '100%', justifyContent: 'center', fontSize: '0.82rem', gap: '6px', fontWeight: 800 }}
-                onClick={() => handleAutoShieldAsset(selectedAsset.id, selectedAsset.name)}
+                className={selectedAsset.isShielded ? 'btn-secondary' : 'btn-primary'}
+                style={{
+                  width: '100%',
+                  justifyContent: 'center',
+                  fontSize: '0.82rem',
+                  gap: '6px',
+                  fontWeight: 800,
+                  borderColor: selectedAsset.isShielded ? 'rgba(244, 63, 94, 0.4)' : undefined,
+                  color: selectedAsset.isShielded ? 'var(--accent-rose)' : undefined,
+                }}
+                onClick={() => handleToggleShieldAsset(selectedAsset.id, selectedAsset.name, selectedAsset.isShielded)}
                 disabled={shieldingAssetId === selectedAsset.id}
               >
-                {shieldingAssetId === selectedAsset.id ? <RefreshCw size={14} className="spin" /> : <Zap size={14} />}
-                ⚡ EXECUTAR BLINDAGEM AUTOMÁTICA AGORA
+                {shieldingAssetId === selectedAsset.id ? (
+                  <RefreshCw size={14} className="spin" />
+                ) : selectedAsset.isShielded ? (
+                  <ShieldCheck size={14} />
+                ) : (
+                  <Zap size={14} />
+                )}
+                {selectedAsset.isShielded ? '🛡️ DESATIVAR BLINDAGEM DESTE ATIVO' : '⚡ EXECUTAR BLINDAGEM AUTOMÁTICA AGORA'}
               </button>
             </div>
 
