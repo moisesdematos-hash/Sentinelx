@@ -1,4 +1,5 @@
 import React from 'react';
+import { useLanguage } from '../../context/LanguageContext';
 import {
   LayoutDashboard,
   Sparkles,
@@ -14,7 +15,7 @@ import {
 
 interface MenuItem {
   id: string;
-  label: string;
+  labelKey: string;
   icon: any;
   badge?: string;
 }
@@ -34,15 +35,17 @@ export const Sidebar: React.FC<SidebarProps> = ({
   isOpenMobile = false,
   onCloseMobile,
 }) => {
+  const { t } = useLanguage();
+
   const mainThemes: MenuItem[] = [
-    { id: 'dashboard', label: 'Painel Principal (SOC)', icon: LayoutDashboard, badge: 'SOC 24/7' },
-    { id: 'hub-super-ai', label: 'Autonomia & Super IA', icon: Sparkles, badge: 'SUPER AI' },
-    { id: 'hub-epp-edr', label: 'EPP, EDR & Ativos', icon: Shield, badge: 'PROTEÇÃO' },
-    { id: 'hub-cloud-security', label: 'Cloud & K8s Security', icon: Cloud, badge: 'CSPM' },
-    { id: 'hub-siem-xdr', label: 'SIEM, XDR & Risco', icon: Activity, badge: 'XDR' },
-    { id: 'hub-compliance', label: 'Conformidade & ISO', icon: FileCheck, badge: 'ISO/SOC2' },
-    { id: 'hub-operations', label: 'Operações & MSP/MSSP', icon: Settings, badge: 'MSSP' },
-    { id: 'welcome', label: 'Landing Page & Planos', icon: Home, badge: 'SAAS' },
+    { id: 'dashboard', labelKey: 'sidebar.dashboard', icon: LayoutDashboard, badge: 'SOC 24/7' },
+    { id: 'hub-super-ai', labelKey: 'sidebar.super_ai', icon: Sparkles, badge: 'SUPER AI' },
+    { id: 'hub-epp-edr', labelKey: 'sidebar.epp_edr', icon: Shield, badge: 'PROTECTION' },
+    { id: 'hub-cloud-security', labelKey: 'sidebar.cloud_security', icon: Cloud, badge: 'CSPM' },
+    { id: 'hub-siem-xdr', labelKey: 'sidebar.siem_xdr', icon: Activity, badge: 'XDR' },
+    { id: 'hub-compliance', labelKey: 'sidebar.compliance', icon: FileCheck, badge: 'ISO/SOC2' },
+    { id: 'hub-operations', labelKey: 'sidebar.operations', icon: Settings, badge: 'MSSP' },
+    { id: 'welcome', labelKey: 'sidebar.landing', icon: Home, badge: 'SAAS' },
   ];
 
   const handleLogoClick = () => {
@@ -112,7 +115,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
         >
           <div
             onClick={handleLogoClick}
-            title="Voltar para a Página Inicial (Landing Page)"
             style={{
               display: 'flex',
               alignItems: 'center',
@@ -188,7 +190,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             padding: '20px 20px 8px 20px',
           }}
         >
-          TEMAS PRINCIPAIS DA PLATAFORMA
+          {t('sidebar.title')}
         </div>
 
         <nav
@@ -234,7 +236,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                   <Icon size={20} color={isActive ? 'var(--accent-cyan)' : 'var(--text-muted)'} />
-                  <span>{item.label}</span>
+                  <span>{t(item.labelKey)}</span>
                 </div>
 
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
@@ -275,13 +277,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
               marginBottom: '6px',
             }}
           >
-            <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>Status do Autopiloto</span>
+            <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>{t('sidebar.autopilot_status')}</span>
             <span className="badge badge-emerald" style={{ fontSize: '0.65rem' }}>
-              ONLINE
+              {t('state.online')}
             </span>
           </div>
           <div style={{ fontSize: '0.78rem', fontWeight: 700, color: 'var(--accent-cyan)' }}>
-            FULL_AUTO (100% Autônomo)
+            {t('state.full_auto')}
           </div>
         </div>
       </aside>

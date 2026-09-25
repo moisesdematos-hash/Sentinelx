@@ -13,7 +13,10 @@ import {
   Activity,
 } from 'lucide-react';
 
+import { useLanguage } from '../context/LanguageContext';
+
 export const DashboardPage: React.FC = () => {
+  const { t } = useLanguage();
   const [health, setHealth] = useState<any>(null);
   const [assets, setAssets] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -39,7 +42,7 @@ export const DashboardPage: React.FC = () => {
   if (loading) {
     return (
       <div style={{ padding: '40px', color: 'var(--accent-cyan)', fontFamily: 'var(--font-mono)' }}>
-        [SENTINELX] INITIALIZING CONTROL PLANE TELEMETRY...
+        [SENTINELX] {t('state.loading')}
       </div>
     );
   }
@@ -64,19 +67,19 @@ export const DashboardPage: React.FC = () => {
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <h3 style={{ fontSize: '1.35rem', fontWeight: 900, color: '#fff' }}>
-              ⚡ BLINDAGEM AUTOMÁTICA EM 1-CLIQUE
+              {t('dashboard.banner_title')}
             </h3>
             <span className="badge badge-emerald">FULL_AUTO ACTIVE</span>
           </div>
           <p style={{ fontSize: '0.88rem', color: 'var(--text-secondary)', marginTop: '4px' }}>
-            Ative o eBPF Kernel Hot-Patching, Baseline SHA-256 Lock e Autopiloto de Contenção instantaneamente em todos os ativos.
+            {t('dashboard.banner_desc')}
           </p>
         </div>
 
         <button
           className="btn-primary"
           onClick={() => {
-            alert('⚡ BLINDAGEM TOTAL EM 1-CLIQUE EXECUTADA! Baseline SHA-256 travado, eBPF Kernel Hot-Patching Ring 0 ativo, Autopiloto em FULL_AUTO e WAF configurado em todos os 42 ativos!');
+            alert(t('assets.success_shield_all'));
           }}
           style={{
             background: 'var(--gradient-cyan)',
@@ -86,7 +89,7 @@ export const DashboardPage: React.FC = () => {
             whiteSpace: 'nowrap',
           }}
         >
-          ⚡ ATIVAR BLINDAGEM TOTAL EM 1-CLIQUE AGORA
+          {t('dashboard.banner_btn')}
         </button>
       </div>
 

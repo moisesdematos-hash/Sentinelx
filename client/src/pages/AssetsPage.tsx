@@ -19,6 +19,7 @@ import {
   LayoutGrid,
   List,
 } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
 
 const DEFAULT_SEED_ASSETS = [
   {
@@ -84,6 +85,7 @@ const DEFAULT_SEED_ASSETS = [
 ];
 
 export const AssetsPage: React.FC = () => {
+  const { t } = useLanguage();
   const [assets, setAssets] = useState<any[]>(DEFAULT_SEED_ASSETS);
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -273,11 +275,11 @@ export const AssetsPage: React.FC = () => {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <h2 style={{ fontSize: '1.75rem', fontWeight: 800 }}>Inventário de Ativos & Proteção</h2>
-            <span className="badge badge-emerald">MODOS MOSAICO E LINHA ATIVOS</span>
+            <h2 style={{ fontSize: '1.75rem', fontWeight: 800 }}>{t('assets.title')}</h2>
+            <span className="badge badge-emerald">AUTOMÁTICO EM 1-CLIQUE</span>
           </div>
           <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', marginTop: '4px' }}>
-            Descoberta Contínua de Ativos, Blindagem eBPF, Baseline Lock SHA-256 e Autopiloto em 1-Clique
+            {t('assets.subtitle')}
           </p>
         </div>
 
@@ -289,11 +291,11 @@ export const AssetsPage: React.FC = () => {
             style={{ background: 'var(--gradient-cyan)', boxShadow: '0 0 20px rgba(0, 242, 254, 0.4)', padding: '10px 20px', fontWeight: 800 }}
           >
             {globalShielding ? <RefreshCw size={16} className="spin" /> : <Zap size={16} />}
-            ⚡ ATIVAR BLINDAGEM TOTAL EM TODOS OS ATIVOS (1-CLIQUE)
+            {t('assets.shield_all')}
           </button>
 
           <button className="btn-secondary" onClick={() => setIsModalOpen(true)}>
-            <Plus size={16} /> Cadastrar Ativo
+            <Plus size={16} /> {t('assets.register_asset')}
           </button>
         </div>
       </div>
@@ -319,7 +321,7 @@ export const AssetsPage: React.FC = () => {
             <input
               type="text"
               className="input-field"
-              placeholder="Buscar por nome, URL, IP ou proprietário..."
+              placeholder={t('action.search_placeholder')}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
@@ -331,12 +333,12 @@ export const AssetsPage: React.FC = () => {
             value={filterType}
             onChange={(e) => setFilterType(e.target.value)}
           >
-            <option value="">Todos os Tipos</option>
+            <option value="">All Types</option>
             <option value="WEBSITE">Websites</option>
-            <option value="API">APIs REST</option>
-            <option value="SERVER">Servidores</option>
-            <option value="CLOUD">Contas de Nuvem</option>
-            <option value="CONTAINER">Contêineres</option>
+            <option value="API">REST APIs</option>
+            <option value="SERVER">Servers</option>
+            <option value="CLOUD">Cloud Accounts</option>
+            <option value="CONTAINER">Containers</option>
           </select>
 
           <select
@@ -345,10 +347,10 @@ export const AssetsPage: React.FC = () => {
             value={filterEnv}
             onChange={(e) => setFilterEnv(e.target.value)}
           >
-            <option value="">Todos Ambientes</option>
-            <option value="PRODUCTION">Produção</option>
+            <option value="">All Environments</option>
+            <option value="PRODUCTION">Production</option>
             <option value="STAGING">Staging</option>
-            <option value="DEVELOPMENT">Desenvolvimento</option>
+            <option value="DEVELOPMENT">Development</option>
           </select>
         </div>
 
@@ -370,10 +372,9 @@ export const AssetsPage: React.FC = () => {
               gap: '6px',
               transition: 'all 0.2s ease',
             }}
-            title="Visualização em Mosaico (Cards Grid)"
           >
             <LayoutGrid size={16} />
-            <span>Modo Mosaico</span>
+            <span>{t('view_mode.mosaic')}</span>
           </button>
 
           <button
@@ -392,10 +393,9 @@ export const AssetsPage: React.FC = () => {
               gap: '6px',
               transition: 'all 0.2s ease',
             }}
-            title="Visualização em Linha (Tabela)"
           >
             <List size={16} />
-            <span>Modo Linha</span>
+            <span>{t('view_mode.line')}</span>
           </button>
         </div>
       </div>

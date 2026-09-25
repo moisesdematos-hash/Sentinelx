@@ -1,5 +1,7 @@
 import React from 'react';
 import { useAuth } from '../../context/AuthContext';
+import { useLanguage } from '../../context/LanguageContext';
+import { LanguageSelector } from './LanguageSelector';
 import { Building2, LogOut, Bell, ShieldCheck, Globe, ArrowLeft, Menu, Zap } from 'lucide-react';
 
 interface HeaderProps {
@@ -18,6 +20,7 @@ export const Header: React.FC<HeaderProps> = ({
   activeTab,
 }) => {
   const { user, logout } = useAuth();
+  const { t } = useLanguage();
 
   const isHubPage = activeTab?.startsWith('hub-');
   const isDashboard = activeTab === 'dashboard' || activeTab === 'welcome';
@@ -64,11 +67,10 @@ export const Header: React.FC<HeaderProps> = ({
           </button>
         )}
 
-        {/* Universal Back Button ("← Voltar") */}
+        {/* Universal Back Button */}
         {showBackButton && (
           <button
             onClick={onBack}
-            title={isHubPage ? 'Voltar para o Painel Principal' : 'Voltar para a Central do Tema'}
             className="btn-secondary"
             style={{
               fontSize: '0.85rem',
@@ -82,14 +84,13 @@ export const Header: React.FC<HeaderProps> = ({
             }}
           >
             <ArrowLeft size={16} />
-            <span>{isHubPage ? 'Voltar ao Painel' : 'Voltar para Central'}</span>
+            <span>{isHubPage ? t('header.back_to_dashboard') : t('header.back_to_hub')}</span>
           </button>
         )}
 
         <div
           className="badge badge-cyan"
           onClick={onGoLanding}
-          title="Clique para ir para a Página Inicial"
           style={{ cursor: 'pointer', userSelect: 'none' }}
         >
           <Building2 size={12} />
@@ -99,20 +100,21 @@ export const Header: React.FC<HeaderProps> = ({
         <div
           className="badge badge-emerald desktop-only"
           onClick={onGoLanding}
-          title="Clique para ir para a Página Inicial"
           style={{ cursor: 'pointer', userSelect: 'none' }}
         >
           <ShieldCheck size={12} />
-          <span>SCORES: 100/100 (BLINDAGEM TOTAL)</span>
+          <span>{t('header.scores_optimal')}</span>
         </div>
       </div>
 
       <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+        {/* Language Selector (PT | EN | ES | FR) */}
+        <LanguageSelector />
+
         {/* ⚡ PROMINENT 1-CLICK AUTO SHIELD BUTTON IN TOP HEADER */}
         {onAutoShield && (
           <button
             onClick={onAutoShield}
-            title="Ativar eBPF Kernel Hot-Patching, Baseline SHA-256 e Autopiloto em 1-Clique"
             style={{
               background: 'var(--gradient-cyan)',
               border: 'none',
@@ -128,13 +130,12 @@ export const Header: React.FC<HeaderProps> = ({
               boxShadow: '0 0 20px rgba(0, 242, 254, 0.4)',
             }}
           >
-            <Zap size={16} /> ⚡ BLINDAR AUTOMATICAMENTE (1-CLIQUE)
+            <Zap size={16} /> {t('header.auto_shield_btn')}
           </button>
         )}
 
         <button
           onClick={onGoLanding}
-          title="Voltar para a Página Inicial (Landing Page)"
           className="btn-secondary"
           style={{
             fontSize: '0.82rem',
@@ -143,7 +144,7 @@ export const Header: React.FC<HeaderProps> = ({
             cursor: 'pointer',
           }}
         >
-          <Globe size={14} /> <span className="desktop-only">Página Inicial</span>
+          <Globe size={14} /> <span className="desktop-only">{t('header.go_landing')}</span>
         </button>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', paddingLeft: '12px', borderLeft: '1px solid var(--border-color)' }}>
@@ -157,7 +158,7 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
           <button
             onClick={logout}
-            title="Sair / Fazer Logout"
+            title={t('header.logout')}
             style={{
               background: 'rgba(255, 8, 68, 0.1)',
               border: '1px solid rgba(255, 8, 68, 0.3)',

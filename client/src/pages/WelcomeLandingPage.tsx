@@ -32,12 +32,16 @@ import {
 } from 'lucide-react';
 import { DocumentationModal } from '../components/documentation/DocumentationModal';
 
+import { useLanguage } from '../context/LanguageContext';
+import { LanguageSelector } from '../components/layout/LanguageSelector';
+
 interface WelcomeLandingPageProps {
   onEnterApp?: () => void;
   onEnterGuest?: () => void;
 }
 
 export const WelcomeLandingPage: React.FC<WelcomeLandingPageProps> = ({ onEnterApp, onEnterGuest }) => {
+  const { t } = useLanguage();
   const [showCheckoutModal, setShowCheckoutModal] = useState(false);
   const [showDocModal, setShowDocModal] = useState(false);
   const [showDemoVideoModal, setShowDemoVideoModal] = useState(false);
@@ -196,10 +200,10 @@ export const WelcomeLandingPage: React.FC<WelcomeLandingPageProps> = ({ onEnterA
         </div>
 
         <nav style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
-          <a href="#dores" style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontSize: '0.88rem', fontWeight: 500 }}>Dores & Soluções</a>
-          <a href="#roi" style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontSize: '0.88rem', fontWeight: 500 }}>Calculadora de ROI</a>
-          <a href="#planos" style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontSize: '0.88rem', fontWeight: 500 }}>Planos & Preços</a>
-          <a href="#faq" style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontSize: '0.88rem', fontWeight: 500 }}>Perguntas Frequentes</a>
+          <a href="#dores" style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontSize: '0.88rem', fontWeight: 500 }}>{t('landing.nav.features')}</a>
+          <a href="#roi" style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontSize: '0.88rem', fontWeight: 500 }}>{t('landing.nav.roi')}</a>
+          <a href="#planos" style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontSize: '0.88rem', fontWeight: 500 }}>{t('landing.nav.pricing')}</a>
+          <a href="#faq" style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontSize: '0.88rem', fontWeight: 500 }}>{t('landing.nav.faq')}</a>
 
           <button
             onClick={() => setShowDocModal(true)}
@@ -217,11 +221,14 @@ export const WelcomeLandingPage: React.FC<WelcomeLandingPageProps> = ({ onEnterA
               gap: '6px',
             }}
           >
-            <BookOpen size={14} /> Documentação Técnica
+            <BookOpen size={14} /> {t('landing.nav.docs')}
           </button>
         </nav>
 
         <div style={{ display: 'flex', gap: '14px', alignItems: 'center' }}>
+          {/* Language Selector */}
+          <LanguageSelector />
+
           {/* ⚡ 1-CLICK AUTO PROTECTION ENTER APP BUTTON */}
           <button
             onClick={onEnterGuest}
@@ -239,9 +246,8 @@ export const WelcomeLandingPage: React.FC<WelcomeLandingPageProps> = ({ onEnterA
               gap: '8px',
               boxShadow: '0 0 20px rgba(0, 242, 254, 0.4)',
             }}
-            title="Entrar na Plataforma e ativar a Blindagem Automática"
           >
-            <Zap size={16} /> ⚡ Blindar Serviços em 1-Clique
+            <Zap size={16} /> {t('landing.nav.shield_btn')}
           </button>
 
           <button
@@ -249,7 +255,7 @@ export const WelcomeLandingPage: React.FC<WelcomeLandingPageProps> = ({ onEnterA
             className="btn-secondary"
             style={{ fontSize: '0.88rem', padding: '10px 18px' }}
           >
-            Acessar / Login
+            {t('landing.nav.login')}
           </button>
         </div>
       </header>

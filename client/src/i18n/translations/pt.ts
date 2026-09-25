@@ -1,0 +1,129 @@
+export const pt = {
+  // Brand & Header
+  'brand.name': 'SENTINELX',
+  'brand.subtitle': 'SECURITY CLOUD',
+  'brand.tagline': 'AUTONOMOUS CONTINUOUS CYBER DEFENSE',
+  'header.go_landing': 'Página Inicial',
+  'header.back_to_hub': 'Voltar para Central',
+  'header.back_to_dashboard': 'Voltar ao Painel',
+  'header.auto_shield_btn': '⚡ BLINDAR AUTOMATICAMENTE (1-CLIQUE)',
+  'header.scores_optimal': 'SCORES: 100/100 (BLINDAGEM TOTAL)',
+  'header.alerts_count': '3 ALERTAS',
+  'header.logout': 'Sair / Logout',
+
+  // Common Actions & States
+  'action.back': 'Voltar',
+  'action.save': 'Salvar',
+  'action.cancel': 'Cancelar',
+  'action.confirm': 'Confirmar',
+  'action.delete': 'Excluir',
+  'action.close': 'Fechar',
+  'action.refresh': 'Atualizar',
+  'action.register': 'Cadastrar',
+  'action.open': 'Abrir Funcionalidade',
+  'action.execute': 'Executar',
+  'action.inspect': 'Inspecionar',
+  'action.search_placeholder': 'Buscar por nome, URL, IP ou proprietário...',
+  'state.loading': 'Carregando...',
+  'state.online': 'ONLINE',
+  'state.offline': 'OFFLINE',
+  'state.full_auto': 'FULL_AUTO (100% Autônomo)',
+  'view_mode.mosaic': 'Modo Mosaico',
+  'view_mode.line': 'Modo Linha',
+
+  // Sidebar Themes
+  'sidebar.title': 'TEMAS PRINCIPAIS DA PLATAFORMA',
+  'sidebar.dashboard': 'Painel Principal (SOC)',
+  'sidebar.super_ai': 'Autonomia & Super IA',
+  'sidebar.epp_edr': 'EPP, EDR & Ativos',
+  'sidebar.cloud_security': 'Cloud & K8s Security',
+  'sidebar.siem_xdr': 'SIEM, XDR & Risco',
+  'sidebar.compliance': 'Conformidade & ISO',
+  'sidebar.operations': 'Operações & MSP/MSSP',
+  'sidebar.landing': 'Landing Page & Planos',
+  'sidebar.autopilot_status': 'Status do Autopiloto',
+
+  // Asset Inventory Page
+  'assets.title': 'Inventário de Ativos & Proteção',
+  'assets.subtitle': 'Descoberta Contínua de Ativos, Blindagem eBPF, Baseline Lock SHA-256 e Autopiloto em 1-Clique',
+  'assets.shield_all': '⚡ ATIVAR BLINDAGEM TOTAL EM TODOS OS ATIVOS (1-CLIQUE)',
+  'assets.register_asset': 'Cadastrar Ativo',
+  'assets.col_name': 'NOME DO SERVIÇO',
+  'assets.col_type': 'TIPO',
+  'assets.col_target': 'ALVO / ENDEREÇO',
+  'assets.col_env': 'AMBIENTE',
+  'assets.col_criticality': 'CRITICIDADE',
+  'assets.col_score': 'SCORE DE SEGURANÇA',
+  'assets.col_action': 'PROTEÇÃO 1-CLIQUE',
+  'assets.shield_btn': '⚡ BLINDAR AUTOMATICAMENTE',
+  'assets.shielded_badge': '🛡️ BLINDAGEM ATIVA',
+  'assets.success_shield': '⚡ BLINDAGEM TOTAL ATIVADA EM 1-CLIQUE PARA "{{name}}"! Baseline SHA-256 travado, eBPF Kernel Hot-Patching Ring 0 ativo, Autopiloto em FULL_AUTO e WAF configurado.',
+  'assets.success_shield_all': '🛡️ BLINDAGEM TOTAL EM 1-CLIQUE CONCLUÍDA EM TODOS OS ATIVOS! Todos os serviços estão 100% protegidos.',
+
+  // Dashboard Page
+  'dashboard.banner_title': '⚡ BLINDAGEM AUTOMÁTICA EM 1-CLIQUE',
+  'dashboard.banner_desc': 'Ative o eBPF Kernel Hot-Patching, Baseline SHA-256 Lock e Autopiloto de Contenção instantaneamente em todos os ativos.',
+  'dashboard.banner_btn': '⚡ ATIVAR BLINDAGEM TOTAL EM 1-CLIQUE AGORA',
+  'dashboard.score': 'SCORE DE SEGURANÇA',
+  'dashboard.critical_assets': 'ATIVOS CRÍTICOS',
+  'dashboard.active_monitors': 'MONITORES ATIVOS',
+  'dashboard.threat_level': 'NÍVEL DE AMEAÇA',
+  'dashboard.threat_low': 'BAIXO (PROTEGIDO)',
+
+  // Super AI Hub
+  'hub.super_ai.title': 'CENTRAL DE AUTONOMIA & SUPER IA',
+  'hub.super_ai.subtitle': 'Selecione qualquer motor de inteligência artificial e proteção autônoma abaixo:',
+  'hub.super_ai.badge': '10 MOTORES ATIVOS',
+  'hub.super_ai.sentinel_ai': 'Sentinel AI Co-Pilot (Engenheiro Instrutor)',
+  'hub.super_ai.sentinel_ai_desc': 'Assistente e Engenheiro Instrutor de Cibersegurança em tempo real com explicações exaustivas de causa-raiz e código.',
+  'hub.super_ai.suite': 'Super AI Suite & Botão do Pânico Quântico',
+  'hub.super_ai.suite_desc': 'Orquestrador Multi-LLM (Groq, DeepSeek R1, Gemini 2.5), RAG Vetorial e Isolamento Imediato em Air-Gap.',
+  'hub.super_ai.red_teaming': 'Red Teaming Autônomo & Simulação de Ataques',
+  'hub.super_ai.ebpf': 'Campo de Força eBPF (Kernel Hot-Patching)',
+  'hub.super_ai.honeytokens': 'Armadilhas Honeytokens & Deception',
+  'hub.super_ai.rollback': 'Reversão Quântica Anti-Ransomware (18ms)',
+  'hub.super_ai.voice': 'Comando por Voz Cyber-Assistente',
+  'hub.super_ai.swarm': 'Inteligência Enxame Global (Swarm Immunity)',
+  'hub.super_ai.finops': 'Sentinel FinOps Anti-Cryptojacking',
+  'hub.super_ai.investigations': 'Investigador Forense com IA (Grafos)',
+
+  // EPP/EDR Hub
+  'hub.epp.title': 'CENTRAL DE EPP, EDR & PROTEÇÃO DE ATIVOS',
+  'hub.epp.subtitle': 'Selecione qualquer módulo de proteção de endpoints, servidores, APIs, contêineres ou borda para gerenciar:',
+  'hub.epp.badge': '7 MÓDULOS DE PROTEÇÃO',
+
+  // Cloud Security Hub
+  'hub.cloud.title': 'CENTRAL DE SEGURANÇA DE NUVEM (CSPM)',
+  'hub.cloud.subtitle': 'Monitore, audite e proteja sua infraestrutura multicloud e clusters Kubernetes:',
+  'hub.cloud.badge': 'AWS / AZURE / GCP / K8S',
+
+  // SIEM/XDR Hub
+  'hub.siem.title': 'CENTRAL DE SIEM, XDR & GRAFO DE RISCO',
+  'hub.siem.subtitle': 'Explore o barramento de eventos, grafo de ameaças, regras de detecção e correlação XDR:',
+  'hub.siem.badge': 'CORRELAÇÃO UNIFICADA',
+
+  // Compliance Hub
+  'hub.compliance.title': 'CENTRAL DE CONFORMIDADE, GOVERNANÇA & AUDITORIA',
+  'hub.compliance.subtitle': 'Gerencie passaportes de conformidade, relatórios executivos para o conselho e auditoria Zero Trust:',
+  'hub.compliance.badge': 'ISO 27001 / SOC 2 / LGPD',
+
+  // Operations Hub
+  'hub.operations.title': 'CENTRAL DE OPERAÇÕES, FINOPS & MSP/MSSP',
+  'hub.operations.subtitle': 'Gerencie integrações, parceiros MSSP, chaves de API, webhooks e otimização financeira:',
+  'hub.operations.badge': 'GESTÃO DE PLATAFORMA',
+
+  // Landing Page
+  'landing.nav.features': 'Dores & Soluções',
+  'landing.nav.roi': 'Calculadora de ROI',
+  'landing.nav.pricing': 'Planos & Preços',
+  'landing.nav.faq': 'Perguntas Frequentes',
+  'landing.nav.docs': 'Documentação Técnica',
+  'landing.nav.shield_btn': '⚡ Blindar Serviços em 1-Clique',
+  'landing.nav.login': 'Acessar / Login',
+  'landing.hero.title': 'Plataforma Autônoma de Cibersegurança & Auto-Cura de Código',
+  'landing.hero.subtitle': 'Defesa Contínua com eBPF no Kernel, Autopiloto FULL_AUTO, RAG Vetorial e Reversão Quântica Anti-Ransomware em 18ms.',
+  'landing.hero.start_free': '🚀 Começar Teste Grátis de 14 Dias',
+  'landing.hero.demo_access': '⚡ Acessar Plataforma Demo',
+  'landing.pricing.monthly': '/ mês',
+  'landing.pricing.select_plan': 'Assinar Plano Agora',
+};

@@ -107,10 +107,14 @@ class ErrorBoundary extends Component<Props, State> {
   }
 }
 
+import { LanguageProvider } from './context/LanguageContext';
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <ErrorBoundary>
-      <App />
+      <LanguageProvider>
+        <App />
+      </LanguageProvider>
     </ErrorBoundary>
   </React.StrictMode>
 );
