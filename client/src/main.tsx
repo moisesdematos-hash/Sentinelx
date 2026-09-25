@@ -4,10 +4,12 @@ import App from './App';
 import './index.css';
 
 // Register PWA Service Worker for Mobile & App Installation
-if ('serviceWorker' in navigator && window.location.protocol === 'https:') {
+if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js').catch((err) => {
-      console.log('ServiceWorker registration failed: ', err);
+    navigator.serviceWorker.register('/sw.js').then((reg) => {
+      console.log('SENTINELX PWA ServiceWorker registered successfully:', reg.scope);
+    }).catch((err) => {
+      console.warn('SENTINELX ServiceWorker registration error:', err);
     });
   });
 }

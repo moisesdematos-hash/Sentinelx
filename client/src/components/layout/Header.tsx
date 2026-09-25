@@ -21,6 +21,43 @@ export const Header: React.FC<HeaderProps> = ({
 }) => {
   const { user, logout } = useAuth();
   const { t } = useLanguage();
+  const [deferredPrompt, setDeferredPrompt] = React.useState<any>(null);
+  const [isInstalled, setIsInstalled] = React.useState(false);
+
+  React.useEffect(() => {
+    const handleBeforeInstallPrompt = (e: any) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+    };
+
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+
+    if (window.matchMedia('(display-mode: standalone)').matches) {
+      setIsInstalled(true);
+    }
+
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    };
+  }, []);
+
+  const handleInstallPWA = async () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      if (outcome === 'accepted') {
+        setIsInstalled(true);
+      }
+      setDeferredPrompt(null);
+    } else {
+      alert(
+        '📱 SENTINELX PWA APP:\n\n' +
+        'O SentinelX está 100% pronto como PWA!\n\n' +
+        '• No Chrome / Edge (Desktop ou Android):\n  Clique no ícone de "Instalar aplicativo" na barra de navegação ou no menu (3 pontos ➔ "Instalar SENTINELX").\n\n' +
+        '• No iOS (Safari):\n  Clique no botão Partilhar ➔ "Adicionar ao Ecrã Principal".'
+      );
+    }
+  };
 
   const isHubPage = activeTab?.startsWith('hub-');
   const isDashboard = activeTab === 'dashboard' || activeTab === 'welcome';
@@ -110,6 +147,26 @@ export const Header: React.FC<HeaderProps> = ({
       <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
         {/* Language Selector (PT | EN | ES | FR) */}
         <LanguageSelector />
+
+        {/* PWA Install Button */}
+        {!isInstalled && (
+          <button
+            onClick={handleInstallPWA}
+            className="btn-secondary"
+            style={{
+              fontSize: '0.82rem',
+              padding: '8px 12px',
+              gap: '6px',
+              cursor: 'pointer',
+              borderColor: 'rgba(0, 242, 254, 0.4)',
+              color: 'var(--accent-cyan)',
+              fontWeight: 700,
+            }}
+            title="Instalar SentinelX como App (PWA)"
+          >
+            <span>📱</span> <span className="desktop-only">Instalar App</span>
+          </button>
+        )}
 
         {/* ⚡ PROMINENT 1-CLICK AUTO SHIELD BUTTON IN TOP HEADER */}
         {onAutoShield && (
