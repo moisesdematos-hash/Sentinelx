@@ -30,7 +30,7 @@ export class SentinelAiService {
             Authorization: `Bearer ${groqKey}`,
           },
           body: JSON.stringify({
-            model: 'llama-3.3-70b-versatile',
+            model: 'openai/gpt-oss-120b',
             messages: [
               {
                 role: 'system',
@@ -54,7 +54,7 @@ O ambiente monitora atualmente ${assets} ativos e ${vulns} vulnerabilidades aber
         });
 
         if (groqRes.ok) {
-          const json = await groqRes.json();
+          const json: any = await groqRes.json();
           if (json.choices && json.choices.length > 0 && json.choices[0].message?.content) {
             response = json.choices[0].message.content;
           }

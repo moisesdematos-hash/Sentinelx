@@ -83,7 +83,7 @@ export class MspService {
       });
     }
 
-    const slug = data.name.toLowerCase().replace(/[^a-z0-9]/g, '-') + '-' + Math.floor(Math.random() * 1000);
+    const slug = data.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') + '-' + Date.now() + '-' + Math.floor(Math.random() * 10000);
     return prisma.organization.create({
       data: {
         name: data.name,
