@@ -312,9 +312,41 @@ code, pre {
 }
 
 @media (max-width: 768px) {
+  /* Prevent horizontal scrolling on mobile smartphones */
+  html, body, #root {
+    overflow-x: hidden !important;
+    width: 100vw !important;
+  }
+
   /* Prevent iOS Safari auto-zoom on input focus */
   input, select, textarea {
     font-size: 16px !important;
+  }
+
+  /* Responsive Headers */
+  header {
+    padding: 10px 16px !important;
+    flex-wrap: wrap !important;
+    gap: 10px !important;
+    height: auto !important;
+    min-height: 60px !important;
+  }
+
+  header nav {
+    display: none !important;
+  }
+
+  /* Responsive Modals on Mobile Phones */
+  div[style*="position: fixed"][style*="inset: 0"] > div,
+  div.glass-panel[style*="width: 480px"],
+  div.glass-panel[style*="width: 600px"],
+  div.glass-panel[style*="width: 800px"] {
+    width: 100% !important;
+    max-width: calc(100vw - 24px) !important;
+    padding: 20px 16px !important;
+    margin: 0 auto !important;
+    max-height: 88vh !important;
+    overflow-y: auto !important;
   }
 
   /* Responsive Grids on Mobile Phones */
@@ -323,11 +355,17 @@ code, pre {
   }
 
   h1 {
-    font-size: 1.75rem !important;
+    font-size: 1.6rem !important;
+    line-height: 1.25 !important;
   }
 
   h2 {
-    font-size: 1.35rem !important;
+    font-size: 1.3rem !important;
+    line-height: 1.3 !important;
+  }
+
+  h3 {
+    font-size: 1.1rem !important;
   }
 
   .glass-panel {
@@ -346,12 +384,21 @@ code, pre {
   /* Touch Target Optimizations for Mobile */
   button, .btn-primary, .btn-secondary {
     min-height: 44px !important;
+    font-size: 0.84rem !important;
   }
 
   /* Floating Chat Widget on Mobile Phones */
   .floating-chat {
     bottom: 12px !important;
     right: 12px !important;
-    max-width: calc(100vw - 24px) !important;
+    left: 12px !important;
+    width: calc(100vw - 24px) !important;
+    max-width: 100% !important;
+  }
+
+  /* iOS Safe Area Padding for PWA Notch & Home Bar */
+  body {
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
   }
 }
