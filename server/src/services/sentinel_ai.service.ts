@@ -133,10 +133,12 @@ sentinelx ebpf status --node production-cluster-01
       }
     }
 
+    const validUser = userId ? await prisma.user.findUnique({ where: { id: userId } }).catch(() => null) : null;
+
     const conversation = await prisma.aiConversation.create({
       data: {
         organizationId,
-        userId,
+        userId: validUser ? userId : undefined,
         prompt: data.prompt,
         response,
         context: JSON.stringify(data.context),
