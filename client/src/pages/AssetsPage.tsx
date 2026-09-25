@@ -283,9 +283,9 @@ export const AssetsPage: React.FC = () => {
   return (
     <div style={{ padding: '32px', display: 'flex', flexDirection: 'column', gap: '24px' }}>
       {/* Top Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
+        <div style={{ minWidth: '280px', flex: 1 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
             <h2 style={{ fontSize: '1.75rem', fontWeight: 800 }}>{t('assets.title')}</h2>
             <span className="badge badge-emerald">AUTOMÁTICO EM 1-CLIQUE</span>
           </div>
@@ -294,7 +294,7 @@ export const AssetsPage: React.FC = () => {
           </p>
         </div>
 
-        <div style={{ display: 'flex', gap: '12px' }}>
+        <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center' }}>
           <button
             className="btn-primary"
             onClick={handleAutoShieldAllAssets}
@@ -305,7 +305,7 @@ export const AssetsPage: React.FC = () => {
             {t('assets.shield_all')}
           </button>
 
-          <button className="btn-secondary" onClick={() => setIsModalOpen(true)}>
+          <button className="btn-secondary" onClick={() => setIsModalOpen(true)} style={{ padding: '10px 20px', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '6px' }}>
             <Plus size={16} /> {t('assets.register_asset')}
           </button>
         </div>
@@ -413,8 +413,21 @@ export const AssetsPage: React.FC = () => {
 
       {/* Main Content Area */}
       <div style={{ display: 'grid', gridTemplateColumns: selectedAsset ? '1fr 420px' : '1fr', gap: '24px' }}>
+        {filteredAssets.length === 0 && (
+          <div className="glass-panel" style={{ padding: '48px 24px', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
+            <Server size={48} color="var(--accent-cyan)" style={{ opacity: 0.7 }} />
+            <h3 style={{ fontSize: '1.25rem', fontWeight: 800 }}>Nenhum ativo encontrado</h3>
+            <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', maxWidth: '450px', lineHeight: 1.5 }}>
+              Não há serviços cadastrados correspondentes à pesquisa ou filtro selecionado. Clique no botão abaixo para adicionar o seu site, servidor ou API.
+            </p>
+            <button className="btn-primary" onClick={() => setIsModalOpen(true)} style={{ padding: '12px 24px', fontWeight: 800, gap: '8px' }}>
+              <Plus size={18} /> Cadastrar Novo Ativo
+            </button>
+          </div>
+        )}
+
         {/* Mosaico Mode (Grid Cards View) */}
-        {viewMode === 'MOSAIC' && (
+        {viewMode === 'MOSAIC' && filteredAssets.length > 0 && (
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '20px' }}>
             {filteredAssets.map((asset) => (
               <div
@@ -513,7 +526,7 @@ export const AssetsPage: React.FC = () => {
         )}
 
         {/* Linha Mode (Table List View) */}
-        {viewMode === 'LINE' && (
+        {viewMode === 'LINE' && filteredAssets.length > 0 && (
           <div className="glass-panel" style={{ overflow: 'hidden' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
               <thead>
