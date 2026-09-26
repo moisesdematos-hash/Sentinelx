@@ -121,11 +121,7 @@ const MainApp: React.FC = () => {
       <div style={{ minHeight: '100vh', background: 'var(--bg-primary)' }}>
         <WelcomeLandingPage
           onEnterApp={() => {
-            if (user) {
-              handleSetCurrentView('APP');
-            } else {
-              handleSetCurrentView('LOGIN');
-            }
+            handleSetCurrentView('LOGIN');
           }}
           onEnterGuest={handleGuestAccess}
         />
@@ -135,8 +131,8 @@ const MainApp: React.FC = () => {
     );
   }
 
-  // 2. MANDATORY LOGIN / REGISTRATION GATEWAY (UNAUTHENTICATED)
-  if (!user) {
+  // 2. MANDATORY LOGIN / REGISTRATION GATEWAY (LOGIN VIEW OR UNAUTHENTICATED)
+  if (currentView === 'LOGIN' || !user) {
     return (
       <div style={{ minHeight: '100vh', background: 'var(--bg-primary)' }}>
         <div style={{ position: 'absolute', top: '20px', left: '20px', zIndex: 10 }}>

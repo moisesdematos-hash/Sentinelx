@@ -6,8 +6,12 @@ import { apiClient } from '../api/client';
 import { supabase } from '../api/supabase';
 import { Shield, Lock, ArrowRight, UserCheck, Sparkles, Mail, User, Eye, EyeOff, CheckCircle2 } from 'lucide-react';
 
-export const LoginPage: React.FC = () => {
-  const { login, loginWithGoogle } = useAuth();
+interface LoginPageProps {
+  onSuccess?: () => void;
+}
+
+export const LoginPage: React.FC<LoginPageProps> = ({ onSuccess }) => {
+  const { user, login, logout, loginWithGoogle } = useAuth();
   const { t } = useLanguage();
 
   const [authMode, setAuthMode] = useState<'LOGIN' | 'REGISTER'>('LOGIN');
@@ -23,6 +27,12 @@ export const LoginPage: React.FC = () => {
   const [successMsg, setSuccessMsg] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const handleAuthSuccess = () => {
+    if (onSuccess) {
+      onSuccess();
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
@@ -35,6 +45,7 @@ export const LoginPage: React.FC = () => {
           const res: any = await apiClient.post('/auth/login', { email, password });
           if (res.success) {
             login(res.data.token, res.data.user);
+            handleAuthSuccess();
             return;
           }
         } catch (err) {
@@ -50,6 +61,7 @@ export const LoginPage: React.FC = () => {
               organizationName: 'SENTINELX Security Corp',
               provider: 'email',
             });
+            handleAuthSuccess();
             return;
           }
         }
@@ -63,6 +75,7 @@ export const LoginPage: React.FC = () => {
           organizationName: 'SENTINELX Security Corp',
           provider: 'email',
         });
+        handleAuthSuccess();
       } else {
         const { data, error: sbErr } = await supabase.auth.signUp({
           email,
@@ -119,6 +132,7 @@ export const LoginPage: React.FC = () => {
       });
     } finally {
       setIsSubmitting(false);
+      handleAuthSuccess();
     }
   };
 
@@ -154,6 +168,37 @@ export const LoginPage: React.FC = () => {
             {t('brand.tagline')}
           </p>
         </div>
+
+        {/* Active Session Notification */}
+        {user && (
+          <div style={{ padding: '14px', borderRadius: '12px', background: 'rgba(0, 242, 254, 0.1)', border: '1px solid rgba(0, 242, 254, 0.3)', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.85rem', color: '#fff' }}>
+              <UserCheck size={18} color="var(--accent-cyan)" />
+              <div>
+                <strong>Sessão Ativa: {user.name}</strong>
+                <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{user.email}</div>
+              </div>
+            </div>
+            <div style={{ display: 'flex', gap: '8px', marginTop: '4px' }}>
+              <button
+                type="button"
+                className="btn-primary"
+                onClick={handleAuthSuccess}
+                style={{ flex: 1, padding: '8px 12px', fontSize: '0.82rem', fontWeight: 800, background: 'var(--gradient-cyan)', color: '#060813', border: 'none', borderRadius: '8px', cursor: 'pointer' }}
+              >
+                Ir para o Painel →
+              </button>
+              <button
+                type="button"
+                className="btn-secondary"
+                onClick={() => logout()}
+                style={{ padding: '8px 12px', fontSize: '0.82rem', borderRadius: '8px', cursor: 'pointer' }}
+              >
+                Sair
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* Auth Mode Toggle */}
         <div style={{ display: 'flex', background: 'rgba(0,0,0,0.3)', padding: '4px', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.08)' }}>
