@@ -13,6 +13,8 @@ interface HeaderProps {
   onBack?: () => void;
   onAutoShield?: () => void;
   onOpenRegisterAsset?: () => void;
+  onOpenAdminPanel?: () => void;
+  onOpenLogin?: () => void;
   activeTab?: string;
 }
 
@@ -22,6 +24,8 @@ export const Header: React.FC<HeaderProps> = ({
   onBack,
   onAutoShield,
   onOpenRegisterAsset,
+  onOpenAdminPanel,
+  onOpenLogin,
   activeTab,
 }) => {
   const { user, logout } = useAuth();
@@ -242,6 +246,44 @@ export const Header: React.FC<HeaderProps> = ({
         >
           <HelpCircle size={14} /> <span className="desktop-only">Tour 30s</span>
         </button>
+
+        {/* Direct Admin Panel Button (Prominent) */}
+        {onOpenAdminPanel && (
+          <button
+            onClick={onOpenAdminPanel}
+            title="Abrir Painel de Administração Global (Super Admin)"
+            className="btn-primary"
+            style={{
+              fontSize: '0.81rem',
+              padding: '6px 12px',
+              gap: '6px',
+              background: 'linear-gradient(135deg, #7c4dff 0%, #b444ff 100%)',
+              color: '#ffffff',
+              fontWeight: 800,
+            }}
+          >
+            <Zap size={14} /> <span className="desktop-only">Painel Admin</span>
+          </button>
+        )}
+
+        {/* Direct Login / Google Auth Button */}
+        {onOpenLogin && (
+          <button
+            onClick={onOpenLogin}
+            title="Abrir Tela de Autenticação (Email + Google OAuth)"
+            className="btn-secondary"
+            style={{
+              fontSize: '0.81rem',
+              padding: '6px 12px',
+              gap: '6px',
+              borderColor: 'var(--accent-cyan)',
+              color: 'var(--accent-cyan)',
+              fontWeight: 800,
+            }}
+          >
+            <Plus size={14} /> <span className="desktop-only">Login / Google</span>
+          </button>
+        )}
 
         <button
           onClick={onGoLanding}

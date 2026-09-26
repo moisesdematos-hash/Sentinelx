@@ -174,6 +174,8 @@ const MainApp: React.FC = () => {
           onToggleMobileSidebar={() => setIsMobileSidebarOpen(!isMobileSidebarOpen)}
           onBack={handleBackNav}
           onOpenRegisterAsset={() => setActiveTab('assets')}
+          onOpenAdminPanel={() => setActiveTab('admin-panel')}
+          onOpenLogin={() => handleSetCurrentView('LOGIN')}
           onAutoShield={() => {
             setActiveTab('assets');
             alert('⚡ BLINDAGEM AUTOMÁTICA EM 1-CLIQUE EXECUTADA COM SUCESSO! Todos os serviços foram salvos com eBPF Kernel Ring 0, Baseline SHA-256 Lock e Autopiloto em FULL_AUTO.');

@@ -40,6 +40,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
   const mainThemes: MenuItem[] = [
     { id: 'dashboard', labelKey: 'sidebar.dashboard', icon: LayoutDashboard, badge: 'SOC 24/7' },
+    { id: 'admin-panel', labelKey: 'Painel Admin & Autenticação', icon: Settings, badge: 'SUPER ADMIN' },
     { id: 'assets', labelKey: 'sidebar.assets_menu', icon: Server, badge: '+ CADASTRAR' },
     { id: 'hub-super-ai', labelKey: 'sidebar.super_ai', icon: Sparkles, badge: 'SUPER AI' },
     { id: 'hub-epp-edr', labelKey: 'sidebar.epp_edr', icon: Shield, badge: 'PROTECTION' },
@@ -238,7 +239,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                   <Icon size={20} color={isActive ? 'var(--accent-cyan)' : 'var(--text-muted)'} />
-                  <span>{t(item.labelKey)}</span>
+                  <span>{item.labelKey.startsWith('sidebar.') ? t(item.labelKey) : item.labelKey}</span>
                 </div>
 
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
