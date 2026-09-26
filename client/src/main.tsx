@@ -2,15 +2,102 @@ import React, { Component, ErrorInfo, ReactNode } from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import './index.css';
+import { LanguageProvider } from './context/LanguageContext';
 
-// Register PWA Service Worker for Mobile & App Installation
+declare const __APP_BUILD_ID__: string;
+
+// Current Build ID injected by Vite build
+const CURRENT_BUILD_ID = typeof __APP_BUILD_ID__ !== 'undefined' ? __APP_BUILD_ID__ : String(Date.now());
+
+// Helper function to clear caches and force hard reload
+const purgeCacheAndReload = async () => {
+  try {
+    if ('caches' in window) {
+      const keys = await caches.keys();
+      await Promise.all(keys.map((key) => caches.delete(key)));
+    }
+    if ('serviceWorker' in navigator) {
+      const registrations = await navigator.serviceWorker.getRegistrations();
+      for (const registration of registrations) {
+        await registration.unregister();
+      }
+    }
+  } catch (e) {
+    console.warn('Cache purge error:', e);
+  } finally {
+    window.location.reload();
+  }
+};
+
+// 1. VERSION CHECK & AUTOMATIC DEPLOYMENT MIGRATION
+try {
+  const storedBuildId = localStorage.getItem('sentinelx_build_id');
+  if (storedBuildId !== CURRENT_BUILD_ID) {
+    console.log(`[SENTINELX] New deployment detected: ${storedBuildId} -> ${CURRENT_BUILD_ID}. Clearing stale caches.`);
+    localStorage.setItem('sentinelx_build_id', CURRENT_BUILD_ID);
+    if ('caches' in window) {
+      caches.keys().then((keys) => keys.forEach((key) => caches.delete(key)));
+    }
+  }
+} catch (e) {}
+
+// 2. VITE PRELOAD & CHUNK LOAD ERROR RECOVERY
+window.addEventListener('vite:preloadError', (event) => {
+  console.warn('[SENTINELX] Vite asset preload failed. Auto-reloading to fetch current deployment assets.');
+  event.preventDefault();
+  purgeCacheAndReload();
+});
+
+// 3. GLOBAL ERROR HANDLER FOR SYNTAX ERROR (HTML FALLBACK ON DELETED CHUNKS)
+window.addEventListener('error', (event) => {
+  const msg = event.message || '';
+  if (
+    msg.includes("Unexpected token '<'") ||
+    msg.includes('Failed to fetch dynamically imported module') ||
+    msg.includes('Loading chunk') ||
+    msg.includes('import() failure')
+  ) {
+    console.warn('[SENTINELX] Detected stale bundle loading error. Purging cache and reloading.');
+    purgeCacheAndReload();
+  }
+});
+
+// 4. UNHANDLED REJECTION HANDLER FOR PROMISE CHUNK FAILURES
+window.addEventListener('unhandledrejection', (event) => {
+  const reason = event.reason ? String(event.reason) : '';
+  if (
+    reason.includes("Unexpected token '<'") ||
+    reason.includes('Failed to fetch dynamically imported module') ||
+    reason.includes('Loading chunk')
+  ) {
+    console.warn('[SENTINELX] Detected unhandled chunk import failure. Purging cache and reloading.');
+    purgeCacheAndReload();
+  }
+});
+
+// 5. REGISTER PWA SERVICE WORKER WITH FORCE UPDATE PROTOCOL
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js').then((reg) => {
-      console.log('SENTINELX PWA ServiceWorker registered successfully:', reg.scope);
-    }).catch((err) => {
-      console.warn('SENTINELX ServiceWorker registration error:', err);
-    });
+    navigator.serviceWorker
+      .register('/sw.js')
+      .then((reg) => {
+        // Check for updates on load
+        reg.update();
+        reg.onupdatefound = () => {
+          const installingWorker = reg.installing;
+          if (installingWorker) {
+            installingWorker.onstatechange = () => {
+              if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                console.log('[SENTINELX] SW updated with new deployment. Claiming clients.');
+                installingWorker.postMessage({ type: 'SKIP_WAITING' });
+              }
+            };
+          }
+        };
+      })
+      .catch((err) => {
+        console.warn('SENTINELX ServiceWorker registration warning:', err);
+      });
   });
 }
 
@@ -36,12 +123,8 @@ class ErrorBoundary extends Component<Props, State> {
     console.error('Uncaught SENTINELX React Error:', error, errorInfo);
   }
 
-  private handleReset = () => {
-    try {
-      localStorage.removeItem('sentinelx_token');
-      localStorage.removeItem('sentinelx_user');
-    } catch (e) {}
-    window.location.reload();
+  private handleReset = async () => {
+    await purgeCacheAndReload();
   };
 
   public render() {
@@ -77,12 +160,21 @@ class ErrorBoundary extends Component<Props, State> {
             <span style={{ fontSize: '32px' }}>🛡️</span>
           </div>
 
-          <h2 style={{ fontSize: '1.8rem', fontWeight: 900, marginBottom: '12px', background: 'var(--gradient-cyan)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+          <h2
+            style={{
+              fontSize: '1.8rem',
+              fontWeight: 900,
+              marginBottom: '12px',
+              background: 'var(--gradient-cyan)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+            }}
+          >
             SENTINELX SECURITY CONTROL PLANE
           </h2>
 
           <p style={{ fontSize: '0.95rem', color: 'var(--text-muted)', maxWidth: '520px', marginBottom: '28px', lineHeight: 1.6 }}>
-            O painel de controle detectou uma inconsistência temporária na sessão local. Clique no botão abaixo para restaurar o estado limpo da plataforma instantaneamente:
+            Uma nova versão da plataforma foi disponibilizada ou ocorreu uma sincronização de sessão. Clique no botão abaixo para carregar a versão mais recente instantaneamente:
           </p>
 
           <button
@@ -99,7 +191,7 @@ class ErrorBoundary extends Component<Props, State> {
               boxShadow: '0 0 25px rgba(0, 242, 254, 0.5)',
             }}
           >
-            ⚡ RESTAURAR E ABRIR PLATAFORMA (1-CLIQUE)
+            ⚡ CARREGAR VERSÃO ATUALIZADA (1-CLIQUE)
           </button>
         </div>
       );
@@ -108,8 +200,6 @@ class ErrorBoundary extends Component<Props, State> {
     return this.props.children;
   }
 }
-
-import { LanguageProvider } from './context/LanguageContext';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
