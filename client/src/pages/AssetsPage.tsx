@@ -294,19 +294,37 @@ export const AssetsPage: React.FC = () => {
           </p>
         </div>
 
-        <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center' }}>
+        <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', alignItems: 'center' }}>
           <button
             className="btn-primary"
             onClick={handleAutoShieldAllAssets}
             disabled={globalShielding || assets.length === 0}
-            style={{ background: 'var(--gradient-cyan)', boxShadow: '0 0 20px rgba(0, 242, 254, 0.4)', padding: '10px 20px', fontWeight: 800 }}
+            style={{
+              background: 'var(--gradient-cyan)',
+              boxShadow: '0 0 15px rgba(0, 242, 254, 0.4)',
+              padding: '7px 14px',
+              fontSize: '0.82rem',
+              fontWeight: 800,
+              whiteSpace: 'nowrap',
+            }}
           >
-            {globalShielding ? <RefreshCw size={16} className="spin" /> : <Zap size={16} />}
+            {globalShielding ? <RefreshCw size={14} className="spin" /> : <Zap size={14} />}
             {t('assets.shield_all')}
           </button>
 
-          <button className="btn-secondary" onClick={() => setIsModalOpen(true)} style={{ padding: '10px 20px', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <Plus size={16} /> {t('assets.register_asset')}
+          <button
+            className="btn-secondary"
+            onClick={() => setIsModalOpen(true)}
+            style={{
+              padding: '7px 14px',
+              fontSize: '0.82rem',
+              fontWeight: 700,
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+            }}
+          >
+            <Plus size={14} /> {t('assets.register_asset')}
           </button>
         </div>
       </div>

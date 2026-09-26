@@ -179,18 +179,19 @@ export const Header: React.FC<HeaderProps> = ({
               background: 'var(--gradient-cyan)',
               border: 'none',
               color: '#060813',
-              padding: '8px 16px',
-              borderRadius: '8px',
-              fontSize: '0.85rem',
+              padding: '6px 12px',
+              borderRadius: '7px',
+              fontSize: '0.81rem',
               fontWeight: 800,
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
-              gap: '6px',
-              boxShadow: '0 0 20px rgba(0, 242, 254, 0.4)',
+              gap: '5px',
+              boxShadow: '0 0 12px rgba(0, 242, 254, 0.3)',
+              whiteSpace: 'nowrap',
             }}
           >
-            <Plus size={16} /> + Cadastrar Ativo
+            <Plus size={14} /> + Cadastrar Ativo
           </button>
         )}
 
@@ -202,18 +203,19 @@ export const Header: React.FC<HeaderProps> = ({
               background: 'var(--gradient-cyan)',
               border: 'none',
               color: '#060813',
-              padding: '8px 16px',
-              borderRadius: '8px',
-              fontSize: '0.85rem',
+              padding: '6px 12px',
+              borderRadius: '7px',
+              fontSize: '0.81rem',
               fontWeight: 800,
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
-              gap: '6px',
-              boxShadow: '0 0 20px rgba(0, 242, 254, 0.4)',
+              gap: '5px',
+              boxShadow: '0 0 12px rgba(0, 242, 254, 0.3)',
+              whiteSpace: 'nowrap',
             }}
           >
-            <Zap size={16} /> {t('header.auto_shield_btn')}
+            <Zap size={14} /> {t('header.auto_shield_btn')}
           </button>
         )}
 

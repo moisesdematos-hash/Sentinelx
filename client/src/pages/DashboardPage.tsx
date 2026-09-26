@@ -82,7 +82,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate }) => {
           </p>
         </div>
 
-        <div style={{ display: 'flex', gap: '12px', alignItems: 'center', flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', gap: '10px', alignItems: 'center', flexWrap: 'wrap' }}>
           <button
             className="btn-primary"
             onClick={() => {
@@ -90,16 +90,16 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate }) => {
             }}
             style={{
               background: 'var(--gradient-cyan)',
-              boxShadow: '0 0 25px rgba(0, 242, 254, 0.5)',
-              fontSize: '0.9rem',
-              padding: '12px 24px',
+              boxShadow: '0 0 15px rgba(0, 242, 254, 0.4)',
+              fontSize: '0.82rem',
+              padding: '8px 16px',
               fontWeight: 800,
               display: 'flex',
               alignItems: 'center',
-              gap: '8px',
+              gap: '6px',
             }}
           >
-            <Plus size={18} /> + CADASTRAR ATIVO A PROTEGER
+            <Plus size={16} /> + CADASTRAR ATIVO
           </button>
 
           <button
@@ -108,12 +108,12 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate }) => {
               if (onNavigate) onNavigate('assets');
             }}
             style={{
-              fontSize: '0.9rem',
-              padding: '12px 20px',
+              fontSize: '0.82rem',
+              padding: '8px 14px',
               fontWeight: 700,
             }}
           >
-            ⚡ ATIVAR BLINDAGEM TOTAL (1-CLIQUE)
+            ⚡ Blindar Todos (1-Clique)
           </button>
         </div>
       </div>

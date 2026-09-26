@@ -6,7 +6,7 @@ export const pt = {
   'header.go_landing': 'Página Inicial',
   'header.back_to_hub': 'Voltar para Central',
   'header.back_to_dashboard': 'Voltar ao Painel',
-  'header.auto_shield_btn': '⚡ BLINDAR AUTOMATICAMENTE (1-CLIQUE)',
+  'header.auto_shield_btn': '⚡ Blindar Todos',
   'header.scores_optimal': 'SCORES: 100/100 (BLINDAGEM TOTAL)',
   'header.alerts_count': '3 ALERTAS',
   'header.logout': 'Sair / Logout',
@@ -47,7 +47,7 @@ export const pt = {
   // Asset Inventory Page
   'assets.title': 'Inventário de Ativos & Proteção',
   'assets.subtitle': 'Descoberta Contínua de Ativos, Blindagem eBPF, Baseline Lock SHA-256 e Autopiloto em 1-Clique',
-  'assets.shield_all': '⚡ ATIVAR BLINDAGEM TOTAL EM TODOS OS ATIVOS (1-CLIQUE)',
+  'assets.shield_all': '⚡ Blindar Todos (1-Clique)',
   'assets.register_asset': 'Cadastrar Ativo',
   'assets.col_name': 'NOME DO SERVIÇO',
   'assets.col_type': 'TIPO',
