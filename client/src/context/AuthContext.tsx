@@ -35,7 +35,7 @@ const DEFAULT_GUEST_USER: User = {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [token, setToken] = useState<string | null>(() => localStorage.getItem('sentinelx_token') || 'stx_guest_demo_token_98f73b');
+  const [token, setToken] = useState<string | null>(() => localStorage.getItem('sentinelx_token') || null);
   const [user, setUser] = useState<User | null>(() => {
     const savedUser = localStorage.getItem('sentinelx_user');
     if (savedUser) {
@@ -43,7 +43,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return JSON.parse(savedUser);
       } catch (e) {}
     }
-    return DEFAULT_GUEST_USER;
+    return null;
   });
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -137,10 +137,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const logout = () => {
     supabase.auth.signOut().catch(() => {});
-    setToken('stx_guest_demo_token_98f73b');
-    setUser(DEFAULT_GUEST_USER);
-    localStorage.setItem('sentinelx_token', 'stx_guest_demo_token_98f73b');
-    localStorage.setItem('sentinelx_user', JSON.stringify(DEFAULT_GUEST_USER));
+    setToken(null);
+    setUser(null);
+    localStorage.removeItem('sentinelx_token');
+    localStorage.removeItem('sentinelx_user');
+    localStorage.removeItem('sentinelx_org_id');
+    localStorage.setItem('sentinelx_current_view', 'LOGIN');
   };
 
   return (

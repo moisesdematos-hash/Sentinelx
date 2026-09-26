@@ -63,7 +63,7 @@ import { LoginPage } from './pages/LoginPage';
 const MainApp: React.FC = () => {
   const { user, login, isLoading } = useAuth();
   const [currentView, setCurrentView] = useState<'LANDING' | 'LOGIN' | 'APP'>(() => {
-    return (localStorage.getItem('sentinelx_current_view') as any) || 'APP';
+    return (localStorage.getItem('sentinelx_current_view') as any) || 'LOGIN';
   });
   const [activeTab, setActiveTabState] = useState<string>(() => {
     return localStorage.getItem('sentinelx_active_tab') || 'dashboard';
@@ -106,7 +106,7 @@ const MainApp: React.FC = () => {
     );
   }
 
-  // 1. PUBLIC LANDING PAGE (DEFAULT SEPARATE FRONT DOOR)
+  // 1. PUBLIC LANDING PAGE (SEPARATE FRONT DOOR)
   if (currentView === 'LANDING') {
     return (
       <div style={{ minHeight: '100vh', background: 'var(--bg-primary)' }}>
@@ -126,8 +126,8 @@ const MainApp: React.FC = () => {
     );
   }
 
-  // 2. PUBLIC LOGIN / REGISTRATION GATE
-  if (currentView === 'LOGIN' && !user) {
+  // 2. MANDATORY LOGIN / REGISTRATION GATEWAY (UNAUTHENTICATED)
+  if (!user || currentView === 'LOGIN') {
     return (
       <div style={{ minHeight: '100vh', background: 'var(--bg-primary)' }}>
         <div style={{ position: 'absolute', top: '20px', left: '20px', zIndex: 10 }}>
