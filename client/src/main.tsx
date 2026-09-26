@@ -4,6 +4,7 @@ import App from './App';
 import './index.css';
 import { LanguageProvider } from './context/LanguageContext';
 
+// SENTINELX Security Platform - Deployment Release 1.0.1 (Auth Gateway Force Deploy)
 declare const __APP_BUILD_ID__: string;
 
 // Current Build ID injected by Vite build
