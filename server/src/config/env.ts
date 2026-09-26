@@ -11,6 +11,9 @@ const envSchema = z.object({
   JWT_EXPIRES_IN: z.string().default('1d'),
   CORS_ORIGIN: z.string().default('http://localhost:5173'),
   LOG_LEVEL: z.string().default('info'),
+  SUPABASE_URL: z.string().optional().default('https://rkmoizysggjcdowpldcz.supabase.co'),
+  SUPABASE_PUBLISHABLE_KEY: z.string().optional().default('sb_publishable_NCHGz1hCJZe-i_vm4O1FGQ__b2_Cdee'),
+  SUPABASE_SECRET_KEY: z.string().optional(),
 });
 
 const parsed = envSchema.safeParse(process.env);
