@@ -2,6 +2,7 @@ import React from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useLanguage } from '../../context/LanguageContext';
 import { LanguageSelector } from './LanguageSelector';
+import { NotificationWebhooksModal } from './NotificationWebhooksModal';
 import { Building2, LogOut, Bell, ShieldCheck, Globe, ArrowLeft, Menu, Zap, Plus } from 'lucide-react';
 
 interface HeaderProps {
@@ -25,6 +26,7 @@ export const Header: React.FC<HeaderProps> = ({
   const { t } = useLanguage();
   const [deferredPrompt, setDeferredPrompt] = React.useState<any>(null);
   const [isInstalled, setIsInstalled] = React.useState(false);
+  const [showNotificationsModal, setShowNotificationsModal] = React.useState(false);
 
   React.useEffect(() => {
     const handleBeforeInstallPrompt = (e: any) => {
@@ -150,7 +152,24 @@ export const Header: React.FC<HeaderProps> = ({
         {/* Language Selector (PT | EN | ES | FR) */}
         <LanguageSelector />
 
-        {/* PWA Install Button */}
+        {/* Webhooks & Notifications Bell Button */}
+        <button
+          onClick={() => setShowNotificationsModal(true)}
+          title="Notificações e Webhooks (Slack, Teams, WhatsApp, Email)"
+          style={{
+            background: 'rgba(0, 242, 254, 0.1)',
+            border: '1px solid rgba(0, 242, 254, 0.3)',
+            color: 'var(--accent-cyan)',
+            borderRadius: '8px',
+            padding: '8px',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <Bell size={16} />
+        </button>
 
         <button
           onClick={onGoLanding}
@@ -193,6 +212,7 @@ export const Header: React.FC<HeaderProps> = ({
           </button>
         </div>
       </div>
+      <NotificationWebhooksModal isOpen={showNotificationsModal} onClose={() => setShowNotificationsModal(false)} />
     </header>
   );
 };
