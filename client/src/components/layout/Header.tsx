@@ -4,7 +4,8 @@ import { useLanguage } from '../../context/LanguageContext';
 import { LanguageSelector } from './LanguageSelector';
 import { NotificationWebhooksModal } from './NotificationWebhooksModal';
 import { InteractiveOnboardingTour } from './InteractiveOnboardingTour';
-import { Building2, LogOut, Bell, ShieldCheck, Globe, ArrowLeft, Menu, Zap, Plus, HelpCircle } from 'lucide-react';
+import { WafStressTestModal } from './WafStressTestModal';
+import { Building2, LogOut, Bell, ShieldCheck, Globe, ArrowLeft, Menu, Zap, Plus, HelpCircle, Sun, Moon, Flame } from 'lucide-react';
 
 interface HeaderProps {
   onGoLanding?: () => void;
@@ -29,6 +30,20 @@ export const Header: React.FC<HeaderProps> = ({
   const [isInstalled, setIsInstalled] = React.useState(false);
   const [showNotificationsModal, setShowNotificationsModal] = React.useState(false);
   const [showTourModal, setShowTourModal] = React.useState(false);
+  const [showWafModal, setShowWafModal] = React.useState(false);
+
+  const [theme, setTheme] = React.useState<'dark' | 'light'>(() => {
+    return (localStorage.getItem('sentinelx_theme') as 'dark' | 'light') || 'dark';
+  });
+
+  React.useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('sentinelx_theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
+  };
 
   React.useEffect(() => {
     const handleBeforeInstallPrompt = (e: any) => {
@@ -154,6 +169,44 @@ export const Header: React.FC<HeaderProps> = ({
         {/* Language Selector (PT | EN | ES | FR) */}
         <LanguageSelector />
 
+        {/* WAF & Rate Limit Stress Test (Red Teaming) Button */}
+        <button
+          onClick={() => setShowWafModal(true)}
+          title="Simulador de Stress WAF & Rate Limit (Red Teaming DDoS Test)"
+          style={{
+            background: 'rgba(255, 8, 68, 0.12)',
+            border: '1px solid rgba(255, 8, 68, 0.4)',
+            color: 'var(--accent-rose)',
+            borderRadius: '8px',
+            padding: '8px',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <Flame size={16} />
+        </button>
+
+        {/* Light / Dark Theme Toggle Button */}
+        <button
+          onClick={toggleTheme}
+          title={theme === 'dark' ? 'Mudar para Tema Claro (Light Corporate)' : 'Mudar para Tema Escuro (Cyber Dark)'}
+          style={{
+            background: 'rgba(255, 255, 255, 0.08)',
+            border: '1px solid var(--border-color)',
+            color: 'var(--text-primary)',
+            borderRadius: '8px',
+            padding: '8px',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          {theme === 'dark' ? <Sun size={16} color="#f59e0b" /> : <Moon size={16} color="#00f2fe" />}
+        </button>
+
         {/* Webhooks & Notifications Bell Button */}
         <button
           onClick={() => setShowNotificationsModal(true)}
@@ -233,6 +286,7 @@ export const Header: React.FC<HeaderProps> = ({
       </div>
       <NotificationWebhooksModal isOpen={showNotificationsModal} onClose={() => setShowNotificationsModal(false)} />
       <InteractiveOnboardingTour isOpen={showTourModal} onClose={() => setShowTourModal(false)} />
+      <WafStressTestModal isOpen={showWafModal} onClose={() => setShowWafModal(false)} />
     </header>
   );
 };
