@@ -279,14 +279,14 @@ export const AdminPanelPage: React.FC = () => {
       </div>
 
       {/* Sub-Tabs Navigation (7 Modules) */}
-      <div style={{ display: 'flex', borderBottom: '1px solid var(--border-color)', gap: '4px', overflowX: 'auto' }}>
+      <div style={{ display: 'flex', borderBottom: '1px solid var(--border-color)', gap: '4px', flexWrap: 'wrap' }}>
         {[
-          { id: 'ai', label: 'IA & Fallbacks (Groq/Gemini)', icon: Bot, badge: 'ATIVO' },
+          { id: 'ai', label: 'IA & Fallbacks', icon: Bot, badge: 'ATIVO' },
           { id: 'users', label: 'Usuários & RBAC', icon: Users, count: users.length },
           { id: 'tenants', label: 'Organizações (MSP)', icon: Building2, count: orgs.length },
           { id: 'apikeys', label: 'Chaves de API', icon: KeyRound, count: apiKeys.length },
           { id: 'policies', label: 'Políticas Zero Trust', icon: ShieldCheck },
-          { id: 'audit', label: 'Logs de Auditoria', icon: FileText, count: auditLogs.length },
+          { id: 'audit', label: 'Logs Auditoria', icon: FileText, count: auditLogs.length },
           { id: 'health', label: 'Saúde & Supabase DB', icon: Activity, badge: 'ONLINE' },
         ].map((tab) => {
           const Icon = tab.icon;
@@ -296,30 +296,31 @@ export const AdminPanelPage: React.FC = () => {
               key={tab.id}
               onClick={() => setActiveSubTab(tab.id as any)}
               style={{
-                padding: '12px 18px',
+                padding: '8px 12px',
                 border: 'none',
-                background: 'transparent',
+                background: isActive ? 'rgba(0, 242, 254, 0.12)' : 'rgba(255,255,255,0.03)',
+                borderRadius: '8px 8px 0 0',
                 borderBottom: isActive ? '3px solid var(--accent-cyan)' : '3px solid transparent',
                 color: isActive ? 'var(--accent-cyan)' : 'var(--text-muted)',
                 fontWeight: isActive ? 800 : 600,
-                fontSize: '0.88rem',
+                fontSize: '0.8rem',
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
-                gap: '8px',
+                gap: '6px',
                 whiteSpace: 'nowrap',
                 transition: 'all 0.2s ease',
               }}
             >
-              <Icon size={16} />
+              <Icon size={14} />
               <span>{tab.label}</span>
               {tab.count !== undefined && (
-                <span className="badge badge-purple" style={{ fontSize: '0.7rem', padding: '2px 6px' }}>
+                <span className="badge badge-purple" style={{ fontSize: '0.65rem', padding: '1px 5px' }}>
                   {tab.count}
                 </span>
               )}
               {tab.badge && (
-                <span className="badge badge-cyan" style={{ fontSize: '0.68rem', padding: '2px 6px' }}>
+                <span className="badge badge-cyan" style={{ fontSize: '0.65rem', padding: '1px 5px' }}>
                   {tab.badge}
                 </span>
               )}

@@ -93,8 +93,8 @@ export const Header: React.FC<HeaderProps> = ({
       className="app-header"
       style={{
         height: '70px',
-        marginLeft: '280px',
-        padding: '0 24px',
+        marginLeft: '240px',
+        padding: '0 12px',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
@@ -104,9 +104,10 @@ export const Header: React.FC<HeaderProps> = ({
         position: 'sticky',
         top: 0,
         zIndex: 10,
+        overflow: 'hidden',
       }}
     >
-      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
         {/* Mobile Hamburger Menu Toggle Button */}
         {onToggleMobileSidebar && (
           <button
@@ -169,7 +170,7 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
       </div>
 
-      <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
         {/* Language Selector (PT | EN | ES | FR) */}
         <LanguageSelector />
 

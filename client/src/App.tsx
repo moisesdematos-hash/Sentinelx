@@ -182,7 +182,7 @@ const MainApp: React.FC = () => {
           }}
           activeTab={activeTab}
         />
-        <main className="app-main" style={{ marginLeft: '280px', flex: 1, minHeight: 'calc(100vh - 70px)' }}>
+        <main className="app-main" style={{ marginLeft: '240px', flex: 1, minHeight: 'calc(100vh - 70px)' }}>
           {activeTab === 'welcome' && (
             <div style={{ padding: '20px' }}>
               <button

@@ -91,7 +91,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
       <aside
         style={{
-          width: '280px',
+          width: '240px',
           height: '100vh',
           background: 'rgba(11, 15, 25, 0.98)',
           backdropFilter: 'blur(16px)',
