@@ -84,6 +84,18 @@ export const LoginPage: React.FC = () => {
     }
   };
 
+  const handleGoogleClick = async () => {
+    setError('');
+    setIsSubmitting(true);
+    try {
+      await loginWithGoogle();
+    } catch (err: any) {
+      setError(err.message || 'Não foi possível concluir o login com Google. Tente novamente.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   const handleGuestLogin = async () => {
     setError('');
     setIsSubmitting(true);
@@ -196,7 +208,7 @@ export const LoginPage: React.FC = () => {
         {/* GOOGLE OAUTH BUTTON (PROMINENT) */}
         <button
           type="button"
-          onClick={loginWithGoogle}
+          onClick={handleGoogleClick}
           disabled={isSubmitting}
           style={{
             width: '100%',

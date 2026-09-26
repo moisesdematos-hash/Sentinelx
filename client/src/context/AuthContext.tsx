@@ -19,7 +19,7 @@ interface AuthContextType {
   isLoading: boolean;
   login: (token: string, user: User) => void;
   loginWithGoogle: () => Promise<void>;
-  logout: () => void;
+  logout: () => Promise<void>;
 }
 
 const DEFAULT_GUEST_USER: User = {
@@ -29,7 +29,7 @@ const DEFAULT_GUEST_USER: User = {
   role: 'SUPER_ADMIN',
   organizationId: 'org-1',
   organizationName: 'SENTINELX Security Corp',
-  provider: 'guest'
+  provider: 'guest',
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -45,29 +45,64 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
     return null;
   });
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  // Monitor Supabase Auth Session (Google OAuth & Email Magic Link Redirects)
+  // Helper to format Supabase user object into platform User
+  const formatSupabaseUser = (sbUser: any, sessionToken: string): User => {
+    return {
+      id: sbUser.id,
+      name: sbUser.user_metadata?.full_name || sbUser.user_metadata?.name || sbUser.email?.split('@')[0] || 'Google User',
+      email: sbUser.email || '',
+      role: 'SUPER_ADMIN',
+      organizationId: 'org-1',
+      organizationName: 'SENTINELX Security Corp',
+      avatarUrl: sbUser.user_metadata?.avatar_url || sbUser.user_metadata?.picture,
+      provider: sbUser.app_metadata?.provider || 'google',
+    };
+  };
+
+  // 1. Initial Session Restore on Mount (Handles OAuth Callbacks & Page Reloads)
+  useEffect(() => {
+    async function restoreSession() {
+      try {
+        const { data: { session }, error } = await supabase.auth.getSession();
+        if (session && session.user) {
+          const formattedUser = formatSupabaseUser(session.user, session.access_token);
+          setToken(session.access_token);
+          setUser(formattedUser);
+          localStorage.setItem('sentinelx_token', session.access_token);
+          localStorage.setItem('sentinelx_org_id', formattedUser.organizationId);
+          localStorage.setItem('sentinelx_user', JSON.stringify(formattedUser));
+          localStorage.setItem('sentinelx_current_view', 'APP');
+        }
+      } catch (e) {
+        console.warn('[SENTINELX Auth] Session restore notice:', e);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    restoreSession();
+  }, []);
+
+  // 2. Monitor Supabase Auth State Changes
   useEffect(() => {
     const { data: authListener } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (session && session.user) {
-        const sbUser = session.user;
-        const formattedUser: User = {
-          id: sbUser.id,
-          name: sbUser.user_metadata?.full_name || sbUser.email?.split('@')[0] || 'Google User',
-          email: sbUser.email || '',
-          role: 'SUPER_ADMIN',
-          organizationId: 'org-1',
-          organizationName: 'SENTINELX Security Corp',
-          avatarUrl: sbUser.user_metadata?.avatar_url,
-          provider: sbUser.app_metadata?.provider || 'google'
-        };
-        const sbToken = session.access_token;
-        setToken(sbToken);
+        const formattedUser = formatSupabaseUser(session.user, session.access_token);
+        setToken(session.access_token);
         setUser(formattedUser);
-        localStorage.setItem('sentinelx_token', sbToken);
+        localStorage.setItem('sentinelx_token', session.access_token);
         localStorage.setItem('sentinelx_org_id', formattedUser.organizationId);
         localStorage.setItem('sentinelx_user', JSON.stringify(formattedUser));
+        localStorage.setItem('sentinelx_current_view', 'APP');
+      } else if (event === 'SIGNED_OUT') {
+        setToken(null);
+        setUser(null);
+        localStorage.removeItem('sentinelx_token');
+        localStorage.removeItem('sentinelx_user');
+        localStorage.removeItem('sentinelx_org_id');
+        localStorage.setItem('sentinelx_current_view', 'LOGIN');
       }
     });
 
@@ -76,10 +111,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
   }, []);
 
+  // 3. Fallback verification endpoint check if local backend token is present
   useEffect(() => {
-    async function checkAuth() {
+    async function checkBackendAuth() {
       if (!token) {
-        setUser(null);
         setIsLoading(false);
         return;
       }
@@ -96,12 +131,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           localStorage.setItem('sentinelx_user', JSON.stringify(res.data.user));
         }
       } catch (err) {
-        // Keep current state if endpoint fallback is active
+        // Active session retained
       } finally {
         setIsLoading(false);
       }
     }
-    checkAuth();
+
+    if (token && token !== 'stx_guest_demo_token_98f73b') {
+      checkBackendAuth();
+    }
   }, [token]);
 
   const login = (newToken: string, newUser: User) => {
@@ -110,6 +148,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     localStorage.setItem('sentinelx_token', newToken);
     localStorage.setItem('sentinelx_org_id', newUser.organizationId);
     localStorage.setItem('sentinelx_user', JSON.stringify(newUser));
+    localStorage.setItem('sentinelx_current_view', 'APP');
   };
 
   const loginWithGoogle = async () => {
@@ -118,30 +157,29 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: window.location.origin
-        }
+          redirectTo: window.location.origin,
+          queryParams: {
+            access_type: 'offline',
+            prompt: 'consent',
+          },
+        },
       });
-      if (error) throw error;
+      if (error) {
+        throw error;
+      }
     } catch (err: any) {
-      console.warn('Supabase OAuth error or popup fallback:', err);
-      // Fallback high-fidelity Google login for demo environment
-      const mockGoogleUser: User = {
-        id: `google_${Date.now()}`,
-        name: 'Analista Google Workspace',
-        email: 'analyst@company.com',
-        role: 'SUPER_ADMIN',
-        organizationId: 'org-1',
-        organizationName: 'SENTINELX Enterprise (Google SSO)',
-        provider: 'google'
-      };
-      login(`stx_google_token_${Date.now()}`, mockGoogleUser);
-    } finally {
+      console.error('[SENTINELX Auth Error] Google OAuth initialization failed:', err);
       setIsLoading(false);
+      throw new Error(
+        err.message || 'Não foi possível iniciar o login com Google. Verifique a configuração do Provider no Supabase.'
+      );
     }
   };
 
-  const logout = () => {
-    supabase.auth.signOut().catch(() => {});
+  const logout = async () => {
+    try {
+      await supabase.auth.signOut();
+    } catch (e) {}
     setToken(null);
     setUser(null);
     localStorage.removeItem('sentinelx_token');

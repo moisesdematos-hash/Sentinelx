@@ -98,6 +98,15 @@ const MainApp: React.FC = () => {
     handleSetCurrentView('APP');
   };
 
+  React.useEffect(() => {
+    if (user && currentView === 'LOGIN') {
+      setCurrentView('APP');
+      try {
+        localStorage.setItem('sentinelx_current_view', 'APP');
+      } catch (e) {}
+    }
+  }, [user, currentView]);
+
   if (isLoading) {
     return (
       <div style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg-primary)', color: 'var(--accent-cyan)', fontFamily: 'var(--font-mono)' }}>
@@ -127,7 +136,7 @@ const MainApp: React.FC = () => {
   }
 
   // 2. MANDATORY LOGIN / REGISTRATION GATEWAY (UNAUTHENTICATED)
-  if (!user || currentView === 'LOGIN') {
+  if (!user) {
     return (
       <div style={{ minHeight: '100vh', background: 'var(--bg-primary)' }}>
         <div style={{ position: 'absolute', top: '20px', left: '20px', zIndex: 10 }}>
