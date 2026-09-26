@@ -11,11 +11,16 @@ import {
   Cloud,
   Terminal,
   Activity,
+  Plus,
 } from 'lucide-react';
 
 import { useLanguage } from '../context/LanguageContext';
 
-export const DashboardPage: React.FC = () => {
+interface DashboardPageProps {
+  onNavigate?: (tab: string) => void;
+}
+
+export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate }) => {
   const { t } = useLanguage();
   const [health, setHealth] = useState<any>(null);
   const [assets, setAssets] = useState<any[]>([]);
@@ -56,12 +61,13 @@ export const DashboardPage: React.FC = () => {
         className="glass-panel"
         style={{
           padding: '24px 28px',
-          background: 'linear-gradient(135deg, rgba(0, 242, 254, 0.15) 0%, rgba(79, 70, 229, 0.15) 100%)',
+          background: 'linear-gradient(135deg, rgba(0, 242, 254, 0.18) 0%, rgba(79, 70, 229, 0.18) 100%)',
           border: '1px solid var(--accent-cyan)',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
           gap: '20px',
+          flexWrap: 'wrap',
         }}
       >
         <div>
@@ -72,25 +78,44 @@ export const DashboardPage: React.FC = () => {
             <span className="badge badge-emerald">FULL_AUTO ACTIVE</span>
           </div>
           <p style={{ fontSize: '0.88rem', color: 'var(--text-secondary)', marginTop: '4px' }}>
-            {t('dashboard.banner_desc')}
+            Proteja o seu site, servidor, API ou conta Cloud com blindagem eBPF e Hash SHA-256 em tempo real.
           </p>
         </div>
 
-        <button
-          className="btn-primary"
-          onClick={() => {
-            alert(t('assets.success_shield_all'));
-          }}
-          style={{
-            background: 'var(--gradient-cyan)',
-            boxShadow: '0 0 25px rgba(0, 242, 254, 0.5)',
-            fontSize: '0.9rem',
-            padding: '12px 24px',
-            whiteSpace: 'nowrap',
-          }}
-        >
-          {t('dashboard.banner_btn')}
-        </button>
+        <div style={{ display: 'flex', gap: '12px', alignItems: 'center', flexWrap: 'wrap' }}>
+          <button
+            className="btn-primary"
+            onClick={() => {
+              if (onNavigate) onNavigate('assets');
+            }}
+            style={{
+              background: 'var(--gradient-cyan)',
+              boxShadow: '0 0 25px rgba(0, 242, 254, 0.5)',
+              fontSize: '0.9rem',
+              padding: '12px 24px',
+              fontWeight: 800,
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+            }}
+          >
+            <Plus size={18} /> + CADASTRAR ATIVO A PROTEGER
+          </button>
+
+          <button
+            className="btn-secondary"
+            onClick={() => {
+              if (onNavigate) onNavigate('assets');
+            }}
+            style={{
+              fontSize: '0.9rem',
+              padding: '12px 20px',
+              fontWeight: 700,
+            }}
+          >
+            ⚡ ATIVAR BLINDAGEM TOTAL (1-CLIQUE)
+          </button>
+        </div>
       </div>
 
       {/* Top Banner / Hero Metric Bar */}

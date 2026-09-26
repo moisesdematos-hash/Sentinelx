@@ -11,6 +11,7 @@ import {
   Home,
   X,
   ChevronRight,
+  Server,
 } from 'lucide-react';
 
 interface MenuItem {
@@ -39,6 +40,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
   const mainThemes: MenuItem[] = [
     { id: 'dashboard', labelKey: 'sidebar.dashboard', icon: LayoutDashboard, badge: 'SOC 24/7' },
+    { id: 'assets', labelKey: 'sidebar.assets_menu', icon: Server, badge: '+ CADASTRAR' },
     { id: 'hub-super-ai', labelKey: 'sidebar.super_ai', icon: Sparkles, badge: 'SUPER AI' },
     { id: 'hub-epp-edr', labelKey: 'sidebar.epp_edr', icon: Shield, badge: 'PROTECTION' },
     { id: 'hub-cloud-security', labelKey: 'sidebar.cloud_security', icon: Cloud, badge: 'CSPM' },

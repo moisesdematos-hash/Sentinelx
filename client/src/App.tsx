@@ -173,6 +173,7 @@ const MainApp: React.FC = () => {
           onGoLanding={() => setCurrentView('LANDING')}
           onToggleMobileSidebar={() => setIsMobileSidebarOpen(!isMobileSidebarOpen)}
           onBack={handleBackNav}
+          onOpenRegisterAsset={() => setActiveTab('assets')}
           onAutoShield={() => {
             setActiveTab('assets');
             alert('⚡ BLINDAGEM AUTOMÁTICA EM 1-CLIQUE EXECUTADA COM SUCESSO! Todos os serviços foram salvos com eBPF Kernel Ring 0, Baseline SHA-256 Lock e Autopiloto em FULL_AUTO.');
@@ -201,10 +202,10 @@ const MainApp: React.FC = () => {
               >
                 🌐 Ir para a Landing Page Pública Externa
               </button>
-              <DashboardPage />
+              <DashboardPage onNavigate={setActiveTab} />
             </div>
           )}
-          {activeTab === 'dashboard' && <DashboardPage />}
+          {activeTab === 'dashboard' && <DashboardPage onNavigate={setActiveTab} />}
           {activeTab === 'admin-panel' && <AdminPanelPage />}
           {activeTab === 'assets' && <AssetsPage />}
           {activeTab === 'monitoring' && <ContinuousMonitoringPage />}

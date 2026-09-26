@@ -34,6 +34,7 @@ export const pt = {
   // Sidebar Themes
   'sidebar.title': 'TEMAS PRINCIPAIS DA PLATAFORMA',
   'sidebar.dashboard': 'Painel Principal (SOC)',
+  'sidebar.assets_menu': 'Cadastrar & Blindar Ativos',
   'sidebar.super_ai': 'Autonomia & Super IA',
   'sidebar.epp_edr': 'EPP, EDR & Ativos',
   'sidebar.cloud_security': 'Cloud & K8s Security',

@@ -2,13 +2,14 @@ import React from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useLanguage } from '../../context/LanguageContext';
 import { LanguageSelector } from './LanguageSelector';
-import { Building2, LogOut, Bell, ShieldCheck, Globe, ArrowLeft, Menu, Zap } from 'lucide-react';
+import { Building2, LogOut, Bell, ShieldCheck, Globe, ArrowLeft, Menu, Zap, Plus } from 'lucide-react';
 
 interface HeaderProps {
   onGoLanding?: () => void;
   onToggleMobileSidebar?: () => void;
   onBack?: () => void;
   onAutoShield?: () => void;
+  onOpenRegisterAsset?: () => void;
   activeTab?: string;
 }
 
@@ -17,6 +18,7 @@ export const Header: React.FC<HeaderProps> = ({
   onToggleMobileSidebar,
   onBack,
   onAutoShield,
+  onOpenRegisterAsset,
   activeTab,
 }) => {
   const { user, logout } = useAuth();
@@ -165,6 +167,30 @@ export const Header: React.FC<HeaderProps> = ({
             title="Instalar SentinelX como App (PWA)"
           >
             <span>📱</span> <span className="desktop-only">Instalar App</span>
+          </button>
+        )}
+
+        {/* + CADASTRAR ATIVO A PROTEGER BUTTON IN HEADER */}
+        {onOpenRegisterAsset && (
+          <button
+            onClick={onOpenRegisterAsset}
+            className="btn-primary"
+            style={{
+              background: 'var(--gradient-cyan)',
+              border: 'none',
+              color: '#060813',
+              padding: '8px 16px',
+              borderRadius: '8px',
+              fontSize: '0.85rem',
+              fontWeight: 800,
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              boxShadow: '0 0 20px rgba(0, 242, 254, 0.4)',
+            }}
+          >
+            <Plus size={16} /> + Cadastrar Ativo
           </button>
         )}
 
