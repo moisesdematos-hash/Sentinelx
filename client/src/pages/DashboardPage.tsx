@@ -12,9 +12,11 @@ import {
   Terminal,
   Activity,
   Plus,
+  Crown,
 } from 'lucide-react';
 
 import { useLanguage } from '../context/LanguageContext';
+import { GoldenKeyCertificateModal } from '../components/documentation/GoldenKeyCertificateModal';
 
 interface DashboardPageProps {
   onNavigate?: (tab: string) => void;
@@ -25,6 +27,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate }) => {
   const [health, setHealth] = useState<any>(null);
   const [assets, setAssets] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showGoldenKeyModal, setShowGoldenKeyModal] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
@@ -83,6 +86,24 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate }) => {
         </div>
 
         <div style={{ display: 'flex', gap: '10px', alignItems: 'center', flexWrap: 'wrap' }}>
+          <button
+            className="btn-primary"
+            onClick={() => setShowGoldenKeyModal(true)}
+            style={{
+              background: 'linear-gradient(135deg, #ffd700 0%, #ffaa00 100%)',
+              color: '#060813',
+              boxShadow: '0 0 20px rgba(255, 215, 0, 0.5)',
+              fontSize: '0.82rem',
+              padding: '8px 16px',
+              fontWeight: 900,
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+            }}
+          >
+            <Crown size={16} color="#060813" /> 🏆 CHAVE DE OURO (PDF)
+          </button>
+
           <button
             className="btn-primary"
             onClick={() => {
@@ -279,6 +300,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate }) => {
           </div>
         </div>
       </div>
+      <GoldenKeyCertificateModal isOpen={showGoldenKeyModal} onClose={() => setShowGoldenKeyModal(false)} />
     </div>
   );
 };
