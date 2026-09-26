@@ -99,13 +99,13 @@ const MainApp: React.FC = () => {
   };
 
   React.useEffect(() => {
-    if (user && currentView === 'LOGIN') {
+    if (user && currentView !== 'LANDING') {
       setCurrentView('APP');
       try {
         localStorage.setItem('sentinelx_current_view', 'APP');
       } catch (e) {}
     }
-  }, [user, currentView]);
+  }, [user]);
 
   if (isLoading) {
     return (
