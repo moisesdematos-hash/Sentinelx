@@ -122,9 +122,67 @@ export const pt = {
   'landing.nav.shield_btn': '⚡ Blindar Serviços em 1-Clique',
   'landing.nav.login': 'Acessar / Login',
   'landing.hero.title': 'Plataforma Autônoma de Cibersegurança & Auto-Cura de Código',
-  'landing.hero.subtitle': 'Defesa Contínua com eBPF no Kernel, Autopiloto FULL_AUTO, RAG Vetorial e Reversão Quântica Anti-Ransomware em 18ms.',
+  'landing.hero.subtitle': 'Defensa Contínua com eBPF no Kernel, Autopiloto FULL_AUTO, RAG Vetorial e Reversão Quântica Anti-Ransomware em 18ms.',
   'landing.hero.start_free': '🚀 Começar Teste Grátis de 14 Dias',
   'landing.hero.demo_access': '⚡ Acessar Plataforma Demo',
   'landing.pricing.monthly': '/ mês',
   'landing.pricing.select_plan': 'Assinar Plano Agora',
+
+  // Auth Gateway & Registration
+  'auth.google_login': 'Continuar com Google',
+  'auth.email_login': 'Entrar com E-mail',
+  'auth.create_account': 'Criar Conta',
+  'auth.guest_login': 'Entrar como Convidado (Demo Instantânea)',
+  'auth.full_name': 'Nome Completo',
+  'auth.org_name': 'Nome da Organização',
+  'auth.email_label': 'E-mail Corporativo',
+  'auth.password_label': 'Senha de Acesso',
+  'auth.submit_login': 'Acessar Console SentinelX',
+  'auth.submit_register': 'Criar Conta no Supabase',
+
+  // Admin Panel
+  'admin.title': 'Painel de Administração Super Admin Global',
+  'admin.subtitle': 'Gestão de Licenças, Organizações, Chaves de API, Provedores de IA, Auditoria SOC 2 e Segurança Global',
+  'admin.tab_orgs': 'Organizações & Tenants',
+  'admin.tab_users': 'Usuários & RBAC',
+  'admin.tab_ai': 'Provedores de IA & Modelos',
+  'admin.tab_audit': 'Logs de Auditoria & SOC 2',
+  'admin.tab_settings': 'Políticas Globais Zero Trust',
+  'admin.tab_licenses': 'Licenciamento SaaS & Entitlements',
+  'admin.tab_security_status': 'Status de Segurança Ring 0',
+  'admin.save_policies': 'Salvar Políticas Globais',
+  'admin.test_ai_conn': 'Testar Conexão com IA',
+
+  // Compliance Auditor
+  'compliance.title': 'Auditor de Conformidade, Governança & Passaporte ISO',
+  'compliance.subtitle': 'Auditoria contínua de controles ISO 27001, SOC 2 Type II, PCI DSS v4 e LGPD com relatórios executivos em PDF',
+  'compliance.export_pdf': 'Exportar Relatório PDF Executivo',
+  'compliance.run_audit': 'Executar Auditoria em Tempo Real',
+
+  // Vulnerabilities & Self-Healing
+  'vulnerabilities.title': 'Gestão de Vulnerabilidades & Auto-Cura de Código',
+  'vulnerabilities.subtitle': 'Detecção SAST/DAST, cálculo de nota de segurança e síntese automática de Pull Requests com patches corrigidos',
+  'vulnerabilities.trigger_fix': 'Sintetizar Patch & Abrir PR no GitHub',
+
+  // Red Teaming
+  'red_teaming.title': 'Red Teaming Autônomo & Simulação de Ataques DDoS',
+  'red_teaming.subtitle': 'Execução autônoma de vetores MITRE ATT&CK, testes de stress WAF e validação de resiliência',
+  'red_teaming.run_simulation': 'Iniciar Simulação de Ataque',
+
+  // Deception Engine
+  'deception.title': 'Engenho de Decepção, Armadilhas & Honeytokens',
+  'deception.subtitle': 'Implantação de credenciais falsas, canários de rede e detecção antecipada de invasores',
+
+  // MSP Partner
+  'msp.title': 'Central de Controle MSP / White-Label Partner',
+  'msp.subtitle': 'Gestão Multi-Tenant de Clientes, Co-Branding de Portais e Faturamento SaaS',
+
+  // Documentation
+  'docs.title': 'Documentação Técnica & Arquitetura de Defesa',
+  'docs.search_placeholder': 'Pesquisar documentação técnica, APIs, eBPF, SDKs...',
+
+  // Modals & Dialogs
+  'modal.close': 'Fechar',
+  'modal.confirm': 'Confirmar',
+  'modal.cancel': 'Cancelar',
 };

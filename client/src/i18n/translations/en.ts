@@ -34,6 +34,7 @@ export const en = {
   // Sidebar Themes
   'sidebar.title': 'MAIN PLATFORM THEMES',
   'sidebar.dashboard': 'Main Dashboard (SOC)',
+  'sidebar.assets_menu': 'Register & Shield Assets',
   'sidebar.super_ai': 'Autonomy & Super AI',
   'sidebar.epp_edr': 'EPP, EDR & Assets',
   'sidebar.cloud_security': 'Cloud & K8s Security',
@@ -126,4 +127,62 @@ export const en = {
   'landing.hero.demo_access': '⚡ Access Demo Platform',
   'landing.pricing.monthly': '/ month',
   'landing.pricing.select_plan': 'Subscribe to Plan Now',
+
+  // Auth Gateway & Registration
+  'auth.google_login': 'Continue with Google',
+  'auth.email_login': 'Sign in with Email',
+  'auth.create_account': 'Create Account',
+  'auth.guest_login': 'Enter as Guest (Instant Demo)',
+  'auth.full_name': 'Full Name',
+  'auth.org_name': 'Organization Name',
+  'auth.email_label': 'Corporate Email',
+  'auth.password_label': 'Password',
+  'auth.submit_login': 'Access SentinelX Console',
+  'auth.submit_register': 'Create Account on Supabase',
+
+  // Admin Panel
+  'admin.title': 'Global Super Admin Panel',
+  'admin.subtitle': 'Management of Licenses, Organizations, API Keys, AI Providers, SOC 2 Auditing, and Global Security',
+  'admin.tab_orgs': 'Organizations & Tenants',
+  'admin.tab_users': 'Users & RBAC',
+  'admin.tab_ai': 'AI Providers & Models',
+  'admin.tab_audit': 'Audit Logs & SOC 2',
+  'admin.tab_settings': 'Global Zero Trust Policies',
+  'admin.tab_licenses': 'SaaS Licensing & Entitlements',
+  'admin.tab_security_status': 'Ring 0 Security Status',
+  'admin.save_policies': 'Save Global Policies',
+  'admin.test_ai_conn': 'Test AI Connection',
+
+  // Compliance Auditor
+  'compliance.title': 'Compliance Auditor, Governance & ISO Passport',
+  'compliance.subtitle': 'Continuous audit of ISO 27001, SOC 2 Type II, PCI DSS v4, and LGPD controls with executive PDF reports',
+  'compliance.export_pdf': 'Export Executive PDF Report',
+  'compliance.run_audit': 'Run Real-Time Audit',
+
+  // Vulnerabilities & Self-Healing
+  'vulnerabilities.title': 'Vulnerability Management & Code Self-Healing',
+  'vulnerabilities.subtitle': 'SAST/DAST detection, security score calculation, and automatic synthesis of Pull Requests with fixed patches',
+  'vulnerabilities.trigger_fix': 'Synthesize Patch & Open GitHub PR',
+
+  // Red Teaming
+  'red_teaming.title': 'Autonomous Red Teaming & DDoS Attack Simulation',
+  'red_teaming.subtitle': 'Autonomous execution of MITRE ATT&CK vectors, WAF stress testing, and resilience validation',
+  'red_teaming.run_simulation': 'Start Attack Simulation',
+
+  // Deception Engine
+  'deception.title': 'Deception Engine, Traps & Honeytokens',
+  'deception.subtitle': 'Deployment of fake credentials, network canaries, and early intruder detection',
+
+  // MSP Partner
+  'msp.title': 'MSP / White-Label Partner Control Center',
+  'msp.subtitle': 'Multi-Tenant Client Management, Portal Co-Branding, and SaaS Billing',
+
+  // Documentation
+  'docs.title': 'Technical Documentation & Defense Architecture',
+  'docs.search_placeholder': 'Search technical docs, APIs, eBPF, SDKs...',
+
+  // Modals & Dialogs
+  'modal.close': 'Close',
+  'modal.confirm': 'Confirm',
+  'modal.cancel': 'Cancel',
 };

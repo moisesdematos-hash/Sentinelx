@@ -34,6 +34,7 @@ export const es = {
   // Sidebar Themes
   'sidebar.title': 'TEMAS PRINCIPALES DE LA PLATAFORMA',
   'sidebar.dashboard': 'Panel Principal (SOC)',
+  'sidebar.assets_menu': 'Registrar y Blindar Activos',
   'sidebar.super_ai': 'Autonomía y Súper IA',
   'sidebar.epp_edr': 'EPP, EDR y Activos',
   'sidebar.cloud_security': 'Seguridad Cloud y K8s',
@@ -126,4 +127,62 @@ export const es = {
   'landing.hero.demo_access': '⚡ Acceder a Plataforma Demo',
   'landing.pricing.monthly': '/ mes',
   'landing.pricing.select_plan': 'Suscribirse al Plan Ahora',
+
+  // Auth Gateway & Registration
+  'auth.google_login': 'Continuar con Google',
+  'auth.email_login': 'Iniciar sesión con Correo',
+  'auth.create_account': 'Crear Cuenta',
+  'auth.guest_login': 'Entrar como Invitado (Demo Instantánea)',
+  'auth.full_name': 'Nombre Completo',
+  'auth.org_name': 'Nombre de la Organización',
+  'auth.email_label': 'Correo Corporativo',
+  'auth.password_label': 'Contraseña de Acceso',
+  'auth.submit_login': 'Acceder a Consola SentinelX',
+  'auth.submit_register': 'Crear Cuenta en Supabase',
+
+  // Admin Panel
+  'admin.title': 'Panel de Administración Súper Admin Global',
+  'admin.subtitle': 'Gestión de Licencias, Organizaciones, Claves de API, Proveedores de IA, Auditoría SOC 2 y Seguridad Global',
+  'admin.tab_orgs': 'Organizaciones e Inquilinos',
+  'admin.tab_users': 'Usuarios y RBAC',
+  'admin.tab_ai': 'Proveedores de IA y Modelos',
+  'admin.tab_audit': 'Registros de Auditoría y SOC 2',
+  'admin.tab_settings': 'Políticas Globales Zero Trust',
+  'admin.tab_licenses': 'Licencias SaaS y Entitlements',
+  'admin.tab_security_status': 'Estado de Seguridad Ring 0',
+  'admin.save_policies': 'Guardar Políticas Globales',
+  'admin.test_ai_conn': 'Probar Conexión de IA',
+
+  // Compliance Auditor
+  'compliance.title': 'Auditor de Conformidad, Gobierno y Pasaporte ISO',
+  'compliance.subtitle': 'Auditoría continua de controles ISO 27001, SOC 2 Type II, PCI DSS v4 y LGPD con informes ejecutivos en PDF',
+  'compliance.export_pdf': 'Exportar Informe Ejecutivo en PDF',
+  'compliance.run_audit': 'Ejecutar Auditoría en Tiempo Real',
+
+  // Vulnerabilities & Self-Healing
+  'vulnerabilities.title': 'Gestión de Vulnerabilidades y Auto-Curación de Código',
+  'vulnerabilities.subtitle': 'Detección SAST/DAST, cálculo de puntuación de seguridad y síntesis automática de Pull Requests con parches corregidos',
+  'vulnerabilities.trigger_fix': 'Sintetizar Parche y Abrir PR en GitHub',
+
+  // Red Teaming
+  'red_teaming.title': 'Red Teaming Autónomo y Simulación de Ataques DDoS',
+  'red_teaming.subtitle': 'Ejecución autónoma de vectores MITRE ATT&CK, pruebas de estrés WAF y validación de resiliencia',
+  'red_teaming.run_simulation': 'Iniciar Simulación de Ataque',
+
+  // Deception Engine
+  'deception.title': 'Motor de Decepción, Trampas y Honeytokens',
+  'deception.subtitle': 'Despliegue de credenciales falsas, canarios de red y detección temprana de intrusos',
+
+  // MSP Partner
+  'msp.title': 'Centro de Control MSP / Socio White-Label',
+  'msp.subtitle': 'Gestión Multi-Inquilino de Clientes, Marca Compartida y Facturación SaaS',
+
+  // Documentation
+  'docs.title': 'Documentación Técnica y Arquitectura de Defensa',
+  'docs.search_placeholder': 'Buscar documentación técnica, APIs, eBPF, SDKs...',
+
+  // Modals & Dialogs
+  'modal.close': 'Cerrar',
+  'modal.confirm': 'Confirmar',
+  'modal.cancel': 'Cancelar',
 };
