@@ -389,6 +389,63 @@ Navegamos você para a **Central de Conformidade**. Todos os controles técnicos
       console.warn('Groq AI API live fetch warning', err);
     }
 
+    // 3. Contingency: Google Gemini Free API Call (Fallback when Groq is unavailable)
+    try {
+      const geminiApiKey = (import.meta as any).env?.VITE_GEMINI_API_KEY || localStorage.getItem('sentinelx_gemini_key') || '';
+      if (geminiApiKey) {
+        const geminiRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiApiKey}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [
+              {
+                role: 'user',
+                parts: [
+                  {
+                    text: `SYSTEM INSTRUCTIONS: Você é o SENTINELX LEAD PRINCIPAL CYBERSECURITY INSTRUCTOR & CHIEF ARCHITECT. Responda como um autêntico Engenheiro Instrutor de Cibersegurança em 4 seções com Markdown impecável:
+1. 🎓 **Conceito Técnico & Causa-Raiz Profunda**
+2. 📋 **Roteiro Didático de Solução Passo a Passo**
+3. 💻 **Snippet Prático de Código / Comando CLI para Produção**
+4. 🛡️ **Medidas de Prevenção Futura & Guardrails (ISO 27001 / SOC 2 / LGPD)**
+
+SOLICITAÇÃO DO USUÁRIO: ${text}`
+                  }
+                ]
+              }
+            ],
+            generationConfig: {
+              temperature: 0.25,
+              maxOutputTokens: 2048,
+            }
+          })
+        }).catch(() => null);
+
+        if (geminiRes && geminiRes.ok) {
+          const geminiData = await geminiRes.json();
+          const textOutput = geminiData.candidates?.[0]?.content?.parts?.[0]?.text;
+          if (textOutput) {
+            const geminiMsg: ChatMessage = {
+              id: String(Date.now() + 1),
+              sender: 'assistant',
+              content: textOutput,
+              timestamp: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
+              superpowerBadge: 'GEMINI FLASH AI (CONTINGÊNCIA GROQ)',
+              suggestedActions: [
+                { label: '⚡ Ativar Blindagem Total', actionId: 'CMD_SHIELD_ALL' },
+                { label: '🚨 Pânico Quântico Air-Gap', actionId: 'CMD_PANIC_AIRGAP' },
+                { label: '📊 Diagnóstico SOC', actionId: 'CMD_DIAGNOSTICS' },
+              ],
+            };
+            setMessages((prev) => [...prev, geminiMsg]);
+            setIsTyping(false);
+            return;
+          }
+        }
+      }
+    } catch (geminiErr) {
+      console.warn('Gemini API contingency fetch warning', geminiErr);
+    }
+
     // Fallback response if offline
     setTimeout(() => {
       const fallbackMsg: ChatMessage = {

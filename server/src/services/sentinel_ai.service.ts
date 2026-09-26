@@ -61,10 +61,53 @@ O ambiente monitora atualmente ${assets} ativos e ${vulns} vulnerabilidades aber
         }
       }
     } catch (err) {
-      console.warn('Groq API direct call failed, falling back to deep instructor engine', err);
+      console.warn('Groq API call warning', err);
     }
 
-    // Deep Instructor Fallback Engine if Groq API is offline
+    // Attempt Gemini Free API Contingency if Groq fails or is missing
+    const geminiKey = process.env.GEMINI_API_KEY || '';
+    if (!response && geminiKey) {
+      try {
+        const geminiRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiKey}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [
+              {
+                role: 'user',
+                parts: [
+                  {
+                    text: `SYSTEM INSTRUCTIONS: Você é o SENTINELX LEAD PRINCIPAL CYBERSECURITY INSTRUCTOR & CHIEF ARCHITECT. Responda como um autêntico Engenheiro Instrutor de Cibersegurança em 4 seções com Markdown impecável:
+1. 🎓 Conceito Técnico & Causa-Raiz Profunda
+2. 📋 Roteiro Didático de Solução Passo a Passo
+3. 💻 Snippet Prático de Código / Comando CLI para Produção
+4. 🛡️ Medidas de Prevenção Futura & Guardrails (ISO 27001 / SOC 2 / LGPD)
+
+SOLICITAÇÃO: ${data.prompt}`
+                  }
+                ]
+              }
+            ],
+            generationConfig: {
+              temperature: 0.25,
+              maxOutputTokens: 3072,
+            }
+          })
+        });
+
+        if (geminiRes.ok) {
+          const geminiData: any = await geminiRes.json();
+          const textOutput = geminiData.candidates?.[0]?.content?.parts?.[0]?.text;
+          if (textOutput) {
+            response = textOutput;
+          }
+        }
+      } catch (geminiErr) {
+        console.warn('Gemini API contingency call failed', geminiErr);
+      }
+    }
+
+    // Deep Instructor Fallback Engine if both Groq and Gemini APIs are offline
     if (!response) {
       const q = data.prompt.toLowerCase();
       
