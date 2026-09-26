@@ -286,6 +286,32 @@ Navegamos você para a **Central de Conformidade**. Todos os controles técnicos
       }
     }
 
+    // Check if user entered an API key string (e.g. starting with AQ. or AIza or gsk_)
+    const trimmed = text.trim();
+    if (trimmed.startsWith('AQ.') || trimmed.startsWith('AIza') || (trimmed.length > 20 && !trimmed.includes(' '))) {
+      localStorage.setItem('sentinelx_gemini_key', trimmed);
+      const keySavedMsg: ChatMessage = {
+        id: String(Date.now() + 1),
+        sender: 'assistant',
+        content: `### 🔑 CHAVE DO GOOGLE GEMINI FREE CONFIGURADA COM SUCESSO!
+        
+A sua Chave de API do **Google Gemini Free** foi registrada com segurança no armazenamento local da aplicação (\`sentinelx_gemini_key\`).
+
+A partir de agora, se o motor principal (Groq) estiver indisponível ou atingir limite de requisições, o **SENTINELX** usará automaticamente esta chave do Gemini 1.5 Flash como contingência ativa! 🤖⚡`,
+        timestamp: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
+        superpowerBadge: '🔑 CHAVE GEMINI ATIVADA',
+        suggestedActions: [
+          { label: '⚡ Ativar Blindagem Total', actionId: 'CMD_SHIELD_ALL' },
+          { label: '📊 Diagnóstico SOC', actionId: 'CMD_DIAGNOSTICS' },
+        ],
+      };
+      setTimeout(() => {
+        setMessages((prev) => [...prev, keySavedMsg]);
+        setIsTyping(false);
+      }, 300);
+      return;
+    }
+
     // Check intent in free text prompt
     const q = text.toLowerCase();
     if (q.includes('blindar') || q.includes('blindagem') || q.includes('proteger todos')) {
