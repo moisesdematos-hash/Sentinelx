@@ -3,7 +3,8 @@ import { useAuth } from '../../context/AuthContext';
 import { useLanguage } from '../../context/LanguageContext';
 import { LanguageSelector } from './LanguageSelector';
 import { NotificationWebhooksModal } from './NotificationWebhooksModal';
-import { Building2, LogOut, Bell, ShieldCheck, Globe, ArrowLeft, Menu, Zap, Plus } from 'lucide-react';
+import { InteractiveOnboardingTour } from './InteractiveOnboardingTour';
+import { Building2, LogOut, Bell, ShieldCheck, Globe, ArrowLeft, Menu, Zap, Plus, HelpCircle } from 'lucide-react';
 
 interface HeaderProps {
   onGoLanding?: () => void;
@@ -27,6 +28,7 @@ export const Header: React.FC<HeaderProps> = ({
   const [deferredPrompt, setDeferredPrompt] = React.useState<any>(null);
   const [isInstalled, setIsInstalled] = React.useState(false);
   const [showNotificationsModal, setShowNotificationsModal] = React.useState(false);
+  const [showTourModal, setShowTourModal] = React.useState(false);
 
   React.useEffect(() => {
     const handleBeforeInstallPrompt = (e: any) => {
@@ -171,6 +173,23 @@ export const Header: React.FC<HeaderProps> = ({
           <Bell size={16} />
         </button>
 
+        {/* Interactive Tour (30s) Button */}
+        <button
+          onClick={() => setShowTourModal(true)}
+          title="Tour Interativo Guiado (30 Segundos)"
+          className="btn-secondary"
+          style={{
+            fontSize: '0.81rem',
+            padding: '6px 12px',
+            gap: '6px',
+            borderColor: 'rgba(0, 242, 254, 0.4)',
+            color: 'var(--accent-cyan)',
+            fontWeight: 700,
+          }}
+        >
+          <HelpCircle size={14} /> <span className="desktop-only">Tour 30s</span>
+        </button>
+
         <button
           onClick={onGoLanding}
           className="btn-secondary"
@@ -213,6 +232,7 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
       </div>
       <NotificationWebhooksModal isOpen={showNotificationsModal} onClose={() => setShowNotificationsModal(false)} />
+      <InteractiveOnboardingTour isOpen={showTourModal} onClose={() => setShowTourModal(false)} />
     </header>
   );
 };
