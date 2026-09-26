@@ -78,7 +78,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   useEffect(() => {
     async function checkAuth() {
-      if (!token || token === 'stx_guest_demo_token_98f73b') {
+      if (!token) {
+        setUser(null);
+        setIsLoading(false);
+        return;
+      }
+      if (token === 'stx_guest_demo_token_98f73b') {
         setUser(DEFAULT_GUEST_USER);
         setIsLoading(false);
         return;
