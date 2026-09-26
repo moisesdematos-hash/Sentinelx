@@ -1,5 +1,6 @@
 import React from 'react';
 import { useLanguage } from '../../context/LanguageContext';
+import { useAuth } from '../../context/AuthContext';
 import {
   LayoutDashboard,
   Sparkles,
@@ -37,8 +38,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onCloseMobile,
 }) => {
   const { t } = useLanguage();
+  const { user } = useAuth();
+  const isSuperAdmin = user?.role === 'SUPER_ADMIN';
 
-  const mainThemes: MenuItem[] = [
+  const rawMainThemes: MenuItem[] = [
     { id: 'dashboard', labelKey: 'sidebar.dashboard', icon: LayoutDashboard, badge: 'SOC 24/7' },
     { id: 'admin-panel', labelKey: 'Painel Admin & Autenticação', icon: Settings, badge: 'SUPER ADMIN' },
     { id: 'assets', labelKey: 'sidebar.assets_menu', icon: Server, badge: '+ CADASTRAR' },
@@ -50,6 +53,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
     { id: 'hub-operations', labelKey: 'sidebar.operations', icon: Settings, badge: 'MSSP' },
     { id: 'welcome', labelKey: 'sidebar.landing', icon: Home, badge: 'SAAS' },
   ];
+
+  const mainThemes = rawMainThemes.filter(item => item.id !== 'admin-panel' || isSuperAdmin);
 
   const handleLogoClick = () => {
     if (onGoLanding) {

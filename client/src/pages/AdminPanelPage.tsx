@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { apiClient } from '../api/client';
 import { supabase } from '../api/supabase';
+import { useAuth } from '../context/AuthContext';
 import {
   Settings,
   Users,
@@ -38,6 +39,9 @@ import {
 } from 'lucide-react';
 
 export const AdminPanelPage: React.FC = () => {
+  const { user } = useAuth();
+  const isSuperAdmin = user?.role === 'SUPER_ADMIN';
+
   const [activeSubTab, setActiveSubTab] = useState<'users' | 'tenants' | 'apikeys' | 'ai' | 'policies' | 'audit' | 'health'>('ai');
   const [users, setUsers] = useState<any[]>([]);
   const [orgs, setOrgs] = useState<any[]>([]);
@@ -246,6 +250,23 @@ export const AdminPanelPage: React.FC = () => {
       u.email?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       u.role?.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  if (!isSuperAdmin) {
+    return (
+      <div style={{ padding: '60px 20px', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px' }}>
+        <div style={{ width: '80px', height: '80px', borderRadius: '20px', background: 'rgba(255, 8, 68, 0.15)', border: '2px solid var(--accent-rose)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 30px rgba(255, 8, 68, 0.3)' }}>
+          <ShieldAlert size={48} color="var(--accent-rose)" />
+        </div>
+        <h2 style={{ fontSize: '1.8rem', fontWeight: 900, color: 'var(--accent-rose)', margin: 0 }}>
+          403 - ACESSO RESTRITO A SUPER ADMINISTRADORES
+        </h2>
+        <p style={{ maxWidth: '520px', color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: '1.6', margin: 0 }}>
+          O Painel de Administração Global é de uso exclusivo dos administradores mestres do <strong>SENTINELX</strong>.<br />
+          Sua conta atual (<strong>{user?.email || 'Visitante Convidado'}</strong> — Cargo: <span className="badge badge-rose">{user?.role || 'GUEST'}</span>) não possui permissões administrativas.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div style={{ padding: '32px', display: 'flex', flexDirection: 'column', gap: '28px' }}>

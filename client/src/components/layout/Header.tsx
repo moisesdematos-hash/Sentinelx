@@ -248,11 +248,11 @@ export const Header: React.FC<HeaderProps> = ({
           <HelpCircle size={14} /> <span className="desktop-only">Tour 30s</span>
         </button>
 
-        {/* Direct Admin Panel Button (Prominent) */}
-        {onOpenAdminPanel && (
+        {/* Direct Admin Panel Button (Prominent - SUPER_ADMIN Only) */}
+        {onOpenAdminPanel && user?.role === 'SUPER_ADMIN' && (
           <button
             onClick={onOpenAdminPanel}
-            title="Abrir Painel de Administração Global (Super Admin)"
+            title="Abrir Painel de Administração Global (Exclusivo Super Admin)"
             className="btn-primary"
             style={{
               fontSize: '0.81rem',
