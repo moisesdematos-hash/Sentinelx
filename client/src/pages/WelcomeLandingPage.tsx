@@ -282,20 +282,41 @@ export const WelcomeLandingPage: React.FC<WelcomeLandingPageProps> = ({ onEnterA
 
           <div style={{ display: 'flex', gap: '16px', marginTop: '12px' }}>
             <button
-              onClick={onEnterGuest}
+              onClick={onEnterApp}
               className="btn-primary"
               style={{
                 padding: '16px 32px',
                 fontSize: '1.05rem',
                 background: 'var(--gradient-cyan)',
+                color: '#060813',
+                fontWeight: 800,
                 boxShadow: '0 0 25px rgba(0, 242, 254, 0.4)',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
               }}
             >
-              🎮 Entrar como Convidado (Demo Instantânea) <ArrowRight size={18} />
+              <UserCheck size={20} /> Entrar / Criar Conta (Google / E-mail) <ArrowRight size={18} />
             </button>
 
-            <button className="btn-secondary" style={{ padding: '16px 32px', fontSize: '1rem' }} onClick={() => setShowDemoVideoModal(true)}>
-              <Video size={18} /> Ver Vídeo de Demonstração
+            <button
+              onClick={onEnterGuest}
+              className="btn-secondary"
+              style={{
+                padding: '16px 28px',
+                fontSize: '1rem',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+              }}
+            >
+              🎮 Demo Convidado
+            </button>
+
+            <button className="btn-secondary" style={{ padding: '16px 28px', fontSize: '1rem' }} onClick={() => setShowDemoVideoModal(true)}>
+              <Video size={18} /> Ver Vídeo
             </button>
           </div>
 
